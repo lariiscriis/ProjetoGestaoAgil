@@ -1,0 +1,174 @@
+{% extends 'template.html' %}
+{% load static %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/landing-page.css' %}">
+    <script src="https://kit.fontawesome.com/30dea9d32e.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block conteudo %}
+    <section class="container py-5" id="SecaoIndex1">
+        <div class="row" id="row">
+            <div class="col-12 col md-6 col-lg-6" id="sectionLeft" >
+                <h1>Alms</h1>
+                <p>Conectando mães, compartilhando forças. Aqui você encontra apoio, 
+                troca de experiências e um espaço 
+                seguro para construir novas histórias junto de quem entende sua jornada.</p>
+                <a href="#" class="btn btn-primary" id="btn-section">Saiba mais</a>
+            </div>
+            <div class="col-lg-6 text-center"id="sectionRight">
+                <img src="https://images.emojiterra.com/open
+moji/v13.1/512px/26ab.png" alt="Alms Logo" class="img-fluid" id="logo">
+            </div>
+        </div>
+    </section>
+
+    
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 318">
+            <path fill="#ffffff" fill-opacity="1" 
+            d="M0,160L120,181.3C240,203,480,245,720,245.3C960,245,1200,203,1320,181.3L1440,160L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
+        </path>
+        </svg>
+
+<section class="py-5" id="Section-posts">
+    <h1>Posts Recentes</h1>
+        <p>
+            Confira as últimas histórias, dicas e reflexões compartilhadas por nossa comunidade.  
+            Um espaço feito para inspirar, apoiar e fortalecer cada passo da sua jornada.
+            
+        </p>
+
+    <div class="container" id="blog-container">
+        <!-- for para loop dos posts entra aqui  -->
+        <div class="blog-card">
+            <div class="blog-image">
+                <img src="https://st.depositphotos.com/4218696/54755/i/450/depositphotos_547556104-stock-photo-worried-black-woman-psychotherapist-talking.jpg" alt="Card-imagem">
+                <div class="blog-data">27 de Abril, 2025</div>
+            </div>
+            <div class="blog-content">
+                <h2 class="blog-title">Entre Mães: Vozes e Vivências</h2>
+                <p class="blog-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci 
+                voluptatibus, cumque, accusantium, doloremque eveniet
+                </p>
+                <div class="blog-footer">
+                    <div class="author-image">
+                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
+                    <span class="blog-author">por psicológa1</span>
+                </div>
+                    <a href="#" class="read-more">Leia Mais</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-card">
+            <div class="blog-image">
+                <img src="https://st.depositphotos.com/4218696/54755/i/450/depositphotos_547556104-stock-photo-worried-black-woman-psychotherapist-talking.jpg" alt="Card-imagem">
+                <div class="blog-data">27 de Abril, 2025</div>
+            </div>
+            <div class="blog-content">
+                <h2 class="blog-title">Entre Mães: Vozes e Vivências</h2>
+                <p class="blog-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci 
+                voluptatibus, cumque, accusantium, doloremque eveniet
+                </p>
+                <div class="blog-footer">
+                    <div class="author-image">
+                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
+                    <span class="blog-author">por psicológa1</span>
+                </div>
+                    <a href="#" class="read-more">Leia Mais</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="blog-card">
+            <div class="blog-image">
+                <img src="https://st.depositphotos.com/4218696/54755/i/450/depositphotos_547556104-stock-photo-worried-black-woman-psychotherapist-talking.jpg" alt="Card-imagem">
+                <div class="blog-data">27 de Abril, 2025</div>
+            </div>
+            <div class="blog-content">
+                <h2 class="blog-title">Entre Mães: Vozes e Vivências</h2>
+                <p class="blog-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci 
+                voluptatibus, cumque, accusantium, doloremque eveniet
+                </p>
+                <div class="blog-footer">
+                    <div class="author-image">
+                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
+                    <span class="blog-author">por psicológa1</span>
+                </div>
+                    <a href="#" class="read-more">Leia Mais</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- for para loop dos posts termina aqui -->
+    </div>
+</section>
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 318">
+    <path fill="#fff" fill-opacity="1" d="M0,64L120,58.7C240,53,480,43,720,53.3C960,64,1200,96,1320,112L1440,128L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z">
+    </path>
+</svg>
+
+<section class="py-5" id="Section-sobre-nos">
+    <div class="container" id="sobre-nos-container">
+        <div class="content-section">
+            <div class="sobre-title">
+                <h1>Sobre Nós</h1>
+            </div>
+            <div class="sobre-content">
+                <h3>Unindo conhecimento e propósito para transformar histórias.</h3>
+                <p>
+                    O Alms é um projeto com viés acadêmico, desenvolvido por quatro estudantes da FATEC Praia Grande.
+                     Nosso propósito é criar um espaço seguro para mães compartilharem vivências, 
+                     receberem apoio e se fortalecerem juntas. 
+                     Acreditamos na troca de experiências como ferramenta de transformação e 
+                     acolhimento. Mais do que um projeto de estudo, o Alms nasce do desejo 
+                     genuíno de fazer a diferença na vida de quem enfrenta desafios diários.
+                </p>
+                <div class="sobre-button">
+                    <a href="#">Saiba Mais</a>
+                </div>
+            </div>
+            <div class="redes-sobre">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-x-twitter"></i></a>
+            </div>
+        </div>
+        <div class="video-section">
+            <video src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4"></video>
+        </div>
+    </div>
+
+</section> 
+ 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 318">
+    <path fill="#ecebeb" fill-opacity="1" d="M0,64L120,58.7C240,53,480,43,720,53.3C960,64,1200,96,1320,112L1440,128L1440,0L1320,0C1200,0,960,0,720,0C480,0,240,0,120,0L0,0Z">
+    </path>
+</svg>
+
+<section class="py-5" id="Section-contato">
+    <div class="container" id="contato-container">
+        <div class="contato-title">
+            <h1>Entre em Contato</h1>
+        </div>
+        <div class="contato-content">
+            <h3>Estamos aqui para ouvir você.</h3>
+            <p>Se você tem alguma dúvida, sugestão ou apenas quer conversar, 
+                não hesite em nos contatar. Sua voz é importante para nós!</p>
+        </div>
+    </div>
+    <div class="contato-form">
+        <form action="#" method="post">
+            <input type="text" name="name" placeholder="Seu Nome" required>
+            <input type="email" name="email" placeholder="Seu E-mail" required>
+            <textarea name="message" rows="5" placeholder="Sua Mensagem"></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
+
