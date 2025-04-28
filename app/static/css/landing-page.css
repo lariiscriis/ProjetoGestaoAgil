@@ -78,7 +78,7 @@ svg{
 #Section-posts p{
     font-size: 1em;
     max-width: 600px;
-    text-align: center;
+    /* text-align: center; */
     margin: 0 auto 20px auto;
     line-height: 1.6;
 }
@@ -160,6 +160,7 @@ svg{
     font-size: 1em;
     line-height: 1.6;
     margin-bottom: auto;
+    text-align: start;
 }
 
 .blog-footer{
