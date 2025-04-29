@@ -76,8 +76,11 @@ WSGI_APPLICATION = 'Projeto.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'projetoGestaoAgil',
+        'CLIENT': {
+            'host': 'mongodb+srv://userTest:userTest@cluster0.zejs1ae.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+        }
     }
 }
 

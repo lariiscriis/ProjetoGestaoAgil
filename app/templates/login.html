@@ -1,0 +1,22 @@
+{% extends 'template.html' %}
+{% load static %}
+
+{% block titulo %} Novo Usuário {% endblock %}
+
+{% block conteudo %}
+
+<h2>Login</h2>
+<form method="post" style="margin-top: 20vh;" action="{% url 'login' %}" id="ContainerLogin">
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    {% csrf_token %}
+    <input type="email" name="email" placeholder="email" required>
+    <input type="password" name="senha" placeholder="Senha" required>
+    <button type="submit">Entrar</button>
+</form>
+<a href="{% url 'cadastro' %}">Não tem conta? Cadastre-se</a>
+
+
+
+{% endblock %}

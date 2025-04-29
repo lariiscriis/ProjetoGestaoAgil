@@ -1,0 +1,29 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+
+
+{% block titulo %} Index {% endblock %}
+
+{% block conteudo %}
+    <a href="{% url 'cadastro'%}">Cadastre-se</a>
+    <a href="{% url 'login'%}">login</a>
+
+    <h1 id="h1Usuarios">Usuários</h1>
+    <table>
+        <tr id="trUsuarios">
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>senha</th>
+        </tr>
+        {% for user in listUsuarios %}
+            <tr>
+                <td>{{user.nome}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.senha}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+{% endblock %}
