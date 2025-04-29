@@ -5,8 +5,8 @@
 ### 1. Clone o repositório
 
 ```bash
-  git clone https://github.com/seu-usuario/seu-projeto.git
-  cd seu-projeto
+  git clone https://github.com/lariiscriis/ProjetoGestaoAgil.git
+  cd ProjetoGestaoAgil
 ```
 
 ### 2. Crie um ambiente virtual
