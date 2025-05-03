@@ -1,0 +1,291 @@
+:root {
+    --cor-principal: #000;
+    --cor-secundaria: #fff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--cor-principal);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.tela {
+    display: flex;
+    flex-direction: row; 
+    height: 100vh;
+  }
+  
+  .imagem {
+    flex: 1;
+    position: relative;
+    background: #eceaea;
+    overflow: hidden;
+  }
+
+  .onda {
+    position: absolute;
+    top: 0;
+    right: -1px;
+    width: 100%;
+    height: 100%;
+    transform: rotate(90deg);
+    z-index: 2;
+  }
+
+.formulario-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    position: relative;
+}
+
+.fundo{
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    width: 500px;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+}
+
+label{
+    display: none;
+}
+
+.navegacao {
+    position: static;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.navegacao a {
+    color: var(--cor-principal);
+    text-decoration: none;
+    margin-right: 1rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.navegacao a:hover {
+    color: gray;
+}
+
+.alternar-tipo {
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    font-size: 1rem;
+}
+
+.alternar-tipo a {
+    color: var(--cor-principal);
+    text-decoration: none;
+    margin: 0 0.5rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.alternar-tipo a:hover {
+    color: gray;
+}
+
+.formulario {
+    width: 100%;
+    max-width: 400px;
+    display: none;
+    flex-direction: column;
+}
+
+.formulario.ativo {
+    display: flex;
+}
+
+h2 {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    text-align: center;
+}
+
+input, button {
+    padding: 0.75rem;
+    margin-top: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    font-size: 1rem;
+}
+
+
+button {
+    background-color: var(--cor-principal);
+    color: var(--cor-secundaria);
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+.alternar-acao {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.alternar-acao a {
+    color: var(--cor-principal);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.alternar-acao a:hover {
+    color: gray;
+}
+
+@media (max-width: 768px) {
+    .tela {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .imagem {
+        display: none;
+    }
+
+    .onda {
+        display: none;
+
+    }
+
+    .formulario-container {
+        top: 10em;
+        padding: 2rem 1rem;
+        height: auto;
+    }
+
+    .fundo {
+        width: 100%;
+        height: auto;
+        padding: 2rem 1.5rem;
+        position: static;
+        box-shadow: none;
+    }
+
+    .alternar-tipo {
+        position: static;
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .navegacao {
+        position: static;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .tela {
+        flex-direction: row;
+        height: 100vh;
+    }
+
+    .formulario-container {
+        padding: 2rem;
+    }
+
+    .fundo {
+        width: 90%;
+        max-width: 450px; 
+        height: auto;
+        padding: 2rem;
+    }
+
+    .formulario {
+        max-width: 100%;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    .alternar-tipo {
+        top: 1rem;
+        right: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .navegacao {
+        top: -2rem;
+        font-size: 0.9rem;
+    }
+
+    input, button {
+        font-size: 0.95rem;
+        padding: 0.65rem;
+    }
+
+    .imagem{
+        display: none;
+    }
+
+    .onda {
+        display: none;
+    }
+}
+
+@media (min-width: 1201px) {
+    .tela {
+        flex-direction: row;
+        height: 100vh;
+    }
+
+    .formulario-container {
+        padding: 3rem;
+    }
+
+    .fundo {
+        width: 500px;
+        height: auto;
+        padding: 3rem;
+    }
+
+    .formulario {
+        max-width: 100%;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .alternar-tipo {
+        top: 2rem;
+        right: 3rem;
+        font-size: 1rem;
+    }
+
+    .navegacao {
+        top: -3rem;
+        font-size: 1rem;
+    }
+
+    input, button {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+}

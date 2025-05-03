@@ -6,7 +6,16 @@ class CadastroForm(forms.ModelForm):
         model = Usuario
         fields = ['nome', 'email', 'senha']
         widgets = {
-            'nome': forms.TextInput(attrs={'placeholder': 'Nome'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
-            'senha': forms.PasswordInput(attrs={'placeholder': 'Senha'}),
+            'nome': forms.TextInput(attrs={'placeholder': 'Nome','class': 'input-padrao'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Email','class': 'input-padrao'}),
+            'senha': forms.PasswordInput(attrs={'placeholder': 'Senha','class': 'input-padrao'}),
+        }
+
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['email', 'senha']
+        widgets = {
+            'email': forms.EmailInput(attrs={'placeholder': 'Email', 'class': 'input-padrao'}),
+            'senha': forms.PasswordInput(attrs={'placeholder': 'Senha','class': 'input-padrao'}),
         }
