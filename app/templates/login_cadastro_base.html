@@ -38,7 +38,8 @@
                 {% if error %}
                     <p style="color: red; text-align: center;">{{ error }}</p>
                 {% endif %}
-                 {{ form.as_p }}
+                {{ form.email }}
+                {{ form.senha }}
                 <button type="submit">Entrar</button>
                 <div class="alternar-acao">
                     <a href="?action=cadastro" onclick="setAcao('cadastro')">Não tem conta? Cadastre-se</a>

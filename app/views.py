@@ -49,14 +49,24 @@ def login_view(request):
                 senha = form.cleaned_data.get('senha')
 
                 try:
-                    usuario = Usuario.objects.get(email=email)
+                    if tipo == 'psicologo':
+                        crp = form.cleaned_data.get('crp')
+                        if not crp:
+                            error = 'CRP é obrigatório para psicólogos.'
+                        else:
+                            usuario = Usuario.objects.get(email=email, crp=crp, tipo='psicologo')
+                    else:
+                        usuario = Usuario.objects.get(email=email, tipo='usuario')
+
                     if check_password(senha, usuario.senha):
                         request.session['usuario_id'] = usuario.id
                         return redirect('exibirUsuarios')
                     else:
                         error = 'Senha inválida.'
+
                 except Usuario.DoesNotExist:
                     error = 'Usuário não encontrado.'
+
             else:
                 print("Formulário inválido:", form.errors)
 

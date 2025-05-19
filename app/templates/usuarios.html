@@ -12,6 +12,7 @@
     <h1 id="h1Usuarios">Usuários</h1>
     <table>
         <tr id="trUsuarios">
+            <th>tipo</th>
             <th>Nome</th>
             <th>E-mail</th>
             <th>senha</th>
@@ -20,6 +21,7 @@
         </tr>
         {% for user in listUsuarios %}
             <tr>
+                <td>{{user.tipo}}</td>
                 <td>{{user.nome}}</td>
                 <td>{{user.email}}</td>
                 <td>{{user.senha}}</td>

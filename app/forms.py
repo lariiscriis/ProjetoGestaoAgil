@@ -44,6 +44,13 @@ class CadastroPsicologoForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
+    crp = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'CRP',
+            'class': 'input-padrao'
+        })
+    )
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'placeholder': 'Email',
