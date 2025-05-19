@@ -9,6 +9,7 @@
 {% block conteudo %}
     <a href="#"> Cadastre-se</a>
     <a href="{% url 'login'%}">login</a>
+    <a href="{% url 'usuarios'%}">login</a>
     <h1 id="h1Usuarios">Usuários</h1>
     <table>
         <tr id="trUsuarios">
@@ -16,7 +17,7 @@
             <th>E-mail</th>
             <th>senha</th>
             <th>crp</th>
-            <th>area_atuacao</th>
+            <th>area de atuação</th>
         </tr>
         {% for user in listUsuarios %}
             <tr>
