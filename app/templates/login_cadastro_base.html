@@ -30,72 +30,84 @@
        
     
             <!-- FORM LOGIN USUÁRIO -->
-            {% if action == 'login' %}
-            <form method="post" action="?action=login" class="formulario" id="login-usuario">
+            {% if tipo == 'usuario' and action == 'login' %}
+            <form method="post" action="?action=login&tipo=usuario" class="formulario" id="login-usuario">
                 {% csrf_token %}
+                <input type="hidden" name="tipo" value="usuario">
                 <h2>Login</h2>
                 {% if error %}
                     <p style="color: red; text-align: center;">{{ error }}</p>
                 {% endif %}
-                <input type="email" name="email" placeholder="E-mail" required>
-                <input type="password" name="senha" placeholder="Senha" required>
+                {{ form.email }}
+                {{ form.senha }}
                 <button type="submit">Entrar</button>
                 <div class="alternar-acao">
                     <a href="?action=cadastro" onclick="setAcao('cadastro')">Não tem conta? Cadastre-se</a>
                 </div>
-            </form>
-            {% endif %}
 
-            <!-- FORM CADASTRO USUÁRIO -->
-            {% if action == 'cadastro' %}
-            <form method="POST" action="?action=cadastro" class="formulario" id="cadastro-usuario">
-                {% csrf_token %}    
-                <h2>Cadastro</h2>
-                <!-- <input type="text" name="nome" placeholder="Nome">
-                <input type="email" name="email" placeholder="Email">
-                <input type="password" name="senha" placeholder="Senha">-->
-                    <!-- {{ form.as_p }} -->
-                    {{ form.nome }}
-                    {{ form.email }}
-                    {{ form.senha }}
-                <button type="submit">Cadastrar</button>
-                <div class="alternar-acao">
-                    <a href="?action=login" onclick="setAcao('login')">Já tem conta? Faça login</a>
-                </div>
             </form>
             {% endif %}
+            
             <!-- FORM LOGIN PSICÓLOGO -->
-            <form class="formulario" id="login-psicologo">
+            {% if action == 'login' and tipo == 'psicologo' %}
+            <form method="POST" action="?action=login&tipo=psicologo" class="formulario" id="login-psicologo">
+                {% csrf_token %}  
+                <input type="hidden" name="tipo" value="psicologo">
                 <h2>Login Psicólogo</h2>
-                <input type="text" placeholder="CRP">   
-                <input type="email" placeholder="E-mail">
-                <input type="password" placeholder="Senha">
+                {{ form.crp }}
+                {{ form.email }}
+                {{ form.senha }}
+
                 <button type="submit">Entrar</button>
                 <div class="alternar-acao">
                     <a href="#" onclick="setAcao('cadastro')">Não tem conta? Cadastre-se</a>
                 </div>
             </form>
-    
-            <!-- FORM CADASTRO PSICÓLOGO -->
-            <form class="formulario" id="cadastro-psicologo">
-                <h2>Cadastro Psicólogo</h2>
-                <input type="text" placeholder="Nome">
-                <input type="email" placeholder="E-mail">
-                <input type="text" placeholder="CRP">
-                <input type="text" placeholder="Área de atuação">
-                <input type="password" placeholder="Senha">
+            {% endif %}
+
+            <!-- FORM CADASTRO USUÁRIO -->
+            {% if action == 'cadastro' and tipo == 'usuario' %}
+            <form method="POST" action="?action=cadastro&tipo=usuario" class="formulario ativo" id="cadastro-usuario">
+                {% csrf_token %}    
+                <input type="hidden" name="tipo" value="usuario">
+                <h2>Cadastro</h2>
+                {{ form.nome }}
+                {{ form.email }}
+                {{ form.senha }}
+
                 <button type="submit">Cadastrar</button>
                 <div class="alternar-acao">
                     <a href="?action=login" onclick="setAcao('login')">Já tem conta? Faça login</a>
                 </div>
             </form>
+            {% endif %}
+
+                        <!-- FORM CADASTRO PSICÓLOGO -->
+            {% if action == 'cadastro' and tipo == 'psicologo' %}
+                <form  method="POST" action="?action=cadastro&tipo=psicologo" class="formulario ativo" id="cadastro-psicologo">
+                {% csrf_token %}
+                <input type="hidden" name="tipo" value="psicologo">
+                <h2>Cadastro Psicólogo</h2>
+                {{ form.nome }}
+                {{ form.email }}
+                {{ form.crp }}
+                {{ form.area_atuacao }}
+                {{ form.senha }}
+                <button type="submit">Cadastrar</button>
+                <div class="alternar-acao">
+                    <a href="?action=login&tipo=psicologo" onclick="setAcao('login')">Já tem conta? Faça login</a>
+                </div>
+            </form>
+            {% endif %}
+ 
         </div>
         </div>
     </div>
     
     <script>
-        let tipo = 'usuario';
+        
         let acao = '{{ action }}';
+        let tipo = '{{ tipo }}';
     
         function atualizarForm() {
             document.querySelectorAll('.formulario').forEach(f => f.classList.remove('ativo'));
@@ -105,13 +117,21 @@
     
         function setTipo(novoTipo) {
             tipo = novoTipo;
-            atualizarForm();
+            const novaUrl = new URL(window.location);
+            novaUrl.searchParams.set("action", acao);
+            novaUrl.searchParams.set("tipo", tipo);
+            window.location = novaUrl.toString();
         }
+
     
         function setAcao(novaAcao) {
             acao = novaAcao;
-            atualizarForm();
+            const novaUrl = new URL(window.location);
+            novaUrl.searchParams.set("action", acao);
+            novaUrl.searchParams.set("tipo", tipo);
+            window.location = novaUrl.toString();
         }
+
     
         document.addEventListener('DOMContentLoaded', atualizarForm);
     </script>
