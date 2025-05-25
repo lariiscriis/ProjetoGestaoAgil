@@ -1,36 +1,17 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse
-
-from .forms import CadastroForm, LoginForm, CadastroPsicologoForm
+from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Usuario
+from .models import Usuario, Post
+from bson import ObjectId 
 
 def app(request):
     return render(request, 'landing-page.html')
 
 def linkAjuda(request):
     return render(request, 'ajuda.html')
-
-
-
-# def cadastro(request):
-#     userForm = CadastroForm(request.POST or None)
-    
-#     if request.method == 'POST':
-#         if userForm.is_valid():
-#             emailForm = userForm.cleaned_data.get('email')
-            
-#             if Usuario.objects.filter(email=emailForm).exists():
-#                 userForm.add_error('email', 'Email já cadastrado.')
-#             else:
-#                 usuario = userForm.save(commit=False)
-#                 usuario.senha = make_password(usuario.senha) 
-#                 usuario.save()
-#                 return redirect("exibirUsuarios")
-    
-#     return render(request, 'login_cadastro_base.html', {'form': userForm, 'action': 'login'})
 
 def login_view(request):
     action = request.GET.get('action', 'login')
@@ -54,15 +35,23 @@ def login_view(request):
                         if not crp:
                             error = 'CRP é obrigatório para psicólogos.'
                         else:
-                            usuario = Usuario.objects.get(email=email, crp=crp, tipo='psicologo')
+                            try:
+                                usuario = Usuario.objects.get(email=email, crp=crp, tipo='psicologo')
+                            except Usuario.DoesNotExist:
+                                usuario = None
                     else:
-                        usuario = Usuario.objects.get(email=email, tipo='usuario')
+                        try:
+                            usuario = Usuario.objects.get(email=email, tipo='usuario')
+                        except Usuario.DoesNotExist:
+                            usuario = None
 
-                    if check_password(senha, usuario.senha):
-                        request.session['usuario_id'] = usuario.id
-                        return redirect('exibirUsuarios')
+                    if usuario and check_password(senha, usuario.senha):
+                        request.session['usuario_id'] = str(usuario._id)
+                        print("ID salvo na sessão:", request.session['usuario_id'])
+                        return redirect('blog')
                     else:
-                        error = 'Senha inválida.'
+                        error = 'Email, CRP ou senha inválidos.'
+
 
                 except Usuario.DoesNotExist:
                     error = 'Usuário não encontrado.'
@@ -99,7 +88,84 @@ def login_view(request):
         })
 
 
-
 def exibirUsuarios(request):
     usuarios = Usuario.objects.all().values()
     return render(request, "usuarios.html", {'listUsuarios': usuarios})
+
+
+# # Blog Views 
+def blog(request):
+    posts = Post.objects.all()
+    usuario = None
+    usuario_id = request.session.get('usuario_id')
+
+    if usuario_id:
+        try:
+            usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        except Usuario.DoesNotExist:
+            pass
+
+    return render(request, 'blog.html', {'posts': posts, 'usuario': usuario})
+
+
+def detalhe_post(request, post_id):
+    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    return render(request, 'detalhe_post.html', {'post': post})
+
+def novo_post(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            usuario_id = request.session.get('usuario_id')
+            if usuario_id:
+                try:
+                    try:
+                        autor = Usuario.objects.get(_id=ObjectId(usuario_id))
+                    except Usuario.DoesNotExist:
+                        autor = None
+
+                    if autor:
+                        post.autor = autor
+                        post.save()
+                        return redirect('blog')
+                    else:
+                        form.add_error(None, "Usuário não encontrado. Faça login novamente.")
+                except Exception as e:
+                    form.add_error(None, f"Erro ao buscar usuário: {e}")
+            else:
+                form.add_error(None, "Usuário não autenticado.")
+    else:
+        form = PostForm()
+    return render(request, 'novo_post.html', {'form': form})
+
+
+
+def editar_post(request, post_id):
+    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id or str(post.autor._id) != usuario_id or post.autor.tipo != 'psicologo':
+        return HttpResponse("Você não tem permissão para editar este post.", status=403)
+
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('blog')
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'editar_post.html', {'form': form})
+
+
+def excluir_post(request, post_id):
+    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id or str(post.autor._id) != usuario_id or post.autor.tipo != 'psicologo':
+        return HttpResponse("Você não tem permissão para excluir este post.", status=403)
+
+    if request.method == "POST":
+        post.delete()
+        return redirect('blog')
+    return render(request, 'excluir_post.html', {'post': post})

@@ -1,0 +1,32 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block titulo %} Blog {% endblock %}
+
+{% block conteudo %}
+    <div class="container py-5">
+
+    <h1>Blog</h1> 
+    {% if usuario and usuario.tipo == "psicologo" %}
+    <p><a href="{% url 'novo_post' %}">Criar novo post</a></p>
+    {% endif %}
+    <ul>
+   {% for post in posts %}
+    <li>
+        <a href="{% url 'detalhe_post' post.post_id %}">{{ post.titulo }}</a>
+        {% if post.autor.foto_perfil %}
+            <img src="{{ post.autor.foto_perfil.url }}" alt="Foto de perfil">
+        {% else %}
+            <img src="/static/images/default-profile.png" alt="Foto padrão">
+        {% endif %}
+
+        <small>Por {{ post.autor.nome }} ({{ post.autor.tipo }}) em {{ post.criado_em }}</small><br>
+
+    </li>
+    {% endfor %}
+
+    </ul>
+    </div>
+
+{% endblock %}

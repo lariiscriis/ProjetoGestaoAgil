@@ -1,0 +1,29 @@
+{% load static %}
+
+{% block titulo %} Blog {% endblock %}
+
+{% block conteudo %}
+<h1>{{ post.titulo }}</h1>
+{% if request.session.usuario_id == post.autor.usuario_id|stringformat:"s" and post.autor.tipo == "psicologo" %}
+    <a href="{% url 'editar_post' post.post_id %}">Editar</a> |
+    <a href="{% url 'excluir_post' post.post_id %}">Excluir</a>
+
+{% endif %}
+
+<div style="display: flex; align-items: center; margin-bottom: 1em;">
+    {% if post.autor.foto_perfil %}
+        <img src="{{ post.autor.foto_perfil.url }}" alt="Foto de {{ post.autor.nome }}" >
+    {% else %}
+        <img src="{% static 'img/perfil_padrao.png' %}" alt="Foto padrão">
+    {% endif %}
+    <strong>Escrito por: {{ post.autor.nome }}</strong>
+</div>
+
+<p>{{ post.conteudo }}</p>
+
+<p><small>Publicado em 
+    {{ post.criado_em|date:"d/m/Y H:i" }}
+</small></p>
+
+<a href="{% url 'blog' %}">← Voltar</a>
+{% endblock %}
