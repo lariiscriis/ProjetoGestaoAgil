@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Usuario
+from app.models import Usuario, Post
 from django.contrib.auth.hashers import make_password
 
 class CadastroForm(forms.ModelForm):
@@ -63,3 +63,12 @@ class LoginForm(forms.Form):
             'class': 'input-padrao'
         })
     )
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['titulo', 'conteudo']
+        widgets = {
+            'titulo': forms.TextInput(attrs={'placeholder': 'titulo'}),
+            'conteudo': forms.Textarea(attrs={'placeholder': 'conteudo'}),            
+        }

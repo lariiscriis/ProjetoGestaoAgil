@@ -19,6 +19,29 @@
             
         <div class="formulario-container">
             <div class="fundo">
+            <div class="navegacao">
+                <a href="#" onclick="setTipo('usuario')">Usuário</a>
+                <a class="separador">|</a>
+                <a href="#" onclick="setTipo('psicologo')">Psicólogo</a>
+            </div>
+    
+       
+    
+            <!-- FORM LOGIN USUÁRIO -->
+            {% if tipo == 'usuario' and action == 'login' %}
+            <form method="post" action="?action=login&tipo=usuario" class="formulario" id="login-usuario">
+                {% csrf_token %}
+                <input type="hidden" name="tipo" value="usuario">
+                <h2>Login</h2>
+                {% if error %}
+                    <p style="color: red; text-align: center;">{{ error }}</p>
+                {% endif %}
+                {{ form.email }}
+                {{ form.senha }}
+                <button type="submit">Entrar</button>
+                <div class="alternar-acao">
+                    <a href="javascript:void(0)" onclick="setAcao('cadastro')">Não tem conta? Cadastre-se</a>
+                </div>
                 <div class="navegacao">
                     <a href="#" onclick="setTipo('usuario')">Usuário</a>
                     <a class="separador">|</a>
@@ -42,6 +65,25 @@
                         <a href="javascript:void(0)" onclick="setAcao('cadastro')">Não tem conta? Cadastre-se</a>
                     </div>
 
+            </form>
+            {% endif %}
+            
+            <!-- FORM LOGIN PSICÓLOGO -->
+            {% if action == 'login' and tipo == 'psicologo' %}
+            <form method="POST" action="?action=login&tipo=psicologo" class="formulario" id="login-psicologo">
+                {% csrf_token %}  
+                <input type="hidden" name="tipo" value="psicologo">
+                <h2>Login Psicólogo</h2>
+                {{ form.crp }}
+                {{ form.email }}
+                {{ form.senha }}
+
+                <button type="submit">Entrar</button>
+                <div class="alternar-acao">
+                    <a href="javascript:void(0)" onclick="setAcao('cadastro')">Não tem conta? Cadastre-se</a>
+                </div>
+            </form>
+            {% endif %}
                 </form>
                 {% endif %}
                 
@@ -74,6 +116,12 @@
                     {{ form.email }}
                     {{ form.senha }}
 
+                <button type="submit">Cadastrar</button>
+                <div class="alternar-acao">
+                    <a href="javascript:void(0)" onclick="setAcao('login')">Já tem conta? Faça login</a>
+                </div>
+            </form>
+            {% endif %}
                     <button type="submit">Cadastrar</button>
                     <div class="alternar-acao">
                         <a href="javascript:void(0)" onclick="setAcao('login')">Já tem conta? Faça login</a>
@@ -81,6 +129,25 @@
                 </form>
                 {% endif %}
 
+                        <!-- FORM CADASTRO PSICÓLOGO -->
+            {% if action == 'cadastro' and tipo == 'psicologo' %}
+                <form  method="POST" action="?action=cadastro&tipo=psicologo" class="formulario ativo" id="cadastro-psicologo">
+                {% csrf_token %}
+                <input type="hidden" name="tipo" value="psicologo">
+                <h2>Cadastro Psicólogo</h2>
+                {{ form.nome }}
+                {{ form.email }}
+                {{ form.crp }}
+                {{ form.area_atuacao }}
+                {{ form.senha }}
+                <button type="submit">Cadastrar</button>
+                <div class="alternar-acao">
+                    <a href="javascript:void(0)" onclick="setAcao('login')">Já tem conta? Faça login</a>
+                </div>
+            </form>
+            {% endif %}
+ 
+        </div>
                 <!-- FORM CADASTRO PSICÓLOGO -->
                 {% if action == 'cadastro' and tipo == 'psicologo' %}
                     <form  method="POST" action="?action=cadastro&tipo=psicologo" class="formulario ativo" id="cadastro-psicologo">
@@ -134,4 +201,6 @@
     
         document.addEventListener('DOMContentLoaded', atualizarForm);
     </script>
+    {% endblock %}
+
 {% endblock %}

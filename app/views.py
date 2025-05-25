@@ -1,11 +1,11 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse
-
-from .forms import CadastroForm, LoginForm, CadastroPsicologoForm
+from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Usuario
+from .models import Usuario, Post
+from bson import ObjectId 
 
 def app(request):
     return render(request, 'landing-page.html')
@@ -13,7 +13,10 @@ def app(request):
 def linkAjuda(request):
     return render(request, 'ajuda.html')
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6bccab372e6548ec61d03c7eef2942a5760e644d
 def login_view(request):
     action = request.GET.get('action', 'login')
     tipo = request.POST.get('tipo') or request.GET.get('tipo', 'usuario')
@@ -36,15 +39,23 @@ def login_view(request):
                         if not crp:
                             error = 'CRP é obrigatório para psicólogos.'
                         else:
-                            usuario = Usuario.objects.get(email=email, crp=crp, tipo='psicologo')
+                            try:
+                                usuario = Usuario.objects.get(email=email, crp=crp, tipo='psicologo')
+                            except Usuario.DoesNotExist:
+                                usuario = None
                     else:
-                        usuario = Usuario.objects.get(email=email, tipo='usuario')
+                        try:
+                            usuario = Usuario.objects.get(email=email, tipo='usuario')
+                        except Usuario.DoesNotExist:
+                            usuario = None
 
-                    if check_password(senha, usuario.senha):
-                        request.session['usuario_id'] = usuario.id
-                        return redirect('exibirUsuarios')
+                    if usuario and check_password(senha, usuario.senha):
+                        request.session['usuario_id'] = str(usuario._id)
+                        print("ID salvo na sessão:", request.session['usuario_id'])
+                        return redirect('blog')
                     else:
-                        error = 'Senha inválida.'
+                        error = 'Email, CRP ou senha inválidos.'
+
 
                 except Usuario.DoesNotExist:
                     error = 'Usuário não encontrado.'
@@ -85,6 +96,10 @@ def exibirUsuarios(request):
     usuarios = Usuario.objects.all().values()
     return render(request, "usuarios.html", {'listUsuarios': usuarios})
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6bccab372e6548ec61d03c7eef2942a5760e644d
 # # Blog Views 
 def blog(request):
     posts = Post.objects.all()
@@ -161,6 +176,9 @@ def excluir_post(request, post_id):
         post.delete()
         return redirect('blog')
     return render(request, 'excluir_post.html', {'post': post})
+<<<<<<< HEAD
 
 def forum(request):
     return render(request, 'forum.html')
+=======
+>>>>>>> 6bccab372e6548ec61d03c7eef2942a5760e644d
