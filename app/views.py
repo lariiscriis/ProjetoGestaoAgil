@@ -14,24 +14,6 @@ def linkAjuda(request):
     return render(request, 'ajuda.html')
 
 
-
-# def cadastro(request):
-#     userForm = CadastroForm(request.POST or None)
-    
-#     if request.method == 'POST':
-#         if userForm.is_valid():
-#             emailForm = userForm.cleaned_data.get('email')
-            
-#             if Usuario.objects.filter(email=emailForm).exists():
-#                 userForm.add_error('email', 'Email já cadastrado.')
-#             else:
-#                 usuario = userForm.save(commit=False)
-#                 usuario.senha = make_password(usuario.senha) 
-#                 usuario.save()
-#                 return redirect("exibirUsuarios")
-    
-#     return render(request, 'login_cadastro_base.html', {'form': userForm, 'action': 'login'})
-
 def login_view(request):
     action = request.GET.get('action', 'login')
     tipo = request.POST.get('tipo') or request.GET.get('tipo', 'usuario')
@@ -99,7 +81,86 @@ def login_view(request):
         })
 
 
-
 def exibirUsuarios(request):
     usuarios = Usuario.objects.all().values()
     return render(request, "usuarios.html", {'listUsuarios': usuarios})
+
+# # Blog Views 
+def blog(request):
+    posts = Post.objects.all()
+    usuario = None
+    usuario_id = request.session.get('usuario_id')
+
+    if usuario_id:
+        try:
+            usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        except Usuario.DoesNotExist:
+            pass
+
+    return render(request, 'blog.html', {'posts': posts, 'usuario': usuario})
+
+
+def detalhe_post(request, post_id):
+    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    return render(request, 'detalhe_post.html', {'post': post})
+
+def novo_post(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            usuario_id = request.session.get('usuario_id')
+            if usuario_id:
+                try:
+                    try:
+                        autor = Usuario.objects.get(_id=ObjectId(usuario_id))
+                    except Usuario.DoesNotExist:
+                        autor = None
+
+                    if autor:
+                        post.autor = autor
+                        post.save()
+                        return redirect('blog')
+                    else:
+                        form.add_error(None, "Usuário não encontrado. Faça login novamente.")
+                except Exception as e:
+                    form.add_error(None, f"Erro ao buscar usuário: {e}")
+            else:
+                form.add_error(None, "Usuário não autenticado.")
+    else:
+        form = PostForm()
+    return render(request, 'novo_post.html', {'form': form})
+
+
+
+def editar_post(request, post_id):
+    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id or str(post.autor._id) != usuario_id or post.autor.tipo != 'psicologo':
+        return HttpResponse("Você não tem permissão para editar este post.", status=403)
+
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('blog')
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'editar_post.html', {'form': form})
+
+
+def excluir_post(request, post_id):
+    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id or str(post.autor._id) != usuario_id or post.autor.tipo != 'psicologo':
+        return HttpResponse("Você não tem permissão para excluir este post.", status=403)
+
+    if request.method == "POST":
+        post.delete()
+        return redirect('blog')
+    return render(request, 'excluir_post.html', {'post': post})
+
+def forum(request):
+    return render(request, 'forum.html')

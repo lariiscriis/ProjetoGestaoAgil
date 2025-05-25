@@ -5,9 +5,9 @@
     --secondary-color: #ffffff; 
     --background-color: #ffffff;
     --text-color: #000000;
-  }
+}
 
-  body{
+body{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -16,14 +16,20 @@
     scroll-behavior: smooth;
 }
 
-
 #nav {
     background-color: #ffffff  !important;
 }
 
-#nav img{
-    width: 4em;
+#nav img {
+    width: 6em;
     height: auto;
+}
+
+.footer img {
+    width: 3em;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .divNav{
@@ -85,8 +91,3 @@
     letter-spacing: 0.5px;
     font-family: "Poppins", sans-serif;
 }
-
-
-
-
-

@@ -1,0 +1,80 @@
+{% extends 'template.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/forum.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block conteudo %}
+<div class="container forum-page">
+    <div class="row justify-content-center">
+
+        <div class="col-12 col-lg-8 order-1 order-lg-0 timeline-area p-4">
+            <div class="col-12 mt-2 mb-3">
+                <h2 class="forum-title">Fórum</h2>
+            </div>
+            {% for post in posts %}
+            <div class="forum-post mb-2">
+                <div class="post-header d-flex justify-content-between align-items-start mb-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="{{ post.usuario.foto.url|default:'/static/img/default-profile.png' }}" alt="Foto de perfil" class="profile-pic">
+                        <strong class="username text-primary">{{ post.usuario.nome }}</strong>
+                    </div>
+                    <small class="text-muted">{{ post.data_postagem|timesince }} atrás</small>
+                </div>
+
+                <p class="post-content">{{ post.conteudo }}</p>
+
+                <div class="post-actions d-flex gap-3">
+                    <a href="#" class="action-link"><i class="bi bi-heart me-1"></i>Curtir</a>
+                    <a href="#" class="action-link"><i class="bi bi-reply me-1"></i>Responder</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-12 col-lg-4 order-0 order-lg-1">
+
+            <div class="mb-4 mt-lg-4">
+                <button class="btn btn-primary w-100 d-flex justify-content-center align-items-center gap-2">
+                    <i class="bi bi-plus-lg"></i> Adicionar comentário
+                </button>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Em alta</h5>
+                    <ul class="list-group list-group-flush" id="assuntos">
+                        <li class="list-group-item">Assunto 1</li>
+                        <li class="list-group-item">Assunto 2</li>
+                        <li class="list-group-item">Assunto 3</li>
+                        <li class="list-group-item">Assunto 4</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Perfis recomendados</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>@usuario1</span>
+                            <button class="btn btn-sm btn-outline-primary">Seguir</button>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>@usuario2</span>
+                            <button class="btn btn-sm btn-outline-primary">Seguir</button>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>@usuario3</span>
+                            <button class="btn btn-sm btn-outline-primary">Seguir</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

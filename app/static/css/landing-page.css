@@ -3,9 +3,9 @@
     --secondary-color: #ffffff; 
     --background-color: #ffffff;
     --text-color: #000000;
-  }
+}
 
-  #SecaoIndex1 {
+#SecaoIndex1 {
     display: flex;
     align-items: center; 
     justify-content: space-between;
@@ -14,7 +14,7 @@
 }
 
 #row{
-margin: 5em 0 -8em 0;
+    margin: 5em 0 -8em 0;
 }
 
 #sectionLeft, #sectionRight {
@@ -78,7 +78,6 @@ svg{
 #Section-posts p{
     font-size: 1em;
     max-width: 600px;
-    /* text-align: center; */
     margin: 0 auto 20px auto;
     line-height: 1.6;
 }
@@ -211,13 +210,13 @@ svg{
   width: 80%;
   display: block;
   margin: auto;
-  /* padding:20px; */
 }
 
 .content-section{
     float: left;
     width: 55%; 
 }
+
 .video-section{
     float: right;
     width: 40%;
@@ -262,11 +261,13 @@ svg{
     transition: background-color 0.3s ease;
     margin-top: 20px;
 }
+
 .sobre-button a{
     text-decoration: none;
     color: #fff;
     font-size: 16px;
 }
+
 .content-section .sobre-button:hover {
     background-color: #333;
 }
@@ -364,13 +365,9 @@ svg{
     transition: background-color 0.3s ease;
 }
 
-
 .contato-form button:hover {
     background-color: #333;
 }
-
-
-
 
 
 @media (max-width: 768px) {
@@ -388,7 +385,6 @@ svg{
        margin-top: -1em;
     }
 
-  
     .sobre-nos-container{
         width: 80%;
         display: block;
@@ -440,9 +436,10 @@ svg{
         line-height: 1.5;
     }
 
-.sobre-button{
-    margin: 20px auto;
+    .sobre-button{
+        margin: 20px auto;
     }
+
     .redes-sobre {
         display: flex;
         justify-content: center; 
@@ -468,6 +465,4 @@ svg{
         width: 100%;  
         margin-bottom: 70px;
     }
-
 }
-    

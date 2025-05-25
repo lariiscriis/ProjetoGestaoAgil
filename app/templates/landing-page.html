@@ -8,18 +8,17 @@
 {% endblock %}
 
 {% block conteudo %}
-    <section class="container py-5" id="SecaoIndex1">
+    <section class="container py-5" id="Section-index">
         <div class="row" id="row">
             <div class="col-12 col md-6 col-lg-6" id="sectionLeft" >
-                <h1>Alms</h1>
+                <h1>Amae</h1>
                 <p>Conectando mães, compartilhando forças. Aqui você encontra apoio, 
                 troca de experiências e um espaço 
                 seguro para construir novas histórias junto de quem entende sua jornada.</p>
                 <a href="#" class="btn btn-primary" id="btn-section">Saiba mais</a>
             </div>
             <div class="col-lg-6 text-center"id="sectionRight">
-                <img src="https://images.emojiterra.com/open
-moji/v13.1/512px/26ab.png" alt="Alms Logo" class="img-fluid" id="logo">
+                <img src="{% static 'assets/images/logo_amae.png' %}" alt="Alms Logo" class="img-fluid" id="logo">
             </div>
         </div>
     </section>
@@ -56,7 +55,7 @@ moji/v13.1/512px/26ab.png" alt="Alms Logo" class="img-fluid" id="logo">
                     <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
                     <span class="blog-author">por psicológa1</span>
                 </div>
-                    <a href="#" class="read-more">Leia Mais</a>
+                    <a href="{% url 'blog' %}" class="read-more">Leia Mais</a>
                 </div>
             </div>
         </div>
@@ -76,7 +75,7 @@ moji/v13.1/512px/26ab.png" alt="Alms Logo" class="img-fluid" id="logo">
                     <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
                     <span class="blog-author">por psicológa1</span>
                 </div>
-                    <a href="#" class="read-more">Leia Mais</a>
+                    <a href="{% url 'blog' %}" class="read-more">Leia Mais</a>
                 </div>
             </div>
         </div>
@@ -97,7 +96,7 @@ moji/v13.1/512px/26ab.png" alt="Alms Logo" class="img-fluid" id="logo">
                     <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
                     <span class="blog-author">por psicológa1</span>
                 </div>
-                    <a href="#" class="read-more">Leia Mais</a>
+                    <a href="{% url 'blog' %}" class="read-more">Leia Mais</a>
                 </div>
             </div>
         </div>
@@ -171,4 +170,3 @@ moji/v13.1/512px/26ab.png" alt="Alms Logo" class="img-fluid" id="logo">
 </section>
 
 {% endblock %}
-
