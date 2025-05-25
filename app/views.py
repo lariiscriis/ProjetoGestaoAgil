@@ -13,10 +13,6 @@ def app(request):
 def linkAjuda(request):
     return render(request, 'ajuda.html')
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 6bccab372e6548ec61d03c7eef2942a5760e644d
 def login_view(request):
     action = request.GET.get('action', 'login')
     tipo = request.POST.get('tipo') or request.GET.get('tipo', 'usuario')
@@ -96,10 +92,6 @@ def exibirUsuarios(request):
     usuarios = Usuario.objects.all().values()
     return render(request, "usuarios.html", {'listUsuarios': usuarios})
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6bccab372e6548ec61d03c7eef2942a5760e644d
 # # Blog Views 
 def blog(request):
     posts = Post.objects.all()
@@ -176,9 +168,6 @@ def excluir_post(request, post_id):
         post.delete()
         return redirect('blog')
     return render(request, 'excluir_post.html', {'post': post})
-<<<<<<< HEAD
 
 def forum(request):
     return render(request, 'forum.html')
-=======
->>>>>>> 6bccab372e6548ec61d03c7eef2942a5760e644d
