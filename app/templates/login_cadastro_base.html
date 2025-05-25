@@ -42,12 +42,8 @@
                 <div class="alternar-acao">
                     <a href="javascript:void(0)" onclick="setAcao('cadastro')">Não tem conta? Cadastre-se</a>
                 </div>
-                <div class="navegacao">
-                    <a href="#" onclick="setTipo('usuario')">Usuário</a>
-                    <a class="separador">|</a>
-                    <a href="#" onclick="setTipo('psicologo')">Psicólogo</a>
-                </div>
-
+            </form>
+            {% endif %}
 
                 <!-- FORM LOGIN USUÁRIO -->
                 {% if tipo == 'usuario' and action == 'login' %}
@@ -65,8 +61,8 @@
                         <a href="javascript:void(0)" onclick="setAcao('cadastro')">Não tem conta? Cadastre-se</a>
                     </div>
 
-            </form>
-            {% endif %}
+                </form>
+                {% endif %}
             
             <!-- FORM LOGIN PSICÓLOGO -->
             {% if action == 'login' and tipo == 'psicologo' %}
@@ -84,8 +80,6 @@
                 </div>
             </form>
             {% endif %}
-                </form>
-                {% endif %}
                 
                 <!-- FORM LOGIN PSICÓLOGO -->
                 {% if action == 'login' and tipo == 'psicologo' %}
@@ -122,12 +116,6 @@
                 </div>
             </form>
             {% endif %}
-                    <button type="submit">Cadastrar</button>
-                    <div class="alternar-acao">
-                        <a href="javascript:void(0)" onclick="setAcao('login')">Já tem conta? Faça login</a>
-                    </div>
-                </form>
-                {% endif %}
 
                         <!-- FORM CADASTRO PSICÓLOGO -->
             {% if action == 'cadastro' and tipo == 'psicologo' %}
@@ -202,5 +190,3 @@
         document.addEventListener('DOMContentLoaded', atualizarForm);
     </script>
     {% endblock %}
-
-{% endblock %}
