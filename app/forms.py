@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Usuario, Post
+from app.models import Usuario, Post, Comentario, Curtida
 from django.contrib.auth.hashers import make_password
 
 class CadastroForm(forms.ModelForm):
@@ -71,4 +71,12 @@ class PostForm(forms.ModelForm):
         widgets = {
             'titulo': forms.TextInput(attrs={'placeholder': 'titulo'}),
             'conteudo': forms.Textarea(attrs={'placeholder': 'conteudo'}),            
+        }
+
+class ComentarioForm(forms.ModelForm):
+    class Meta:
+        model = Comentario
+        fields = ['texto']
+        widgets = {
+            'texto': forms.Textarea(attrs={'placeholder': 'Escreva seu comentário aqui...'}),
         }

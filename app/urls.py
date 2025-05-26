@@ -14,4 +14,6 @@ urlpatterns = [
     path('novo_post/', views.novo_post, name='novo_post'),
     path('post/<str:post_id>/editar/', views.editar_post, name='editar_post'),
     path('post/<str:post_id>/excluir/', views.excluir_post, name='excluir_post'),
+    path('curtir_comentario/<str:comentario_id>/', views.curtir_comentario, name='curtir_comentario'),
+    path('curtir_post/<str:post_id>/', views.curtir_post, name='curtir_post'),
 ]

@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse
-from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm
+from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm, ComentarioForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Usuario, Post
+from .models import Usuario, Post, Comentario, Curtida
 from bson import ObjectId 
 
 def app(request):
@@ -109,7 +109,55 @@ def blog(request):
 
 def detalhe_post(request, post_id):
     post = get_object_or_404(Post, _id=ObjectId(post_id))
-    return render(request, 'detalhe_post.html', {'post': post})
+    comentarios = Comentario.objects.filter(post_id=post, comentario_pai=None).order_by('-data_criacao')
+
+    form = ComentarioForm()
+    usuario_id = request.session.get('usuario_id')
+    
+    if request.method == 'POST' and usuario_id:
+        form = ComentarioForm(request.POST)
+        if form.is_valid():
+            comentario = form.save(commit=False)
+            comentario.post_id = post
+            comentario.autor = Usuario.objects.get(_id=ObjectId(usuario_id))
+            
+            comentario_pai_id = request.POST.get('comentario_pai_id')
+            if comentario_pai_id:
+                comentario.comentario_pai = Comentario.objects.get(_id=ObjectId(comentario_pai_id))
+            
+            comentario.save()
+            return redirect('detalhe_post', post_id=post_id)
+
+
+    return render(request, 'detalhe_post.html', {
+        'post': post,
+        'comentarios': comentarios,
+        'form': form,
+        'usuario_id': usuario_id,
+    })
+
+def curtir_post(request, post_id):
+    usuario_id = request.session.get('usuario_id')
+    if usuario_id:
+        usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        post = Post.objects.get(_id=ObjectId(post_id))
+
+        if not Curtida.objects.filter(usuario=usuario, post_id=post).exists():
+            Curtida.objects.create(usuario=usuario, post_id=post, comentario_id=None)
+    return redirect('detalhe_post', post_id=post_id)
+
+
+def curtir_comentario(request, comentario_id):
+    usuario_id = request.session.get('usuario_id')
+    if usuario_id:
+        usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        comentario = Comentario.objects.get(_id=ObjectId(comentario_id))
+
+        if not Curtida.objects.filter(usuario=usuario, comentario_id=comentario).exists():
+            Curtida.objects.create(usuario=usuario, comentario_id=comentario, post_id=None)
+
+    return redirect('detalhe_post', post_id=comentario.post_id._id)
+
 
 def novo_post(request):
     if request.method == "POST":

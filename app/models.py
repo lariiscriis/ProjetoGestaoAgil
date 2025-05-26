@@ -38,4 +38,20 @@ class Post(models.Model):
         return str(self._id)
     
 
+class Comentario(models.Model):
+    _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+    post_id = models.ForeignKey('Post', null=True, blank=True, on_delete=models.CASCADE)
+    autor = models.ForeignKey('Usuario', on_delete=models.CASCADE)
+    texto = models.TextField()
+    data_criacao = models.DateTimeField(default=timezone.now)
+    comentario_pai = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     
+    def comentario_id(self):
+        return str(self._id)
+
+class Curtida(models.Model):
+    _id = models.ObjectIdField(primary_key=True, default=ObjectId)
+    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE)
+    post_id = models.ForeignKey('Post', null=True, blank=True, on_delete=models.CASCADE)
+    comentario_id = models.ForeignKey('Comentario', null=True, blank=True,  on_delete=models.CASCADE)
+    data_curtida = models.DateTimeField(default=timezone.now)
