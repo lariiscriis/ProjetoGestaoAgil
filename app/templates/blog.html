@@ -14,6 +14,12 @@
     <ul>
    {% for post in posts %}
     <li>
+        {% if post.thumbnail %}
+            <img src="{{ post.thumbnail.url }}"   width="60" alt="{{ post.titulo }}">
+        {% else %}
+            <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">
+        {% endif %}
+
         <a href="{% url 'detalhe_post' post.post_id %}">{{ post.titulo }}</a>
         {% if post.autor.foto_perfil %}
             <img src="{{ post.autor.foto_perfil.url }}" alt="Foto de perfil">

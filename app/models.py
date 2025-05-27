@@ -2,6 +2,7 @@ from django.db import models
 from djongo import models
 from bson import ObjectId
 from django.utils import timezone
+from ckeditor.fields import RichTextField
 
 class Usuario(models.Model):
     _id = models.ObjectIdField(primary_key=True, default=ObjectId)
@@ -27,9 +28,10 @@ class Usuario(models.Model):
 class Post(models.Model):
     _id = models.ObjectIdField(primary_key=True) 
     titulo = models.CharField(max_length=200)
-    conteudo = models.TextField()
+    conteudo = RichTextField()
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     criado_em = models.DateTimeField(auto_now_add=True)
+    thumbnail = models.ImageField(upload_to='posts/thumbnails/', null=True, blank=True)
 
     def __str__(self):
         return self.titulo

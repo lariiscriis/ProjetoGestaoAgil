@@ -158,28 +158,20 @@ def curtir_comentario(request, comentario_id):
 
     return redirect('detalhe_post', post_id=comentario.post_id._id)
 
-
 def novo_post(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES) 
         if form.is_valid():
             post = form.save(commit=False)
             usuario_id = request.session.get('usuario_id')
             if usuario_id:
                 try:
-                    try:
-                        autor = Usuario.objects.get(_id=ObjectId(usuario_id))
-                    except Usuario.DoesNotExist:
-                        autor = None
-
-                    if autor:
-                        post.autor = autor
-                        post.save()
-                        return redirect('blog')
-                    else:
-                        form.add_error(None, "Usuário não encontrado. Faça login novamente.")
-                except Exception as e:
-                    form.add_error(None, f"Erro ao buscar usuário: {e}")
+                    autor = Usuario.objects.get(_id=ObjectId(usuario_id))
+                    post.autor = autor
+                    post.save()
+                    return redirect('blog')
+                except Usuario.DoesNotExist:
+                    form.add_error(None, "Usuário não encontrado. Faça login novamente.")
             else:
                 form.add_error(None, "Usuário não autenticado.")
     else:
@@ -191,18 +183,20 @@ def novo_post(request):
 def editar_post(request, post_id):
     post = get_object_or_404(Post, _id=ObjectId(post_id))
     usuario_id = request.session.get('usuario_id')
-
-    if not usuario_id or str(post.autor._id) != usuario_id or post.autor.tipo != 'psicologo':
+    if not usuario_id or str(post.autor._id) != usuario_id:
         return HttpResponse("Você não tem permissão para editar este post.", status=403)
-
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('blog')
+            return redirect('detalhe_post', post_id=post_id)
     else:
         form = PostForm(instance=post)
-    return render(request, 'editar_post.html', {'form': form})
+    
+    return render(request, 'editar_post.html', {
+        'form': form,
+        'post': post
+    })
 
 
 def excluir_post(request, post_id):

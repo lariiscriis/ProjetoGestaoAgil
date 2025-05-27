@@ -1,6 +1,7 @@
 from django import forms
-from app.models import Usuario, Post, Comentario, Curtida
+from app.models import Usuario, Post, Comentario
 from django.contrib.auth.hashers import make_password
+from ckeditor.widgets import CKEditorWidget
 
 class CadastroForm(forms.ModelForm):
     class Meta:
@@ -65,12 +66,15 @@ class LoginForm(forms.Form):
     )
 
 class PostForm(forms.ModelForm):
+    conteudo = forms.CharField(widget=CKEditorWidget()) 
     class Meta:
         model = Post
-        fields = ['titulo', 'conteudo']
+        fields = ['titulo', 'conteudo', 'thumbnail']
         widgets = {
             'titulo': forms.TextInput(attrs={'placeholder': 'titulo'}),
-            'conteudo': forms.Textarea(attrs={'placeholder': 'conteudo'}),            
+            'conteudo': forms.Textarea(attrs={'placeholder': 'conteudo'}),  
+            'thumbnail': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
+          
         }
 
 class ComentarioForm(forms.ModelForm):

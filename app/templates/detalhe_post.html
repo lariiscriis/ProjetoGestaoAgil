@@ -29,7 +29,9 @@
     <strong>Escrito por: {{ post.autor.nome }}</strong>
 </div>
 
-<p>{{ post.conteudo }}</p>
+<div class="post-content">
+    {{ post.conteudo|safe }}
+</div>
 
 <p><small>Publicado em 
     {{ post.criado_em|date:"d/m/Y H:i" }}

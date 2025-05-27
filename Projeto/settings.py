@@ -29,8 +29,36 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+             ['Format', 'Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+            ['TextColor', 'BGColor'],
 
-# Application definition
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar'],
+            ['RemoveFormat', 'Source']
+        ],
+        'height': 300,
+        'width': '100%',
+        'font_names': 'Arial/Arial, Helvetica, sans-serif;' +
+                     'Comic Sans MS/Comic Sans MS, cursive;' +
+                     'Courier New/Courier New, Courier, monospace;' +
+                     'Georgia/Georgia, serif;' +
+                     'Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, sans-serif;' +
+                     'Tahoma/Tahoma, Geneva, sans-serif;' +
+                     'Times New Roman/Times New Roman, Times, serif;' +
+                     'Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;' +
+                     'Verdana/Verdana, Geneva, sans-serif',
+        'fontSize_sizes': '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px',
+    },
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
     'app'
 ]
 
