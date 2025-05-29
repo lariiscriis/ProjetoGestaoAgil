@@ -2,79 +2,148 @@
 {% load static %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static 'css/forum.css' %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 {% endblock %}
 
 {% block conteudo %}
-<div class="container forum-page">
-    <div class="row justify-content-center">
+<div class="container-fluid forum-page">
+  <div class="row justify-content-center px-3 px-lg-5">
 
-        <div class="col-12 col-lg-8 order-1 order-lg-0 timeline-area p-4">
-            <div class="col-12 mt-2 mb-3">
-                <h2 class="forum-title">Fórum</h2>
-            </div>
-            {% for post in posts %}
-            <div class="forum-post mb-2">
-                <div class="post-header d-flex justify-content-between align-items-start mb-2">
-                    <div class="d-flex align-items-center gap-2">
-                        <img src="{{ post.usuario.foto.url|default:'/static/img/default-profile.png' }}" alt="Foto de perfil" class="profile-pic">
-                        <strong class="username text-primary">{{ post.usuario.nome }}</strong>
-                    </div>
-                    <small class="text-muted">{{ post.data_postagem|timesince }} atrás</small>
-                </div>
+    <div class="col-12 col-md-3">
+      <div class="sidebar sticky-top">
 
-                <p class="post-content">{{ post.conteudo }}</p>
-
-                <div class="post-actions d-flex gap-3">
-                    <a href="#" class="action-link"><i class="bi bi-heart me-1"></i>Curtir</a>
-                    <a href="#" class="action-link"><i class="bi bi-reply me-1"></i>Responder</a>
-                </div>
-            </div>
-            {% endfor %}
+        <div class="perfil-box d-flex align-items-center gap-2 m-4 p-3 bg-white rounded shadow-sm border">
+          <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic" width="50" height="50">
+          <h5 class="mb-0">Usuário</h5>
         </div>
 
-        <div class="col-12 col-lg-4 order-0 order-lg-1">
 
-            <div class="mb-4 mt-lg-4">
-                <button class="btn btn-primary w-100 d-flex justify-content-center align-items-center gap-2">
-                    <i class="bi bi-plus-lg"></i> Adicionar comentário
-                </button>
+        <div class="d-grid gap-2">
+          <button class="btn btn-outline-primary" onclick="mostrarPopup()"><i class="bi bi-pencil-square me-2"></i>Postar</button>
+          <button class="btn btn-light"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
+          <button class="btn btn-light"><i class="bi bi-search me-2"></i>Pesquisar</button>
+          <button class="btn btn-light"><i class="bi bi-bell me-2"></i>Notificações</button>
+          <button class="btn btn-light"><i class="bi bi-person me-2"></i>Meu Perfil</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+        <h2 class="mb-4">Fórum</h2>
+
+        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
+                <strong class="text-primary">Maria Silva</strong>
             </div>
-
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Em alta</h5>
-                    <ul class="list-group list-group-flush" id="assuntos">
-                        <li class="list-group-item">Assunto 1</li>
-                        <li class="list-group-item">Assunto 2</li>
-                        <li class="list-group-item">Assunto 3</li>
-                        <li class="list-group-item">Assunto 4</li>
-                    </ul>
-                </div>
+            <small class="text-muted">2h atrás</small>
             </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Perfis recomendados</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>@usuario1</span>
-                            <button class="btn btn-sm btn-outline-primary">Seguir</button>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>@usuario2</span>
-                            <button class="btn btn-sm btn-outline-primary">Seguir</button>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>@usuario3</span>
-                            <button class="btn btn-sm btn-outline-primary">Seguir</button>
-                        </li>
-                    </ul>
-                </div>
+            <p class="mb-2">Olá pessoal! Alguém tem dicas sobre como lidar com ansiedade em dias difíceis?</p>
+            <div class="d-flex gap-3">
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
             </div>
+        </div>
 
+        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
+                <strong class="text-primary">João Costa</strong>
+            </div>
+            <small class="text-muted">30min atrás</small>
+            </div>
+            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
+            <div class="d-flex gap-3">
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
+            </div>
+        </div>
+
+        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
+                <strong class="text-primary">João Costa</strong>
+            </div>
+            <small class="text-muted">30min atrás</small>
+            </div>
+            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
+            <div class="d-flex gap-3">
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
+            </div>
+        </div>
+
+        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
+                <strong class="text-primary">João Costa</strong>
+            </div>
+            <small class="text-muted">30min atrás</small>
+            </div>
+            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
+            <div class="d-flex gap-3">
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
+            </div>
+        </div>
+
+        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
+                <strong class="text-primary">João Costa</strong>
+            </div>
+            <small class="text-muted">30min atrás</small>
+            </div>
+            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
+            <div class="d-flex gap-3">
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
+            </div>
+        </div>
+
+        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+            <div class="d-flex align-items-center gap-2">
+                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
+                <strong class="text-primary">João Costa</strong>
+            </div>
+            <small class="text-muted">30min atrás</small>
+            </div>
+            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
+            <div class="d-flex gap-3">
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
+            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
+            </div>
         </div>
     </div>
+
+  </div>
 </div>
+
+<div id="popupComentario" class="popup-comentario d-none">
+  <div class="popup-inner">
+    <textarea placeholder="O que você está pensando?" rows="4"></textarea>
+    <div class="popup-botoes">
+      <button class="btn btn-sm btn-primary">Publicar</button>
+      <button class="btn btn-sm btn-secondary" onclick="fecharPopup()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function mostrarPopup() {
+    document.getElementById('popupComentario').classList.remove('d-none');
+  }
+
+  function fecharPopup() {
+    document.getElementById('popupComentario').classList.add('d-none');
+  }
+</script>
+
 {% endblock %}

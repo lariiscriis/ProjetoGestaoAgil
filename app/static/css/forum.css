@@ -1,89 +1,92 @@
-/* Body da Timeline*/
-.forum-page .container {
-    max-width: 1200px;
-    margin-top: 2.5rem;
+.forum-page {
+  background-color: #f9f9f9;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
-/* Timeline*/
-.forum-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #343a40;
-    margin-bottom: 1rem;
-}
-
-.timeline-area {
-    background-color: #f8f9fa;
-    border-radius: 0.5rem;
-    margin-top: 1.5rem;
-}
-
-.forum-post {
-    background-color: transparent;
-    padding: 1rem 0;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 2em;;
+.sidebar {
+  position: sticky;
+  top: 90px;
 }
 
 .profile-pic {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    object-fit: cover;
+  border-radius: 50%;
+  object-fit: cover;
+  width: 40px;
+  height: 40px;
 }
 
-.username {
-    font-size: 0.95rem;
-    color: #0d6efd;
+.perfil-box {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.post-content {
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-    white-space: pre-wrap;
-    word-break: break-word;
+.forum-post {
+  transition: box-shadow 0.2s;
 }
 
-.post-actions {
-    font-size: 0.85rem;
-    color: #6c757d;
+.forum-post:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
 }
 
-.post-actions .action-link {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    align-items: center;
+.timeline-area {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 800px;
 }
 
-.post-actions .action-link:hover {
-    color: #0d6efd;
+.timeline-box {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
-/* Adicionar comentário */
-.forum-page button.btn {
-    font-size: 1rem;
-    padding: 0.6rem 1rem;
+.popup-comentario {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  z-index: 1050;
 }
 
-/* Assuntos em alta */
-#assuntos{
-    font-size: 18px;
+.popup-inner textarea {
+  width: 100%;
+  resize: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-/* Perfis recomendados */
-.card .list-group-item {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+.popup-botoes {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: end;
+  gap: 0.5rem;
 }
 
-.btn-outline-primary {
-    font-size: 0.85rem;
-    padding: 0.25rem 0.75rem;
+.d-none {
+  display: none;
 }
 
-@media (max-width: 700px) {
-    .forum-post {
-        max-width: 90%;
-    }
+@media (max-width: 768px) {
+  .forum-page .col-lg-3,
+  .forum-page .col-lg-7 {
+    padding: 0 1rem;
+  }
+
+  .forum-post {
+    padding: 1rem;
+  }
 }
