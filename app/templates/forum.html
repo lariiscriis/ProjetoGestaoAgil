@@ -7,128 +7,78 @@
 {% endblock %}
 
 {% block conteudo %}
+
+
+<div class="forum-wrapper position-relative">
+
 <div class="container-fluid forum-page">
-  <div class="row justify-content-center px-3 px-lg-5">
-
-    <div class="col-12 col-md-3">
-      <div class="sidebar sticky-top">
-
-        <div class="perfil-box d-flex align-items-center gap-2 m-4 p-3 bg-white rounded shadow-sm border">
-          <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic" width="50" height="50">
-          <h5 class="mb-0">Usuário</h5>
+  
+  <div class="row gx-3">
+    <div class="col-lg-3 order-lg-3 order-1">
+      <div class="right-panel sticky-top py-4 nova-postagem"  style="top: 90px;">
+        <div class="mb-4 p-3 bg-white rounded shadow-sm border">
+          <h5 class="mb-3">Nova Postagem</h5>
+          <textarea class="form-control mb-2" rows="3" placeholder="O que você está pensando?" disabled></textarea>
+          <button class="btn btn-primary btn-sm w-100" onclick="mostrarPopup()">Publicar</button>
         </div>
 
+        <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
+          <h6 class="mb-3">Posts Sugeridos</h6>
+          <ul class="list-unstyled small">
+            <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
+            <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 p-0">
+             <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+      <div class="left-sidebar p-3 text-white">
+
+        <div class="perfil-box d-flex align-items-center gap-2 mb-4">
+          <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
+          <h6 class="mb-0">Usuário</h6>
+        </div>
 
         <div class="d-grid gap-2">
-          <button class="btn btn-outline-primary" onclick="mostrarPopup()"><i class="bi bi-pencil-square me-2"></i>Postar</button>
-          <button class="btn btn-light"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
-          <button class="btn btn-light"><i class="bi bi-search me-2"></i>Pesquisar</button>
-          <button class="btn btn-light"><i class="bi bi-bell me-2"></i>Notificações</button>
-          <button class="btn btn-light"><i class="bi bi-person me-2"></i>Meu Perfil</button>
+          <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
+          <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
+          <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
+          <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
         </div>
       </div>
     </div>
 
-    <div class="col-12 col-lg-7">
-        <h2 class="mb-4">Fórum</h2>
+    <div class="col-lg-7">
+      <h2 class="my-4">Fórum</h2>
 
-        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
-                <strong class="text-primary">Maria Silva</strong>
-            </div>
-            <small class="text-muted">2h atrás</small>
-            </div>
-            <p class="mb-2">Olá pessoal! Alguém tem dicas sobre como lidar com ansiedade em dias difíceis?</p>
-            <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
-            </div>
+      {% for i in "123456"|make_list %}
+      <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
+            <strong class="text-primary">João Costa</strong>
+          </div>
+          <small class="text-muted">30min atrás</small>
         </div>
-
-        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
-                <strong class="text-primary">João Costa</strong>
-            </div>
-            <small class="text-muted">30min atrás</small>
-            </div>
-            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
-            <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
-            </div>
+        <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
+          <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
         </div>
-
-        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
-                <strong class="text-primary">João Costa</strong>
-            </div>
-            <small class="text-muted">30min atrás</small>
-            </div>
-            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
-            <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
-            </div>
-        </div>
-
-        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
-                <strong class="text-primary">João Costa</strong>
-            </div>
-            <small class="text-muted">30min atrás</small>
-            </div>
-            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
-            <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
-            </div>
-        </div>
-
-        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
-                <strong class="text-primary">João Costa</strong>
-            </div>
-            <small class="text-muted">30min atrás</small>
-            </div>
-            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
-            <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
-            </div>
-        </div>
-
-        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="d-flex align-items-center gap-2">
-                <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
-                <strong class="text-primary">João Costa</strong>
-            </div>
-            <small class="text-muted">30min atrás</small>
-            </div>
-            <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
-            <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-reply me-1"></i>Responder</a>
-            </div>
-        </div>
+      </div>
+      {% endfor %}
     </div>
-
   </div>
 </div>
+</div>
+
 
 <div id="popupComentario" class="popup-comentario d-none">
   <div class="popup-inner">
-    <textarea placeholder="O que você está pensando?" rows="4"></textarea>
+    <textarea  placeholder="O que você está pensando?" rows="4" ></textarea>
     <div class="popup-botoes">
       <button class="btn btn-sm btn-primary">Publicar</button>
       <button class="btn btn-sm btn-secondary" onclick="fecharPopup()">Cancelar</button>
@@ -144,6 +94,19 @@
   function fecharPopup() {
     document.getElementById('popupComentario').classList.add('d-none');
   }
+
+    function toggleSidebar() {
+    document.querySelector('.left-sidebar').classList.toggle('active');
+  }
+
+    document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.left-sidebar');
+    const toggle = document.querySelector('.sidebar-toggle');
+    
+    if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggle.contains(event.target)) {
+      sidebar.classList.remove('active');
+    }
+  });
 </script>
 
 {% endblock %}
