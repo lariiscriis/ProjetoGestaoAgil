@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -29,35 +29,43 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_IMAGE_BACKEND = "pillow"
-CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'Custom',
-        'toolbar_Custom': [
-             ['Format', 'Font', 'FontSize'],
-            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
-            ['TextColor', 'BGColor'],
-
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Link', 'Unlink'],
-            ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar'],
-            ['RemoveFormat', 'Source']
-        ],
-        'height': 300,
+SUMMERNOTE_CONFIG = {
+    'iframe': True,
+    'summernote': {
+        'airMode': False,
         'width': '100%',
-        'font_names': 'Arial/Arial, Helvetica, sans-serif;' +
-                     'Comic Sans MS/Comic Sans MS, cursive;' +
-                     'Courier New/Courier New, Courier, monospace;' +
-                     'Georgia/Georgia, serif;' +
-                     'Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, sans-serif;' +
-                     'Tahoma/Tahoma, Geneva, sans-serif;' +
-                     'Times New Roman/Times New Roman, Times, serif;' +
-                     'Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;' +
-                     'Verdana/Verdana, Geneva, sans-serif',
-        'fontSize_sizes': '8/8px;9/9px;10/10px;11/11px;12/12px;14/14px;16/16px;18/18px;20/20px;22/22px;24/24px;26/26px;28/28px;36/36px;48/48px;72/72px',
+        'height': '480',
+        'imageResize': True,
+        'imageResizeWithPercent': True,
+        'imageResizeWithRatio': False,
+        'imageSizeUnits': ['px', '%'],
+        'imageShapeControls': ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone'],
+        'imageTextNear': True,
+        'imageMove': True,
+        'toolbar': [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['insert', ['picture']],
+            ['view', ['fullscreen', 'codeview']],
+            ['help', ['help']],
+        ],
     },
+    'js': (
+        '/static/summernote/summernote-image-attributes.js', 
+    ),
+    'css': (
+        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/codemirror.min.css',
+        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/theme/monokai.min.css',
+    ),
+    'attachment_require_authentication': False,
+    'disable_attachment': False,
+    'attachment_filesize_limit': 1024 * 1024 * 5,  # 5MB
 }
 
 INSTALLED_APPS = [
@@ -67,7 +75,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ckeditor',
+    'django_summernote',
     'app'
 ]
 
