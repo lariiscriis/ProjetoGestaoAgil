@@ -63,15 +63,13 @@
                                 <div class="blog-content">
                                     <h2 class="blog-title">{{ post.titulo }}</h2>
                             
-                                    <p class="blog-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci 
-                                    voluptatibus, cumque, accusantium, doloremque eveniet
-                                    </p>
+                                    <p class="blog-description">{{ post.conteudo|safe|truncatewords:50 }}...</p>
                                         <div class="blog-footer">
                                         <div class="author-image">
                                             {% if post.autor.foto_perfil %}
                                             <img src="{{ post.autor.foto_perfil.url }}" alt="">
                                                {% else %}
-                                            <img src="/static/images/default-profile.png" alt="Foto padrão">
+                                            <img src="/static/images/default-profile.png">
                                         {% endif %}
 
                                         <span class="blog-author">{{ post.autor.nome }}</span>
@@ -90,10 +88,54 @@
         </div>
 
 
-        <div class="content">
+        <div class="content clearfix">
             <div class="main-content">
                 <h1 class="recent-post-title">Posts Recentes</h1>
-                
+                {% for post in posts %}
+                    <div class="post">
+                        <!-- imagem -->
+                        {% if post.thumbnail  and post.thumbnail.name%}
+                            <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }} " class="post-image">
+                        {% else %}
+                            <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão" class="post-image">
+                        {% endif %}   
+                        
+                        <!-- titulo -->
+                    <div class="post-preview">
+                            <h4><a href="{% url 'detalhe_post' post.post_id %}">{{ post.titulo }}</a></h4>
+                             <!-- <p class="blog-description">{{ post.conteudo|safe|truncatewords:50 }}...</p> -->
+
+                            <!-- autor -->
+                            <div class="post-footer">
+                                        <div class="post-author-image">
+                                            <div class="blog-data">{{ post.criado_em }}</div>
+                                            {% if post.autor.foto_perfil %}
+                                            <img src="{{ post.autor.foto_perfil.url }}" alt="">
+                                               {% else %}
+                                            <img src="/static/images/default-profile.png">
+                                        {% endif %}
+                                         <span class="post-author">{{ post.autor.nome }}</span>
+                                        </div>
+                                        <i class="bi bi-heart me-1">{{ post.curtida_set.count }}</i>
+                                        <a href="{% url 'detalhe_post' post.post_id %}" class="post-read-more">Leia Mais</a>
+                                </div>
+                        </div>
+
+
+
+                     </div>
+               {% endfor %}
+
+
+
+                    {% for post in posts %}
+                      <!-- <div class="post">
+                            <h2>{{ post.titulo }}</h2>
+                            <p>{{ post.criado_em }}</p>
+                            <a href="{% url 'detalhe_post' post.post_id %}">Leia Mais</a>
+                        </div>
+                        {% endfor %} -->
+      
             </div>
             <div class="side-bar"></div>
         </div>
