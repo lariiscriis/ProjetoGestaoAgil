@@ -2,10 +2,17 @@
 
 {% load static %}
 
+    {% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    {% endblock %}
+
 {% block titulo %} Blog {% endblock %}
 
+
 {% block conteudo %}
-    <div class="container py-5">
+    <!-- <div class="container py-5">
 
     <h1>Blog</h1> 
     {% if usuario and usuario.tipo == "psicologo" %}
@@ -14,8 +21,8 @@
     <ul>
    {% for post in posts %}
     <li>
-        {% if post.thumbnail %}
-            <img src="{{ post.thumbnail.url }}"   width="60" alt="{{ post.titulo }}">
+        {% if post.thumbnail  and post.thumbnail.name %}  
+            <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }}">
         {% else %}
             <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">
         {% endif %}
@@ -33,6 +40,108 @@
     {% endfor %}
 
     </ul>
+    </div> -->
+
+    <div class="page-wrapper">
+        <div class="post-slider">
+            <h1>Mais Curtidos</h1>
+            <i class="bi bi-chevron-left prev"></i>  
+            <i class="bi bi-chevron-right next"></i> 
+            <div class="post-wrapper">
+                {% for post in posts %}
+                <div class="post">
+                        <div class="blog-card">
+                            <div class="blog-image">
+                                {% if post.thumbnail  and post.thumbnail.name%}
+
+                                    <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }} ">
+                                {% else %}
+                                    <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">
+                                {% endif %}                                        
+                                <div class="blog-data">{{ post.criado_em }}</div>
+                                         </div>
+                                <div class="blog-content">
+                                    <h2 class="blog-title">{{ post.titulo }}</h2>
+                            
+                                    <p class="blog-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci 
+                                    voluptatibus, cumque, accusantium, doloremque eveniet
+                                    </p>
+                                        <div class="blog-footer">
+                                        <div class="author-image">
+                                            {% if post.autor.foto_perfil %}
+                                            <img src="{{ post.autor.foto_perfil.url }}" alt="">
+                                               {% else %}
+                                            <img src="/static/images/default-profile.png" alt="Foto padrão">
+                                        {% endif %}
+
+                                        <span class="blog-author">{{ post.autor.nome }}</span>
+                                            </div>
+                                        <a href="{% url 'detalhe_post' post.post_id %}" class="read-more">Leia Mais</a>
+                                </div>
+                            </div>
+                     </div>
+
+                </div>
+        {% endfor %}
+
+
+
+            </div>
+        </div>
+
+
+        <div class="content">
+            <div class="main-content">
+                <h1 class="recent-post-title">Posts Recentes</h1>
+                
+            </div>
+            <div class="side-bar"></div>
+        </div>
+
     </div>
 
-{% endblock %}
+    <!-- js do slick carousel  -->
+<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<script>    
+  $('.post-wrapper').slick({
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  nextArrow: $('.next'),
+  prevArrow: $('.prev'),
+   responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        infinite: true,
+        dots: true
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    }
+
+  ]
+});
+</script>
+
+{% endblock %} 
+
