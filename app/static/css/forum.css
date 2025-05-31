@@ -3,7 +3,6 @@
   background-color: #f9f9f9;
 }
 
-
 .perfil-box {
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -24,7 +23,6 @@
   width: 40px;
   height: 40px;
 }
-
 
 .left-sidebar {
   background-color: #e0e0e0;
@@ -110,9 +108,9 @@
   border-radius: 10px;
 }
 
-  .col-lg-7{
-    margin-bottom: 4em;
-  }
+.col-lg-7{
+  margin-bottom: 4em;
+}
 
 
 @media (max-width: 1300px) {
