@@ -1,0 +1,120 @@
+{% extends 'template.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_psicologo.css' %}"/>
+{% endblock %}
+
+{% block titulo %}Administrar Posts{% endblock %}
+
+{% block conteudo %}
+<div class="admin-container">
+    
+    <div class="left-sidebar p-3 text-white">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="perfil-box d-flex align-items-center gap-2 mb-4">
+                    <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
+                    <h6 class="mb-0">Usuário</h6>
+        </div>
+
+        <div class="d-grid gap-2">
+            <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
+                    <a class="btn btn-light text-start" href="{% url 'forum' %}" ><i class="bi bi-chat  me-2"></i> Fórum</a>
+                    <a class="btn btn-light text-start" href="{% url 'blog' %}"><i class="bi bi-file-earmark-text me-2"></i>Blog</a>
+                    <a class="btn btn-light text-start" href="{% url 'admin_posts' %}"><i class="bi bi-file-earmark-text me-2"></i>Administrar Posts</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Gerenciar Posts</h2>
+            <a href="{% url 'novo_post' %}" class="btn btn-success btn-novo-post">
+                <i class="bi bi-plus-lg"></i> Novo Post
+            </a>
+        </div>
+
+    {% if not autor or autor.tipo != 'psicologo' %}
+            <div class="alert alert-danger">
+                Você não tem permissão para acessar essa área.
+            </div>
+        {% else %}
+            {% if posts %}
+                {% for post in posts %}
+                    <div class="post-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>{{ post.titulo }}</h5>
+                                <p class="text-muted">Criado em {{ post.criado_em|date:"d/m/Y H:i" }}</p>
+                            </div>
+                            {% if post.thumbnail %}
+                                <img src="{{ post.thumbnail.url }}" alt="Thumbnail" class="post-thumbnail rounded">
+                            {% endif %}
+                        </div>
+                        <p class="mt-2">{{ post.conteudo|safe|truncatewords:50 }}</p>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'editar_post' post_id=post.id %}" class="btn btn-primary btn-sm btn-edit">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                    <a type="button" class="btn btn-danger btn-sm btn-excluir" data-bs-toggle="modal" data-bs-target="#deleteModal{{ post.id }}">
+                                <i class="bi bi-trash"></i> Excluir
+                            </a>
+                        </div>
+                        <div class="modal fade" id="deleteModal{{ post.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ post.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <form method="post" action="{% url 'excluir_post' post_id=post.id %}">
+                                {% csrf_token %}
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel{{ post.id }}">Confirmar exclusão</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                </div>
+                                <div class="modal-body">
+                                Tem certeza que deseja excluir <strong>"{{ post.titulo }}"</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-danger">Sim, excluir</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Você ainda não publicou nenhum post.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<script>
+    function toggleSidebar() {
+    document.querySelector('.left-sidebar').classList.toggle('active');
+  }
+
+    document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.left-sidebar');
+    const toggle = document.querySelector('.sidebar-toggle');
+    
+    if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggle.contains(event.target)) {
+      sidebar.classList.remove('active');
+    }
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

@@ -32,24 +32,27 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-2 p-0">
-             <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
 
-      <div class="left-sidebar p-3 text-white">
+     <div class="col-lg-2 p-0">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="left-sidebar p-3 text-white">
 
-        <div class="perfil-box d-flex align-items-center gap-2 mb-4">
-          <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
-          <h6 class="mb-0">Usuário</h6>
-        </div>
+                    <div class="perfil-box d-flex align-items-center gap-2 mb-4">
+                    <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
+                    <h6 class="mb-0">Usuário</h6>
+                    </div>
 
-        <div class="d-grid gap-2">
-          <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
-          <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
-          <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
-          <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
-        </div>
-      </div>
-    </div>
+                    <div class="d-grid gap-2">
+                    <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
+                    <a class="btn btn-light text-start" href="{% url 'forum' %}" ><i class="bi bi-chat  me-2"></i> Fórum</a>
+                    <a class="btn btn-light text-start" href="{% url 'blog' %}"><i class="bi bi-file-earmark-text me-2"></i>Blog</a>
+
+                    </div>
+                </div>
+                </div>
 
     <div class="col-lg-7">
       <h2 class="my-4">Fórum</h2>

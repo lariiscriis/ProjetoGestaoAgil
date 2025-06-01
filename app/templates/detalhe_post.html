@@ -1,10 +1,17 @@
-{% load static %}
+{% extends 'template.html' %}
 
-{% block titulo %} Blog {% endblock %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/detalhe_post.css' %}"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+{% endblock %}
+{% block titulo %}{{ post.titulo }}{% endblock %}
+
 
 {% block conteudo %}
-
-<a href="{% url 'blog' %}">← Voltar</a>
+<!--
+ <a href="{% url 'blog' %}">← Voltar</a>
 
 <h1>{{ post.titulo }}</h1>
 {% if request.session.usuario_id == post.autor.usuario_id|stringformat:"s" and post.autor.tipo == "psicologo" %}
@@ -12,6 +19,7 @@
     <a href="{% url 'excluir_post' post.post_id %}">Excluir</a>
 
 {% endif %}
+
 {% if request.session.usuario_id != post.autor.usuario_id|stringformat:"s" %}
     <form method="post" action="{% url 'curtir_post' post.post_id %}">
         {% csrf_token %}
@@ -95,6 +103,199 @@
             {% endif %}
         </li>
     {% endfor %}
-</ul>
+</ul> -->
 
+
+
+    <div class="page-wrapper">
+
+        <div class="content clearfix">
+            <!-- <div class="voltar-blog">
+            <a >←</a>
+            </div> -->
+               <div class="col-lg-2 p-0">
+                        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+
+                <div class="left-sidebar p-3 text-white">
+
+                    <div class="perfil-box d-flex align-items-center gap-2 mb-4">
+                    <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
+                    <h6 class="mb-0">Usuário</h6>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                    <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
+                    <a class="btn btn-light text-start" href="{% url 'forum' %}" ><i class="bi bi-chat  me-2"></i> Fórum</a>
+                    <a class="btn btn-light text-start" href="{% url 'blog' %}"><i class="bi bi-file-earmark-text me-2"></i>Blog</a>
+                    <a class="btn btn-light text-start" href="{% url 'admin_posts' %}"><i class="bi bi-file-earmark-text me-2"></i>Administrar Posts</a>
+
+                    </div>
+                </div>
+                </div>
+            <div class="main-content">
+                <h1 class="post-title"> {{post.titulo}}  </h1>
+                <div class="post-content">
+                    {{ post.conteudo|safe }}
+                </div>
+
+            </div>  
+
+            <div class="side-bar">
+                <div class="section perfil-autor">
+                 <div class="post-author-image-perfil">
+                     {% if post.autor.foto_perfil %}
+                        <img src="{{ post.autor.foto_perfil.url }}" alt="">
+                            {% else %}
+                           <img src="/static/images/default-profile.png">
+                         {% endif %}
+                         <div class="autor-noem-email">
+                      <span class="post-author-perfil">{{ post.autor.nome }}</span>
+                      <p class="autor-email"><span>{{ post.autor.email }}</span></p>
+                   </div>
+                    </div>
+                    <div class="autor-bio">
+                       <p class="paragrafo-bio"> <!-- {{ post.autor.bio }}--> Parágrafo para ilustração para demonstrar como ficaria caso adicionassemos bio</p> 
+                        <p class="autor-especialidade">Especialidade: <span>{{ post.autor.area_atuacao }}</span></p>                        
+                    </div>
+                </div>
+
+                <div class="section topics">
+                    <h4 class="section-title">Outros posts do autor(a)</h4>
+                        <ul>
+                 {% for post in posts_do_autor %}
+                 <li>
+                    <a href="{% url 'detalhe_post' post.post_id %}">
+                        <div class="post-author-image">
+                            {% if post.thumbnail  and post.thumbnail.name%}
+                                        <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }} ">
+                                    {% else %}
+                                    <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">
+                                {% endif %} 
+                                <div class="titulo-post">
+                        <span class="post-author">{{ post.titulo }}</span>
+                        </div>
+                    </div>
+                </a>
+                 </li>
+                {% empty %}
+                 <li>Nenhum outro post deste autor.</li>
+                    {% endfor %}
+                        </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="comentarios-section col-lg-7 ">
+
+        <div class="perfil-box forum-post">
+            <h3>Comentários</h3>
+
+            <form method="post" class="mt-3 mb-4 position-relative">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="comentario_pai_id" id="comentario_pai_id" />
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary mt-2 btn-comentar">Comentar</button>
+                </div>
+            </form>
+
+            {% for comentario in comentarios %}
+            <div class="comentario forum-post p-3 mb-3">
+            <div class="d-flex align-items-center mb-2">
+                {% if comentario.autor.foto_perfil %}
+                <img class="profile-pic me-2" src="{{ comentario.autor.foto_perfil.url }}" alt="{{ comentario.autor.nome }}">
+                {% else %}
+                <img class="profile-pic me-2" src="{% static 'img/perfil_padrao.png' %}" alt="Foto padrão">
+                {% endif %}
+                <strong>{{ comentario.autor.nome }}</strong>
+            </div>
+            <p class="mb-1">{{ comentario.texto }}</p>
+            <p class="text-muted data-comentario position-absolute" style="font-size: 0.85rem;">{{ comentario.data_criacao|date:"d/m/Y H:i" }}</p>
+
+            <form method="post" class="mb-2">
+                {% csrf_token %}
+                <input type="hidden" name="comentario_pai_id" value="{{ comentario.comentario_id }}">
+                <textarea class="form-control mb-1" name="texto" rows="2" placeholder="Responder..."></textarea>
+               
+                <div class="acoes-comentarios position-absolute"  style="bottom: 0px; right: 50px; ">
+                <button class="btn-icone responder-btn" type="submit">
+                     <i class="bi bi-reply"></i> Responder
+                </button>
+               
+                </div>
+            </form>
+
+            <form method="post" action="{% url 'curtir_comentario' comentario.comentario_id %}">
+                {% csrf_token %}
+             
+                <div class="acoes-comentarios position-absolute" style="bottom: 0px; right: 10px;">
+                <button type="submit" class="btn-icone curtir_form">
+                    <i class="bi bi-heart"></i> {{ comentario.curtida_set.count }}
+                </button>
+                </div>
+
+                </form>     
+
+
+
+            </div>
+                {% if comentario.comentario_set.all %}
+            <div class="respostas ms-4 mt-3 ">
+                {% for resposta in comentario.comentario_set.all %}
+                <div class="resposta forum-post p-2 mb-2 position-relative">
+                <div class="d-flex align-items-center mb-1">
+                    {% if resposta.autor.foto_perfil %}
+                    <img class="profile-pic me-2" src="{{ resposta.autor.foto_perfil.url }}" alt="{{ resposta.autor.nome }}">
+                    {% else %}
+                    <img class="profile-pic me-2" src="{% static 'img/perfil_padrao.png' %}" alt="Foto padrão">
+                    {% endif %}
+                    <strong>{{ resposta.autor.nome }}</strong>
+                </div>
+                <p class="mb-1">{{ resposta.texto }}</p>
+                <p class="text-muted data-resposta" style="font-size: 0.85rem; top: 20px; right: 10px; position: absolute;">{{ resposta.data_criacao|date:"d/m/Y H:i" }}</p>
+
+                <form method="post" action="{% url 'curtir_comentario' resposta.comentario_id %}">
+                    {% csrf_token %}
+                    
+                    <button type="submit" class="btn-icone" style="position: absolute; bottom: 10px; right: 10px;">
+                    <i class="bi bi-heart"></i> {{ resposta.curtida_set.count }}
+                </button>
+                </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        
+            {% empty %}
+            <p class="text-muted">Nenhum comentário ainda.</p>
+            {% endfor %}
+        </div>
+        
+        </div>
+
+
+
+    </div>
+
+
+    <script>
+    function toggleSidebar() {
+    document.querySelector('.left-sidebar').classList.toggle('active');
+  }
+
+    document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.left-sidebar');
+    const toggle = document.querySelector('.sidebar-toggle');
+    
+    if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggle.contains(event.target)) {
+      sidebar.classList.remove('active');
+    }
+  });
+
+
+  
+    </script>
 {% endblock %}

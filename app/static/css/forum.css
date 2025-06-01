@@ -4,6 +4,11 @@
 }
 
 
+a {
+  text-decoration: none;
+}
+
+
 .perfil-box {
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -25,17 +30,16 @@
   height: 40px;
 }
 
-
 .left-sidebar {
-  background-color: #e0e0e0;
-  padding-top: 90px;
-  padding-bottom: 20px;
-  min-height: 100vh;
-  position: fixed;
+  /* background-color: #e0e0e0; */
+  /* padding-top: 90px;
+  padding-bottom: 20px; */
+  /* min-height: 100vh; */
+  /* position: fixed; */
   width: 250px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); */
   transition: transform 0.3s ease-in-out;
-  z-index: 999;
+  /* z-index: 999; */
 }
 
 .profile-pic {
@@ -60,6 +64,7 @@
 
 .forum-wrapper {
   position: relative;
+  
 }
 
 .popup-comentario {
@@ -98,7 +103,7 @@
 
 .sidebar-toggle {
   position: absolute;
-  top: 10px;
+  top: 5px;
   left: 10px;
   background: #e0e0e0;
   color: black;
@@ -106,7 +111,7 @@
   padding: 0.5rem 1rem;
   z-index: 1001;
   display: none;
-  margin: 1rem 0 1rem 1rem; 
+  /* margin: 1rem 0 1rem 1rem;  */
   border-radius: 10px;
 }
 
@@ -115,24 +120,27 @@
   }
 
 
-@media (max-width: 1300px) {
+
+@media (max-width: 1500px) {
   .sidebar-toggle {
     display: block;
-    position: absolute;
-    top: 10px;
+    position: fixed;
+    top: 100px;
     z-index: 2000;
   }
 
   .left-sidebar {
+    background-color: #e0e0e0;
     transform: translateX(-100%);
     position: absolute;  
     z-index: 1000;
+    border-radius: 12px;
 
 }
 
   .left-sidebar.active {
+  /* position: fixed; */
     transform: translateX(0);
-     min-height: 100vh;
     position: fixed;
     z-index: 1060;
   }
@@ -154,4 +162,3 @@
   }
 
 }
-

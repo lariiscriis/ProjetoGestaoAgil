@@ -16,4 +16,6 @@ urlpatterns = [
     path('post/<str:post_id>/excluir/', views.excluir_post, name='excluir_post'),
     path('curtir_comentario/<str:comentario_id>/', views.curtir_comentario, name='curtir_comentario'),
     path('curtir_post/<str:post_id>/', views.curtir_post, name='curtir_post'),
+    path('admin/posts/', views.admin_posts, name='admin_posts'),
+
 ]

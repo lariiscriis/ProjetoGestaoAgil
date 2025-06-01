@@ -4,41 +4,58 @@
 {% block head %}
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
 <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/editar_post.css' %}"/>
+{% endblock %}
+
+{% block titulo %}Editar Post{% endblock %}
+
+{% block scripts %}
 {% endblock %}
 
 {% block conteudo %}
-<div class="container">
+<div class="page-layout">
+    <div class="left-sidebar p-3 text-white">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="perfil-box d-flex align-items-center gap-2 mb-4">
+                    <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
+                    <h6 class="mb-0">Usuário</h6>
+        </div>
+
+        <div class="d-grid gap-2">
+            <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
+                    <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
+                    <a class="btn btn-light text-start" href="{% url 'forum' %}" ><i class="bi bi-chat  me-2"></i> Fórum</a>
+                    <a class="btn btn-light text-start" href="{% url 'blog' %}"><i class="bi bi-file-earmark-text me-2"></i>Blog</a>
+                    <a class="btn btn-light text-start" href="{% url 'admin_posts' %}"><i class="bi bi-file-earmark-text me-2"></i>Administrar Posts</a>
+        </div>
+    </div>
+
+  <div class="edit-post-container">
+    <a href="{% url 'admin_posts' %}" class="btn btn-secondary mb-3">← Voltar</a>
     <h2>Editar Post</h2>
-    <a href="{% url 'detalhe_post' post.post_id %}" class="btn btn-secondary mb-3">← Voltar</a>
-    
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <div class="form-group">
-            <label for="{{ form.titulo.id_for_label }}">Título:</label>
-            {{ form.titulo }}
+    <form method="post" enctype="multipart/form-data" class="edit-post-form">
+      {% csrf_token %}
+      <div class="form-group">{{ form.titulo.label_tag }}{{ form.titulo }}</div>
+      <div class="form-group">
+        {{ form.thumbnail.label_tag }}
+        {{ form.thumbnail }}
+        {% if post.thumbnail %}
+        <div class="thumbnail-preview">
+          <small>Thumbnail atual:</small>
+          <img src="{{ post.thumbnail.url }}" alt="Thumbnail atual">
         </div>
-        
-        <div class="form-group">
-            <label for="{{ form.thumbnail.id_for_label }}">Thumbnail:</label>
-            {{ form.thumbnail }}
-            {% if post.thumbnail %}
-                <div class="mt-2">
-                    <small>Thumbnail atual:</small>
-                    <img src="{{ post.thumbnail.url }}" alt="Thumbnail atual" class="img-thumbnail" style="max-height: 100px;">
-                </div>
-            {% endif %}
-        </div>
-        
-        <div class="form-group">
-            <label for="{{ form.conteudo.id_for_label }}">Conteúdo:</label>
-            {{ form.conteudo }}
-        </div>
-        
-        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-        <a href="{% url 'detalhe_post' post.post_id %}" class="btn btn-outline-secondary">Cancelar</a>
+        {% endif %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.conteudo.id_for_label }}">Conteúdo:</label>
+        {{ form.conteudo }}
+      </div>
+      <button type="submit">Salvar Alterações</button>
+      <a href="{% url 'detalhe_post' post.post_id %}" class="btn-outline-secondary">Cancelar</a>
     </form>
+  </div>
 </div>
-
-
 {% endblock %}

@@ -127,13 +127,15 @@ def detalhe_post(request, post_id):
             
             comentario.save()
             return redirect('detalhe_post', post_id=post_id)
-
+        
+    posts_do_autor = Post.objects.filter(autor=post.autor).exclude(_id=post._id)[:5]  
 
     return render(request, 'detalhe_post.html', {
         'post': post,
         'comentarios': comentarios,
         'form': form,
         'usuario_id': usuario_id,
+        'posts_do_autor': posts_do_autor,
     })
 
 def curtir_post(request, post_id):
@@ -157,6 +159,33 @@ def curtir_comentario(request, comentario_id):
             Curtida.objects.create(usuario=usuario, comentario_id=comentario, post_id=None)
 
     return redirect('detalhe_post', post_id=comentario.post_id._id)
+
+
+def admin_posts(request):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
+        return redirect('login')
+
+    try:
+        autor = Usuario.objects.get(_id=ObjectId(usuario_id))
+
+        if autor.tipo != 'psicologo':
+            return HttpResponse("Apenas psicólogos podem acessar esta página.", status=403)
+
+        posts = Post.objects.filter(autor=autor).order_by('-criado_em')
+        
+        for post in posts:
+            post.id = str(post._id)  
+
+    except Usuario.DoesNotExist:
+        return redirect('login')
+
+    return render(request, 'admin_psicologo.html', {
+        'posts': posts,
+        'autor': autor, 
+    })
+
 
 def novo_post(request):
     if request.method == "POST":

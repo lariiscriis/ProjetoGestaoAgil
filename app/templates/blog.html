@@ -59,11 +59,11 @@
                                     <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">
                                 {% endif %}                                        
                                 <div class="blog-data">{{ post.criado_em }}</div>
-                                         </div>
+                                        </div>
                                 <div class="blog-content">
                                     <h2 class="blog-title">{{ post.titulo }}</h2>
                             
-                                    <p class="blog-description">{{ post.conteudo|safe|truncatewords:50 }}...</p>
+                                    <p class="blog-description">{{ post.conteudo|safe|truncatewords:20|linebreaksbr|striptags|cut:"\n"|cut:"\r"}}...</p>
                                         <div class="blog-footer">
                                         <div class="author-image">
                                             {% if post.autor.foto_perfil %}
@@ -72,7 +72,7 @@
                                             <img src="/static/images/default-profile.png">
                                         {% endif %}
 
-                                        <span class="blog-author">{{ post.autor.nome }}</span>
+                                        <span class="blog-author">{{ post.autor.nome}}</span>
                                             </div>
                                         <a href="{% url 'detalhe_post' post.post_id %}" class="read-more">Leia Mais</a>
                                 </div>
@@ -95,20 +95,22 @@
                     <div class="post">
                         <!-- imagem -->
                         {% if post.thumbnail  and post.thumbnail.name%}
+                        <div class="post-image-data">
                             <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }} " class="post-image">
-                        {% else %}
+                             <div class="post-data">{{ post.criado_em }}</div>
+
+                            {% else %}
                             <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão" class="post-image">
                         {% endif %}   
-                        
+                        </div>
                         <!-- titulo -->
                     <div class="post-preview">
-                            <h4><a href="{% url 'detalhe_post' post.post_id %}">{{ post.titulo }}</a></h4>
-                             <!-- <p class="blog-description">{{ post.conteudo|safe|truncatewords:50 }}...</p> -->
+                            <h4 class="post-title"><a href="{% url 'detalhe_post' post.post_id %}">{{ post.titulo }}</a></h4>
+                             <p class="post-description">{{ post.conteudo|safe|truncatewords:40|linebreaksbr|striptags|cut:"\n"|cut:"\r" }}</p>
 
                             <!-- autor -->
                             <div class="post-footer">
                                         <div class="post-author-image">
-                                            <div class="blog-data">{{ post.criado_em }}</div>
                                             {% if post.autor.foto_perfil %}
                                             <img src="{{ post.autor.foto_perfil.url }}" alt="">
                                                {% else %}
@@ -116,8 +118,10 @@
                                         {% endif %}
                                          <span class="post-author">{{ post.autor.nome }}</span>
                                         </div>
-                                        <i class="bi bi-heart me-1">{{ post.curtida_set.count }}</i>
+                                        <div class="post-likes">
+                                        <i class="bi bi-heart-fill me-1"><span>{{ post.curtida_set.count }}</span></i>
                                         <a href="{% url 'detalhe_post' post.post_id %}" class="post-read-more">Leia Mais</a>
+                                        </div>
                                 </div>
                         </div>
 
@@ -137,7 +141,35 @@
                         {% endfor %} -->
       
             </div>
-            <div class="side-bar"></div>
+            <div class="side-bar">
+
+                <div class="section search">
+                    <h2 class="section-title">Pesquisa</h2>
+                        <form action="#" method="post">
+                            <input type="text" name="" class="text-input" placeholder="Pesquisar...">
+                        </form>
+                </div>
+
+                <div class="section topics">
+                    <h2 class="section-title">Autores Frequentes</h2>
+                        <ul>
+                    {% for post in posts %}
+                            <li><a href="#">
+                                 <div class="post-author-image">
+                                            {% if post.autor.foto_perfil %}
+                                            <img src="{{ post.autor.foto_perfil.url }}" alt="">
+                                               {% else %}
+                                            <img src="/static/images/default-profile.png">
+                                        {% endif %}
+                                         <span class="post-author">{{ post.autor.nome }}</span>
+                                        </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                        </ul>
+                </div>
+
+            </div>
         </div>
 
     </div>
@@ -183,6 +215,8 @@
 
   ]
 });
+
+
 </script>
 
 {% endblock %} 
