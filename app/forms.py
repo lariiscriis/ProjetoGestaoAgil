@@ -83,3 +83,12 @@ class ComentarioForm(forms.ModelForm):
         widgets = {
             'texto': forms.Textarea(attrs={'placeholder': 'Escreva seu comentário aqui...'}),
         }
+
+class ForumForm(forms.ModelForm):
+    conteudo = forms.CharField(widget=SummernoteWidget())
+    class Meta:
+        model = Post
+        fields = ['titulo', 'conteudo']
+        widgets = {
+        'titulo': forms.TextInput(attrs={'placeholder': 'titulo'}),
+}

@@ -37,22 +37,35 @@ class Post(models.Model):
     
     def post_id(self):
         return str(self._id)
-    
 
+class Forum(models.Model):
+    _id = models.ObjectIdField(primary_key=True) 
+    conteudo = models.TextField()
+    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    data = models.DateTimeField(auto_now_add=True)
+ 
+    def forum_id(self):
+        return str(self._id)
+        
 class Comentario(models.Model):
-    _id = models.ObjectIdField(primary_key=True, default=ObjectId)
-    post_id = models.ForeignKey('Post', null=True, blank=True, on_delete=models.CASCADE)
-    autor = models.ForeignKey('Usuario', on_delete=models.CASCADE)
+    _id = models.ObjectIdField(primary_key=True) 
+    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
+    forum = models.ForeignKey(Forum, null=True, blank=True, on_delete=models.CASCADE)
+    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     texto = models.TextField()
-    data_criacao = models.DateTimeField(default=timezone.now)
-    comentario_pai = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
-    
+    data_criacao = models.DateTimeField(auto_now_add=True)
+ 
+    def __str__(self):
+        return self.texto
     def comentario_id(self):
         return str(self._id)
-
+    
 class Curtida(models.Model):
-    _id = models.ObjectIdField(primary_key=True, default=ObjectId)
-    usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE)
-    post_id = models.ForeignKey('Post', null=True, blank=True, on_delete=models.CASCADE)
-    comentario_id = models.ForeignKey('Comentario', null=True, blank=True,  on_delete=models.CASCADE)
-    data_curtida = models.DateTimeField(default=timezone.now)
+    _id = models.ObjectIdField(primary_key=True) 
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
+    forum = models.ForeignKey(Forum, null=True, blank=True, on_delete=models.CASCADE)
+    data_curtida = models.DateTimeField(auto_now_add=True)
+ 
+    def comcurtida_id(self):
+        return str(self._id)

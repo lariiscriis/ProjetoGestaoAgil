@@ -92,7 +92,7 @@
     margin-bottom: 20px;
 }
 
-.fale-btn {
+.conversar-btn {
     background-color: #000000;
     color: #fff;
     padding: 10px 20px;
@@ -102,8 +102,18 @@
     transition: background-color 0.3s ease;
 }
 
-.fale-btn:hover {
+.conversar-btn:hover {
     background-color: #333;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
 }
 
 @media (max-width: 768px) {

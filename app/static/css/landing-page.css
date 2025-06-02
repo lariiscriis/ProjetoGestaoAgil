@@ -219,14 +219,7 @@ svg{
 
 .video-section{
     float: right;
-    width: 40%;
-}
-
-.video-section video{
-    width: 130%;
-    height: auto;
-    border-radius: 15px;
-    border: 5px solid #5f5b5b;
+    max-height: 100px;
 }
 
 .content-section h1{
@@ -367,6 +360,16 @@ svg{
 
 .contato-form button:hover {
     background-color: #333;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
 }
 
 

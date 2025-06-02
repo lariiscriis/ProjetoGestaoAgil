@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse
-from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm, ComentarioForm
+from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm, ComentarioForm, ForumForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Usuario, Post, Comentario, Curtida
+from .models import Usuario, Post, Comentario, Curtida, Forum
 from bson import ObjectId 
+from django.contrib.auth.decorators import login_required
 
 def app(request):
     return render(request, 'landing-page.html')
@@ -186,7 +187,6 @@ def admin_posts(request):
         'autor': autor, 
     })
 
-
 def novo_post(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES) 
@@ -206,8 +206,6 @@ def novo_post(request):
     else:
         form = PostForm()
     return render(request, 'novo_post.html', {'form': form})
-
-
 
 def editar_post(request, post_id):
     post = get_object_or_404(Post, _id=ObjectId(post_id))
@@ -241,4 +239,60 @@ def excluir_post(request, post_id):
     return render(request, 'excluir_post.html', {'post': post})
 
 def forum(request):
-    return render(request, 'forum.html')
+    forums = Forum.objects.all().order_by('-data')
+    usuario = None
+    usuario_id = request.session.get('usuario_id')
+
+    if usuario_id:
+        try:
+            usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        except Usuario.DoesNotExist:
+            usuario = None
+
+    # TRATAR O POST
+    if request.method == "POST" and usuario:
+        conteudo = request.POST.get('conteudo')
+        if conteudo:
+            Forum.objects.create(autor=usuario, conteudo=conteudo)
+            return redirect('forum')
+
+    return render(request, 'forum.html', {'forums': forums, 'usuario': usuario})
+ 
+def novo_forum(request):
+    if request.method == "POST":
+        form = ForumForm(request.POST)
+        if form.is_valid():
+            forum = form.save(commit=False)
+            usuario_id = request.session.get('usuario_id')
+            if usuario_id:
+                try:
+                    try:
+                        autor = Usuario.objects.get(_id=ObjectId(usuario_id))
+                    except Usuario.DoesNotExist:
+                        autor = None
+ 
+                    if autor:
+                        forum.autor = autor
+                        forum.save()
+                        return redirect('forum')
+                    else:
+                        form.add_error(None, "Usuário não encontrado. Faça login novamente.")
+                except Exception as e:
+                    form.add_error(None, f"Erro ao buscar usuário: {e}")
+            else:
+                form.add_error(None, "Usuário não autenticado.")
+    else:
+        form = ForumForm()
+    return render(request, 'novo_forum.html', {'form': form})
+ 
+def excluir_forum(request, forum_id):
+    forum = get_object_or_404(Forum, _id=ObjectId(forum_id))
+    usuario_id = request.session.get('usuario_id')
+ 
+    if not usuario_id or str(forum.autor._id) != usuario_id:
+        return HttpResponse("Você não tem permissão para excluir este forum.", status=403)
+ 
+    if request.method == "POST":
+        forum.delete()
+        return redirect('forum')
+    return render(request, 'excluir_forum.html', {'forum': forum})
