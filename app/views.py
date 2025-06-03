@@ -141,7 +141,8 @@ def blog(request):
 
 def detalhe_post(request, post_id):
     post = get_object_or_404(Post, _id=ObjectId(post_id))
-    comentarios = Comentario.objects.filter(post_id=post, comentario_pai=None).order_by('-data_criacao')
+    comentarios = Comentario.objects.filter(post=post, comentario_pai=None).order_by('-data_criacao')
+
 
     form = ComentarioForm()
     usuario_id = request.session.get('usuario_id')
@@ -150,7 +151,7 @@ def detalhe_post(request, post_id):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             comentario = form.save(commit=False)
-            comentario.post_id = post
+            comentario.post = post  # era comentario.post_id
             comentario.autor = Usuario.objects.get(_id=ObjectId(usuario_id))
             
             comentario_pai_id = request.POST.get('comentario_pai_id')
@@ -176,8 +177,9 @@ def curtir_post(request, post_id):
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         post = Post.objects.get(_id=ObjectId(post_id))
 
-        if not Curtida.objects.filter(usuario=usuario, post_id=post).exists():
-            Curtida.objects.create(usuario=usuario, post_id=post, comentario_id=None)
+        if not Curtida.objects.filter(usuario=usuario, post=post).exists():
+            Curtida.objects.create(usuario=usuario, post=post, comentario=None)
+
     return redirect('detalhe_post', post_id=post_id)
 
 
@@ -187,8 +189,9 @@ def curtir_comentario(request, comentario_id):
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         comentario = Comentario.objects.get(_id=ObjectId(comentario_id))
 
-        if not Curtida.objects.filter(usuario=usuario, comentario_id=comentario).exists():
-            Curtida.objects.create(usuario=usuario, comentario_id=comentario, post_id=None)
+    if not Curtida.objects.filter(usuario=usuario, comentario=comentario).exists():
+        Curtida.objects.create(usuario=usuario, comentario=comentario, post=None)
+
 
     return redirect('detalhe_post', post_id=comentario.post_id._id)
 

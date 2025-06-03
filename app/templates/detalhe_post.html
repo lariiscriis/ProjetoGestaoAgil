@@ -140,7 +140,14 @@
                 <div class="post-content">
                     {{ post.conteudo|safe }}
                 </div>
-
+                {% if request.session.usuario_id != post.autor.usuario_id|stringformat:"s" %}
+                    <form method="post" action="{% url 'curtir_post' post.post_id %}">
+                        {% csrf_token %}
+                        <button type="submit">Curtir postagem ({{ post.curtida_set.count }})</button>
+                    </form>
+                {% else %}
+                    <hr><p class="curtidas-count">❤️{{ post.curtida_set.count }}</p>
+                {% endif %}
             </div>  
 
             <div class="side-bar">

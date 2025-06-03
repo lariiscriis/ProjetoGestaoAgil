@@ -66,6 +66,7 @@ class Curtida(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
     forum = models.ForeignKey(Forum, null=True, blank=True, on_delete=models.CASCADE)
+    comentario = models.ForeignKey(Comentario, null=True, blank=True, on_delete=models.CASCADE)  # ➕ ADICIONAR
     data_curtida = models.DateTimeField(auto_now_add=True)
  
     def comcurtida_id(self):
