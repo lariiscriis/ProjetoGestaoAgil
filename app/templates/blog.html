@@ -90,7 +90,20 @@
 
         <div class="content clearfix">
             <div class="main-content">
-                <h1 class="recent-post-title">Posts</h1>
+                {% if request.GET.autor_id %}
+                    <h1 class="recent-post-title">Posts de {{ posts.0.autor.nome }}
+                        <a href="{% url 'blog' %}">x</a>
+                    </h1>
+                    
+                {% elif request.GET.q %}
+                    <h1 class="recent-post-title">Resultados para "{{ request.GET.q }}"  
+                        <a href="{% url 'blog' %}">x</a>
+                    </h1>
+                    
+                {% else %}
+                    <h1 class="recent-post-title">Posts Recentes</h1>
+                {% endif %}
+
                 {% for post in posts %}
                     <div class="post">
                         <!-- imagem -->
@@ -154,18 +167,18 @@
                     <h2 class="section-title">Autores Frequentes</h2>
                         <ul>
                         {% for item in autores_frequentes %}
-                            <li><a href="#">
-                                 <div class="post-author-image">
-                                    {% if item.autor.foto_perfil %}
-                                        <img src="{{ item.autor.foto_perfil.url }}" alt="">
-                                    {% else %}
-                                        <img src="/static/images/default-profile.png">
-                                    {% endif %}
-                                    <span class="post-author">{{ item.autor.nome }}</span>
-                                    <p class="post-author">{{ item.total }} postagens</p>
-                                </div>
-                            </a>
-                        </li>
+                        
+                        <li><a href="?autor_id={{ item.autor.usuario_id }}">
+                            <div class="post-author-image">
+                                {% if item.autor.foto_perfil %}
+                                    <img src="{{ item.autor.foto_perfil.url }}" alt="">
+                                {% else %}
+                                    <img src="/static/images/default-profile.png">
+                                {% endif %}
+                                <span class="post-author">{{ item.autor.nome }}</span>
+                                <p class="post-author">{{ item.total }} postagens</p>
+                            </div>
+                        </a></li>
                         {% endfor %}
                         </ul>
                 </div>

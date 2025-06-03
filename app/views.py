@@ -99,6 +99,7 @@ def exibirUsuarios(request):
 # # Blog Views 
 def blog(request):
     query = request.GET.get('q', '')
+    autor_id = request.GET.get('autor_id')
     usuario = None
     usuario_id = request.session.get('usuario_id')
 
@@ -108,11 +109,15 @@ def blog(request):
         except Usuario.DoesNotExist:
             pass
 
-    # Filtro de busca dos posts
     if query:
         posts = Post.objects.filter(
             Q(titulo__icontains=query) | Q(conteudo__icontains=query)
         ).select_related('autor')
+    elif autor_id:
+        try:
+            posts = Post.objects.filter(autor=ObjectId(autor_id)).select_related('autor')
+        except Exception:
+            posts = Post.objects.none()
     else:
         posts = Post.objects.select_related('autor').all()
 
