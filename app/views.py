@@ -123,11 +123,13 @@ def blog(request):
             curtidas_por_post[curtida.post._id] += 1
 
     # Ordenar os posts mais curtidos pro carrossel
+    Allposts = Post.objects.select_related('autor').all()
     posts_com_curtidas = sorted(
-        posts,
+        Allposts,
         key=lambda post: curtidas_por_post.get(post._id, 0),
         reverse=True
     )
+
     top_mais_curtidos = posts_com_curtidas[:6]
 
     # Autores mais frequentes
