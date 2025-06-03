@@ -8,84 +8,43 @@
 {% endblock %}
 
 {% block conteudo %}
-
 <section id="Section-ajuda" class="py-5">
     <div class="container">
         <div class="ajuda-title">
             <h1>Ajuda & Contatos</h1>
             <h2>Encontre Psicólogos Parceiros</h2>
         </div>
+
         <div class="ajuda-cards">
+            {% for psicologo in psicologos %}
             <div class="card">
                 <div class="card-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="Psicólogo 1">
+                    {% if psicologo.foto_perfil %}
+                        <img src="{{ psicologo.foto_perfil.url }}" alt="{{ psicologo.nome }}">
+                    {% else %}
+                        <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="Psicólogo">
+                    {% endif %}
                 </div>
                 <div class="card-content">
-                    <h3>Dr. João Silva</h3>
-                    <p>Psicólogo com 10 anos de experiência, especializado em terapia cognitivo-comportamental e transtornos de ansiedade.</p>
-                    <a href="#" class="conversar-btn">Conversar</a>
+                    <h3>{{ psicologo.nome }}</h3>
+                    <p>
+                        {% if psicologo.area_atuacao %}
+                            {{ psicologo.area_atuacao }}
+                        {% else %}
+                            Psicólogo parceiro da plataforma.
+                        {% endif %}
+                        {% if psicologo.bio %}
+                            {{ psicologo.bio }}
+                        {% endif %}
+                        
+                    </p>
+                    <a href="mailto:{{ psicologo.email }}" class="conversar-btn">Conversar</a>
                 </div>
             </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="Psicóloga 2">
-                </div>
-                <div class="card-content">
-                    <h3>Dra. Maria Oliveira</h3>
-                    <p>Psicóloga clínica, especializada em terapia familiar e psicologia infantil, com foco no desenvolvimento emocional.</p>
-                    <a href="#" class="conversar-btn">Conversar</a>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="Psicólogo 3">
-                </div>
-                <div class="card-content">
-                    <h3>Dr. Pedro Costa</h3>
-                    <p>Psicoterapeuta com abordagem humanista-existencial, focado em adultos que enfrentam crises emocionais e de vida.</p>
-                    <a href="#" class="conversar-btn">Conversar</a>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="Psicólogo 3">
-                </div>
-                <div class="card-content">
-                    <h3>Dr. Pedro Costa</h3>
-                    <p>Psicoterapeuta com abordagem humanista-existencial, focado em adultos que enfrentam crises emocionais e de vida.</p>
-                    <a href="#" class="conversar-btn">Conversar</a>
-                </div>
-            </div>
-
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="Psicólogo 3">
-                </div>
-                <div class="card-content">
-                    <h3>Dr. Pedro Costa</h3>
-                    <p>Psicoterapeuta com abordagem humanista-existencial, focado em adultos que enfrentam crises emocionais e de vida.</p>
-                    <a href="#" class="conversar-btn">Conversar</a>
-                </div>
-            </div>
-
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="Psicólogo 3">
-                </div>
-                <div class="card-content">
-                    <h3>Dr. Pedro Costa</h3>
-                    <p>Psicoterapeuta com abordagem humanista-existencial, focado em adultos que enfrentam crises emocionais e de vida.</p>
-                    <a href="#" class="conversar-btn">Conversar</a>
-                </div>
-            </div>
-
+            {% empty %}
+            <p>Nenhum psicólogo disponível no momento.</p>
+            {% endfor %}
         </div>
     </div>
 </section>
-
 {% endblock %}

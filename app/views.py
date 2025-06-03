@@ -12,7 +12,8 @@ def app(request):
     return render(request, 'landing-page.html')
 
 def linkAjuda(request):
-    return render(request, 'ajuda.html')
+    psicologos = Usuario.objects.filter(tipo='psicologo')
+    return render(request, 'ajuda.html', {'psicologos': psicologos})
 
 def login_view(request):
     action = request.GET.get('action', 'login')
