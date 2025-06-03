@@ -54,7 +54,8 @@ class Comentario(models.Model):
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     texto = models.TextField()
     data_criacao = models.DateTimeField(auto_now_add=True)
- 
+    comentario_pai = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.texto
     def comentario_id(self):
