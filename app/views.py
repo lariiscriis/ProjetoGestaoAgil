@@ -195,7 +195,7 @@ def curtir_comentario(request, comentario_id):
         Curtida.objects.create(usuario=usuario, comentario=comentario, post=None)
 
 
-    return redirect('detalhe_post', post_id=comentario.post_id._id)
+    return redirect('detalhe_post', post_id=comentario.post._id)
 
 
 def admin_posts(request):
