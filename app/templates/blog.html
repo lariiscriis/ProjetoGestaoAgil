@@ -48,7 +48,7 @@
             <i class="bi bi-chevron-left prev"></i>  
             <i class="bi bi-chevron-right next"></i> 
             <div class="post-wrapper">
-                {% for post in posts %}
+                {% for post in top_mais_curtidos %}
                 <div class="post">
                         <div class="blog-card">
                             <div class="blog-image">
@@ -145,8 +145,8 @@
 
                 <div class="section search">
                     <h2 class="section-title">Pesquisa</h2>
-                        <form action="#" method="post">
-                            <input type="text" name="" class="text-input" placeholder="Pesquisar...">
+                        <form method="get" action="{% url 'blog' %}">
+                            <input type="text" name="q" class="text-input" placeholder="Pesquisar..." value="{{ request.GET.q }}">
                         </form>
                 </div>
 

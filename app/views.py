@@ -8,6 +8,7 @@ from .models import Usuario, Post, Comentario, Curtida, Forum
 from bson import ObjectId 
 from django.contrib.auth.decorators import login_required
 from collections import Counter
+from django.db.models import Q
 
 def app(request):
     return render(request, 'landing-page.html')
@@ -97,9 +98,7 @@ def exibirUsuarios(request):
 
 # # Blog Views 
 def blog(request):
-    posts = Post.objects.all()
-    posts_ = Post.objects.select_related('autor').all()
-
+    query = request.GET.get('q', '')
     usuario = None
     usuario_id = request.session.get('usuario_id')
 
@@ -109,20 +108,36 @@ def blog(request):
         except Usuario.DoesNotExist:
             pass
 
- # Contar autores mais frequentes
-        contagem_autores = Counter()
-        for post in posts_:
-            contagem_autores[post.autor] += 1
+    # Filtro de busca dos posts
+    if query:
+        posts = Post.objects.filter(
+            Q(titulo__icontains=query) | Q(conteudo__icontains=query)
+        ).select_related('autor')
+    else:
+        posts = Post.objects.select_related('autor').all()
 
-        # Ordenar e pegar os top 5
-        autores_ordenados = sorted(contagem_autores.items(), key=lambda item: item[1], reverse=True)[:7]
+    # Contar curtidas por post
+    curtidas_por_post = Counter()
+    for curtida in Curtida.objects.filter(post__isnull=False):
+        if curtida.post:
+            curtidas_por_post[curtida.post._id] += 1
 
-        # Lista de dicionários com autor e total de posts
-        autores_frequentes = [{'autor': autor, 'total': total} for autor, total in autores_ordenados]
+    # Ordenar os posts mais curtidos pro carrossel
+    posts_com_curtidas = sorted(
+        posts,
+        key=lambda post: curtidas_por_post.get(post._id, 0),
+        reverse=True
+    )
+    top_mais_curtidos = posts_com_curtidas[:6]
 
+    # Autores mais frequentes
+    contagem_autores = Counter()
+    for post in posts:
+        contagem_autores[post.autor] += 1
+    autores_ordenados = sorted(contagem_autores.items(), key=lambda item: item[1], reverse=True)[:5]
+    autores_frequentes = [{'autor': autor, 'total': total} for autor, total in autores_ordenados]
 
-    return render(request, 'blog.html', {'posts': posts, 'usuario': usuario, 'autores_frequentes': autores_frequentes})
-
+    return render(request, 'blog.html', {'posts': posts,'usuario': usuario,'autores_frequentes': autores_frequentes,'request': request,'top_mais_curtidos': top_mais_curtidos})
 
 def detalhe_post(request, post_id):
     post = get_object_or_404(Post, _id=ObjectId(post_id))
