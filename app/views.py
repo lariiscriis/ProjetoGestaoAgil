@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from .models import Usuario, Post, Comentario, Curtida, Forum
 from bson import ObjectId 
 from django.contrib.auth.decorators import login_required
+from collections import Counter
 
 def app(request):
     return render(request, 'landing-page.html')
@@ -97,6 +98,8 @@ def exibirUsuarios(request):
 # # Blog Views 
 def blog(request):
     posts = Post.objects.all()
+    posts_ = Post.objects.select_related('autor').all()
+
     usuario = None
     usuario_id = request.session.get('usuario_id')
 
@@ -106,7 +109,19 @@ def blog(request):
         except Usuario.DoesNotExist:
             pass
 
-    return render(request, 'blog.html', {'posts': posts, 'usuario': usuario})
+ # Contar autores mais frequentes
+        contagem_autores = Counter()
+        for post in posts_:
+            contagem_autores[post.autor] += 1
+
+        # Ordenar e pegar os top 5
+        autores_ordenados = sorted(contagem_autores.items(), key=lambda item: item[1], reverse=True)[:7]
+
+        # Lista de dicionários com autor e total de posts
+        autores_frequentes = [{'autor': autor, 'total': total} for autor, total in autores_ordenados]
+
+
+    return render(request, 'blog.html', {'posts': posts, 'usuario': usuario, 'autores_frequentes': autores_frequentes})
 
 
 def detalhe_post(request, post_id):

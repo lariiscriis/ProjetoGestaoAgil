@@ -153,19 +153,20 @@
                 <div class="section topics">
                     <h2 class="section-title">Autores Frequentes</h2>
                         <ul>
-                    {% for post in posts %}
+                        {% for item in autores_frequentes %}
                             <li><a href="#">
                                  <div class="post-author-image">
-                                            {% if post.autor.foto_perfil %}
-                                            <img src="{{ post.autor.foto_perfil.url }}" alt="">
-                                               {% else %}
-                                            <img src="/static/images/default-profile.png">
-                                        {% endif %}
-                                         <span class="post-author">{{ post.autor.nome }}</span>
-                                        </div>
+                                    {% if item.autor.foto_perfil %}
+                                        <img src="{{ item.autor.foto_perfil.url }}" alt="">
+                                    {% else %}
+                                        <img src="/static/images/default-profile.png">
+                                    {% endif %}
+                                    <span class="post-author">{{ item.autor.nome }}</span>
+                                    <p class="post-author">{{ item.total }} postagens</p>
+                                </div>
                             </a>
                         </li>
-                    {% endfor %}
+                        {% endfor %}
                         </ul>
                 </div>
 
