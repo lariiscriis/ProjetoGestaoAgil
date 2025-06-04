@@ -65,15 +65,18 @@
                             
                                     <p class="blog-description">{{ post.conteudo|safe|truncatewords:20|linebreaksbr|striptags|cut:"\n"|cut:"\r"}}...</p>
                                         <div class="blog-footer">
-                                        <div class="author-image">
-                                            {% if post.autor.foto_perfil %}
-                                            <img src="{{ post.autor.foto_perfil.url }}" alt="">
-                                               {% else %}
-                                            <img src="/static/images/default-profile.png">
-                                        {% endif %}
+                                         <a href="{% url 'perfil_usuario' post.autor.usuario_id %}">
+                                            <div class="author-image">
+                                                {% if post.autor.foto_perfil %}
+                                                <img src="{{ post.autor.foto_perfil.url }}" alt="">
+                                                {% else %}
+                                                <img src="{% static 'assets/images/default_foto.png' %}" width="60"> 
+                                                {% endif %}
 
-                                        <span class="blog-author">{{ post.autor.nome}}</span>
+                                            <span class="blog-author">{{ post.autor.nome}}</span>
+                                        
                                             </div>
+                                        </a>
                                         <a href="{% url 'detalhe_post' post.post_id %}" class="read-more">Leia Mais</a>
                                 </div>
                             </div>
@@ -123,13 +126,15 @@
 
                             <!-- autor -->
                             <div class="post-footer">
-                                        <div class="post-author-image">
+                                        <div class="post-author-image" >
+                                        <a href="{% url 'perfil_usuario' post.autor.usuario_id %}">
                                             {% if post.autor.foto_perfil %}
                                             <img src="{{ post.autor.foto_perfil.url }}" alt="">
-                                               {% else %}
-                                            <img src="/static/images/default-profile.png">
-                                        {% endif %}
-                                         <span class="post-author">{{ post.autor.nome }}</span>
+                                            {% else %}
+                                            <img  src="{% static 'assets/images/default_foto.png' %}" width="60">
+                                            {% endif %}
+                                            <span class="post-author">{{ post.autor.nome }}</span>
+                                        </a>
                                         </div>
                                         <div class="post-likes">
                                         <i class="bi bi-heart-fill me-1"><span>{{ post.curtida_set.count }}</span></i>
@@ -173,7 +178,7 @@
                                 {% if item.autor.foto_perfil %}
                                     <img src="{{ item.autor.foto_perfil.url }}" alt="">
                                 {% else %}
-                                    <img src="/static/images/default-profile.png">
+                                    <img  src="{% static 'assets/images/default_foto.png' %}" width="60">
                                 {% endif %}
                                 <span class="post-author">{{ item.autor.nome }}</span>
                                 <p class="post-author">{{ item.total }} postagens</p>

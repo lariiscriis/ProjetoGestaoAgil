@@ -1,0 +1,82 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block titulo %} Perfil {% endblock %}
+
+
+{% block conteudo %}
+    <div class="container py-5">
+    
+    <a href="{% url 'logout' %}" class="btn btn-primary mb-3">logout</a>
+    <h1>perfil </h1>
+    {% if request.session.usuario_id == usuario.usuario_id %}
+        <a href="{% url 'editar_perfil' usuario.usuario_id %}" class="btn btn-warning">Editar Perfil</a>
+    {% endif %}
+
+        <div class="perfil-container">
+            {% if usuario.background_perfil %}
+                <img src="{{ usuario.background_perfil.url }}" width="100"  height="60" alt="{{ usuario.background_perfil }}">
+            {% else %}
+                <img src="{% static 'assets/images/default_background.jpg' %}" width="100" alt="Thumbnail padrão">
+            {% endif %}
+            {% if usuario.foto_perfil %}
+                <img src="{{ usuario.foto_perfil.url }}" alt="Foto de perfil" width="60"  class="perfil-foto">
+            {% else %}
+                <img src="{% static 'assets/images/default_foto.png' %}" width="60"  alt="Foto padrão" class="perfil-foto">
+            {% endif %}
+            <div class="perfil-info">
+                <h2>{{ usuario.nome }}</h2>
+                <p>Tipo: {{ usuario.tipo }}</p>
+                <p>Bio: {{ usuario.bio }}</p>
+                <p>Email: {{ usuario.email }}</p>
+                <p>Telefone: {{ usuario.telefone }}</p>
+                <p>Data de Nascimento: {{ usuario.data_nascimento }}</p>
+                <p>Endereço: {{ usuario.endereco }}</p>                
+                
+                {% if usuario.tipo == 'psicologo' %}
+                    <p>tipo: {{ usuario.tipo }}</p>   
+                    <p>CRP: {{ usuario.crp }}</p>
+                    <p>Area de atuação: {{ usuario.area_atuacao }}</p>
+
+                {% endif %}
+            </div>
+            <div class="comentario_perfil">
+                <h3>Comentários</h3>
+                {% if comentarios %}
+                    <ul>
+                    {% for comentario in comentarios %}
+                        <div class="comentario forum-post p-3 mb-3">
+                            <div class="d-flex align-items-center mb-2">
+                                {% if comentario.autor.foto_perfil %}
+                                    <img class="profile-pic me-2" src="{{ comentario.autor.foto_perfil.url }}" width="60" alt="{{ comentario.autor.nome }}">
+                                {% else %}
+                                    <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="60" alt="Foto padrão">
+                                {% endif %}
+                                <strong>{{ comentario.autor.nome }}</strong>
+                            </div>
+                            <strong class="mb-1">post: {{ comentario.post.titulo }}</strong>
+                            <p class="mb-1">{{ comentario.texto }}</p>
+                            <i class="bi bi-heart-fill me-1"><span>{{ comentario.curtida_set.count }}</span></i>
+                            <p class="text-muted data-comentario position-absolute" style="font-size: 0.85rem;">{{ comentario.data_criacao|date:"d/m/Y H:i" }}</p>
+                             <a href="{% url 'detalhe_post' comentario.post_id %}#comentario-{{ comentario.comentario_id }}">Ver comentario</a>
+                        </div>
+                                          
+
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Nenhum comentário encontrado.</p>
+                {% endif %}
+
+                
+            </div>
+        </div>    
+    </div>
+{% endblock %} 
+

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse
-from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm, ComentarioForm, ForumForm
+from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm, ComentarioForm, ForumForm, EditarPerfilForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Usuario, Post, Comentario, Curtida, Forum
@@ -90,6 +90,11 @@ def login_view(request):
             'action': 'cadastro',
             'tipo': tipo
         })
+
+def logout(request):
+    if 'usuario_id' in request.session:
+        del request.session['usuario_id']
+    return redirect('app')
 
 
 def exibirUsuarios(request):
@@ -229,21 +234,24 @@ def admin_posts(request):
     })
 
 def novo_post(request):
+    usuario_id = request.session.get('usuario_id')
+    if not usuario_id:
+        return redirect('login')
+
+    try:
+        autor = Usuario.objects.get(_id=ObjectId(usuario_id))
+        if autor.tipo != 'psicologo':
+            return HttpResponse("Apenas psicólogos podem criar posts.", status=403)
+    except Usuario.DoesNotExist:
+        return redirect('login')
+    
     if request.method == "POST":
-        form = PostForm(request.POST, request.FILES) 
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            usuario_id = request.session.get('usuario_id')
-            if usuario_id:
-                try:
-                    autor = Usuario.objects.get(_id=ObjectId(usuario_id))
-                    post.autor = autor
-                    post.save()
-                    return redirect('blog')
-                except Usuario.DoesNotExist:
-                    form.add_error(None, "Usuário não encontrado. Faça login novamente.")
-            else:
-                form.add_error(None, "Usuário não autenticado.")
+            post.autor = autor
+            post.save()
+            return redirect('blog')
     else:
         form = PostForm()
     return render(request, 'novo_post.html', {'form': form})
@@ -256,6 +264,8 @@ def editar_post(request, post_id):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
+            if not post.thumbnail:
+                post.thumbnail = 'defaults/default_thumbnail.jpeg'
             form.save()
             return redirect('detalhe_post', post_id=post_id)
     else:
@@ -337,3 +347,40 @@ def excluir_forum(request, forum_id):
         forum.delete()
         return redirect('forum')
     return render(request, 'excluir_forum.html', {'forum': forum})
+
+def perfil_usuario(request, usuario_id):
+    try:
+        usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+    except Usuario.DoesNotExist:
+        return HttpResponse("Usuário não encontrado.", status=404)
+
+    posts = Post.objects.filter(autor=usuario).order_by('-criado_em')
+    comentarios = Comentario.objects.filter(autor=usuario).order_by('-data_criacao')
+
+    return render(request, 'perfil_usuario.html', {
+        'usuario': usuario,
+        'posts': posts,
+        'comentarios': comentarios
+    })
+
+
+def editar_perfil(request, usuario_id):
+    usuario = get_object_or_404(Usuario, _id=ObjectId(usuario_id))
+
+    if request.session.get('usuario_id') != str(usuario._id):
+        return HttpResponse("Você não tem permissão para editar este perfil.", status=403)
+    if request.method == 'POST':
+        form = EditarPerfilForm(request.POST, request.FILES, instance=usuario)
+        if form.is_valid():
+            if not usuario.foto_perfil:
+                usuario.foto_perfil = 'defaults/default_foto.png'
+            if not usuario.background_perfil:
+                usuario.background_perfil = 'defaults/default_background.jpg'
+            if form.cleaned_data['senha']:
+               usuario.senha = make_password(form.cleaned_data['senha'])
+            form.save()
+            return redirect('perfil_usuario', usuario_id=usuario_id)
+    else:
+        form = EditarPerfilForm(instance=usuario)
+
+    return render(request, 'editar_perfil.html', {'form': form, 'usuario': usuario})

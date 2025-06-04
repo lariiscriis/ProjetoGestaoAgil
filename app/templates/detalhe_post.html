@@ -119,7 +119,7 @@
                 <div class="left-sidebar p-3 text-white">
 
                     <div class="perfil-box d-flex align-items-center gap-2 mb-4">
-                    <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
+                    <img  src="{% static 'assets/images/default_foto.png' %}" width="60" alt="Perfil" class="profile-pic">
                     <h6 class="mb-0">Usuário</h6>
                     </div>
 
@@ -152,11 +152,12 @@
 
             <div class="side-bar">
                 <div class="section perfil-autor">
+                <a href="{% url 'perfil_usuario' post.autor.usuario_id %}">
                  <div class="post-author-image-perfil">
                      {% if post.autor.foto_perfil %}
                         <img src="{{ post.autor.foto_perfil.url }}" alt="">
                             {% else %}
-                           <img src="/static/images/default-profile.png">
+                           <img  src="{% static 'assets/images/default_foto.png' %}" width="60" alt="Foto padrão">
                          {% endif %}
                          <div class="autor-noem-email">
                       <span class="post-author-perfil">{{ post.autor.nome }}</span>
@@ -164,9 +165,10 @@
                    </div>
                     </div>
                     <div class="autor-bio">
-                       <p class="paragrafo-bio"> <!-- {{ post.autor.bio }}--> Parágrafo para ilustração para demonstrar como ficaria caso adicionassemos bio</p> 
-                        <p class="autor-especialidade">Especialidade: <span>{{ post.autor.area_atuacao }}</span></p>                        
+                       <p class="paragrafo-bio">{{ post.autor.bio}}</p> 
+                        <p class="autor-especialidade"><span>Especialidade: {{ post.autor.area_atuacao }}</span></p>                        
                     </div>
+                </a>
                 </div>
 
                 <div class="section topics">
@@ -179,7 +181,7 @@
                             {% if post.thumbnail  and post.thumbnail.name%}
                                         <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }} ">
                                     {% else %}
-                                    <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">
+                                    <img  src="{% static 'assets/images/default_thumbnail.jpeg' %}" width="30" alt="Thumbnail padrão">
                                 {% endif %} 
                                 <div class="titulo-post">
                         <span class="post-author">{{ post.titulo }}</span>
@@ -211,13 +213,15 @@
 
             {% for comentario in comentarios %}
             <div class="comentario forum-post p-3 mb-3">
-            <div class="d-flex align-items-center mb-2">
+            <div class="d-flex align-items-center mb-2" id="comentario-{{ comentario.comentario_id }}">
+                <a href="{% url 'perfil_usuario' comentario.autor.usuario_id %}">
                 {% if comentario.autor.foto_perfil %}
                 <img class="profile-pic me-2" src="{{ comentario.autor.foto_perfil.url }}" alt="{{ comentario.autor.nome }}">
                 {% else %}
-                <img class="profile-pic me-2" src="{% static 'img/perfil_padrao.png' %}" alt="Foto padrão">
+                <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="60" alt="Foto padrão">
                 {% endif %}
                 <strong>{{ comentario.autor.nome }}</strong>
+                </a>
             </div>
             <p class="mb-1">{{ comentario.texto }}</p>
             <p class="text-muted data-comentario position-absolute" style="font-size: 0.85rem;">{{ comentario.data_criacao|date:"d/m/Y H:i" }}</p>
@@ -254,12 +258,14 @@
                 {% for resposta in comentario.comentario_set.all %}
                 <div class="resposta forum-post p-2 mb-2 position-relative">
                 <div class="d-flex align-items-center mb-1">
+                    <a href="{% url 'perfil_usuario' resposta.autor.usuario_id %}">
                     {% if resposta.autor.foto_perfil %}
                     <img class="profile-pic me-2" src="{{ resposta.autor.foto_perfil.url }}" alt="{{ resposta.autor.nome }}">
                     {% else %}
-                    <img class="profile-pic me-2" src="{% static 'img/perfil_padrao.png' %}" alt="Foto padrão">
+                    <img class="profile-pic me-2"  src="{% static 'assets/images/default_foto.png' %}" width="60" alt="Foto padrão">
                     {% endif %}
                     <strong>{{ resposta.autor.nome }}</strong>
+                    </a>
                 </div>
                 <p class="mb-1">{{ resposta.texto }}</p>
                 <p class="text-muted data-resposta" style="font-size: 0.85rem; top: 20px; right: 10px; position: absolute;">{{ resposta.data_criacao|date:"d/m/Y H:i" }}</p>
