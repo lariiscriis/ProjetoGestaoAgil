@@ -1,10 +1,24 @@
 :root {
-    --primary-color: #000000;
-    --secondary-color: #ffffff; 
-    --background-color: #ffffff;
-    --text-color: #000000;
-}
+/* Color Theme Swatches in Hex */
 
+.cor1-1-hex { color: #88C3FB; }
+.cor1-2-hex { color: #BEE5B0; }
+.cor1-3-hex { color: #FFFFFF; }
+.cor1-4-hex { color: #F5F5F5; }
+
+/* Color Theme Swatches in RGBA */
+.cor1-1-rgba { color: rgba(136, 195, 251, 1); }
+.cor1-2-rgba { color: rgba(190, 229, 176, 1); }
+.cor1-3-rgba { color: rgba(255, 255, 255, 1); }
+.cor1-4-rgba { color: rgba(245, 245, 245, 1); }
+
+/* Color Theme Swatches in HSLA */
+.cor1-1-hsla { color: hsla(209, 93, 75, 1); }
+.cor1-2-hsla { color: hsla(104, 50, 79, 1); }
+.cor1-3-hsla { color: hsla(0, 0, 100, 1); }
+.cor1-4-hsla { color: hsla(0, 0, 96, 1); }
+
+}
 
 
 .post-slider{

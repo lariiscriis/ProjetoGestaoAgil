@@ -53,7 +53,6 @@
                         <div class="blog-card">
                             <div class="blog-image">
                                 {% if post.thumbnail  and post.thumbnail.name%}
-
                                     <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }} ">
                                 {% else %}
                                     <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">

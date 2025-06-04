@@ -10,103 +10,6 @@
 
 
 {% block conteudo %}
-<!--
- <a href="{% url 'blog' %}">← Voltar</a>
-
-<h1>{{ post.titulo }}</h1>
-{% if request.session.usuario_id == post.autor.usuario_id|stringformat:"s" and post.autor.tipo == "psicologo" %}
-    <a href="{% url 'editar_post' post.post_id %}">Editar</a> |
-    <a href="{% url 'excluir_post' post.post_id %}">Excluir</a>
-
-{% endif %}
-
-{% if request.session.usuario_id != post.autor.usuario_id|stringformat:"s" %}
-    <form method="post" action="{% url 'curtir_post' post.post_id %}">
-        {% csrf_token %}
-        <button type="submit">Curtir postagem ({{ post.curtida_set.count }})</button>
-    </form>
-{% endif %}
-
-
-<div style="display: flex; align-items: center; margin-bottom: 1em;">
-    {% if post.autor.foto_perfil %}
-        <img src="{{ post.autor.foto_perfil.url }}" alt="Foto de {{ post.autor.nome }}" >
-    {% else %}
-        <img src="{% static 'img/perfil_padrao.png' %}" alt="Foto padrão">
-    {% endif %}
-    <strong>Escrito por: {{ post.autor.nome }}</strong>
-</div>
-
-<div class="post-content">
-    {{ post.conteudo|safe }}
-</div>
-
-<p><small>Publicado em 
-    {{ post.criado_em|date:"d/m/Y H:i" }}
-</small></p>
-
-
-
-<h2>Comentários</h2>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="hidden" name="comentario_pai_id" id="comentario_pai_id" />
-    <button type="submit">Comentar</button>
-</form>
-
-<ul>
-    {% for comentario in comentarios %}
-        <li>
-            <div>
-                {% if comentario.autor.foto_perfil %}
-                    <img src="{{ comentario.autor.foto_perfil.url }}" alt="Foto de {{ comentario.autor.nome }}" >
-                {% else %}
-                    <img src="{% static 'img/perfil_padrao.png' %}" alt="Foto padrão de {{ comentario.autor.nome }}">
-                {% endif %}
-            </div>
-            <p><strong>{{ comentario.autor.nome }}</strong>: {{ comentario.texto }}</p>
-            <p><small>{{ comentario.data_criacao|date:"d/m/Y H:i" }}</small></p>
-
-            <form method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="comentario_pai_id" value="{{ comentario.comentario_id }}">
-                <textarea name="texto" placeholder="Responder..."></textarea>
-                <button type="submit">Responder</button>
-            </form>
-
-           <form method="post" action="{% url 'curtir_comentario' comentario.comentario_id %}">
-                {% csrf_token %}
-                <button type="submit">Curtir ({{ comentario.curtida_set.count }})</button>
-            </form>
-
-            {% if comentario.comentario_set.all %}
-                <ul>
-                    {% for resposta in comentario.comentario_set.all %}
-                        <div>
-                            {% if resposta.autor.foto_perfil %}
-                                <img src="{{ resposta.autor.foto_perfil.url }}" alt="Foto de {{ resposta.autor.nome }}" >
-                            {% else %}
-                                <img src="{% static 'img/perfil_padrao.png' %}" alt="Foto padrão de {{ resposta.autor.nome }}">
-                            {% endif %}
-                        </div> 
-
-                        <li><strong>{{ resposta.autor.nome }}</strong>: {{ resposta.texto }}</li>
-                        <p><small>{{ comentario.data_criacao|date:"d/m/Y H:i" }}</small></p>
-                        <form method="post" action="{% url 'curtir_comentario' resposta.comentario_id %}">
-                            {% csrf_token %}
-                            <button type="submit">Curtir ({{ resposta.curtida_set.count }})</button>
-                        </form>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </li>
-    {% endfor %}
-</ul> -->
-
-
-
     <div class="page-wrapper">
 
         <div class="content clearfix">
@@ -137,13 +40,20 @@
                 </div>
             <div class="main-content">
                 <h1 class="post-title"> {{post.titulo}}  </h1>
+                <div class="post-image">
+                    {% if post.thumbnail and post.thumbnail.name %}
+                        <img src="{{ post.thumbnail.url }}" alt="Thumbnail do post" class="thumbnail">
+                    {% else %}
+                        <img src="{% static 'assets/images/default_thumbnail.jpeg' %}" alt="Thumbnail padrão" class="thumbnail">
+                    {% endif %}
+                </div>
                 <div class="post-content">
                     {{ post.conteudo|safe }}
                 </div>
                 {% if request.session.usuario_id != post.autor.usuario_id|stringformat:"s" %}
                     <form method="post" action="{% url 'curtir_post' post.post_id %}">
                         {% csrf_token %}
-                        <button type="submit">Curtir postagem ({{ post.curtida_set.count }})</button>
+                        <button type="submit" class="btn-icone curtir_form"><i class="bi bi-heart"></i> {{ post.curtida_set.count }}</button>
                     </form>
                 {% else %}
                     <hr><p class="curtidas-count">❤️{{ post.curtida_set.count }}</p>
