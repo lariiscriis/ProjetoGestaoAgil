@@ -18,7 +18,7 @@
         <div class="right-panel sticky-top py-4 nova-postagem"  style="top: 90px;">
           <div class="mb-4 p-3 bg-white rounded shadow-sm border">
             <h5 class="mb-3">Nova Postagem</h5>
-            <textarea class="form-control mb-2" rows="3" placeholder="O que você está pensando?" disabled></textarea>
+            <textarea class="form-control mb-2" rows="3" placeholder="O que você está pensando?"></textarea>
             <button class="btn btn-primary btn-sm w-100" onclick="mostrarPopup()">Publicar</button>
           </div>
 
@@ -53,16 +53,9 @@
                     </div>
                 </div>
                 </div>
-          <div class="d-grid gap-2">
-            <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
-            <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
-            <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
-            <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
-          </div>
-        </div>
-      </div>
 
-      <div class="col-lg-7">
+
+                      <div class="col-lg-7">
         <h2 class="my-4">Fórum</h2>
 
         {% for i in "123456"|make_list %}
@@ -92,6 +85,17 @@
         </div>
         {% endfor %}
       </div>
+        
+        </div>
+
+        
+
+
+
+
+      </div>
+
+
     </div>
   </div>
 </div>
@@ -108,18 +112,6 @@
 </div>
 
 <script>
-  function mostrarPopup() {
-    document.getElementById('popupComentario').classList.remove('d-none');
-  }
-
-  function fecharPopup() {
-    document.getElementById('popupComentario').classList.add('d-none');
-  }
-
-    function toggleSidebar() {
-    document.querySelector('.left-sidebar').classList.toggle('active');
-  }
-
     document.addEventListener('click', function(event) {
     const sidebar = document.querySelector('.left-sidebar');
     const toggle = document.querySelector('.sidebar-toggle');
