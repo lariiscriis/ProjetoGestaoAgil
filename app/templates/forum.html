@@ -112,6 +112,11 @@
 </div>
 
 <script>
+
+function toggleSidebar() {
+    document.querySelector('.left-sidebar').classList.toggle('active');
+  }
+
     document.addEventListener('click', function(event) {
     const sidebar = document.querySelector('.left-sidebar');
     const toggle = document.querySelector('.sidebar-toggle');
