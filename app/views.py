@@ -183,6 +183,17 @@ def detalhe_post(request, post_id):
         'posts_do_autor': posts_do_autor,
     })
 
+def excluir_comentario(request, comentario_id):
+    comentario = get_object_or_404(Comentario, _id=ObjectId(comentario_id))
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id or str(comentario.autor._id) != usuario_id:
+        return HttpResponse("Você não tem permissão para excluir este comentário.", status=403)
+
+    comentario.delete()
+    return redirect('perfil_usuario', usuario_id=usuario_id)
+
+
 def curtir_post(request, post_id):
     usuario_id = request.session.get('usuario_id')
     if usuario_id:

@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('curtir_comentario/<str:comentario_id>/', views.curtir_comentario, name='curtir_comentario'),
     path('curtir_post/<str:post_id>/', views.curtir_post, name='curtir_post'),
+    path('excluir_comentario/<str:comentario_id>/excluir', views.excluir_comentario, name='excluir_comentario'),
 
     path('admin/posts/', views.admin_posts, name='admin_posts'),
 

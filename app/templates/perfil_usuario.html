@@ -64,7 +64,9 @@
                             <p class="mb-1">{{ comentario.texto }}</p>
                             <i class="bi bi-heart-fill me-1"><span>{{ comentario.curtida_set.count }}</span></i>
                             <p class="text-muted data-comentario position-absolute" style="font-size: 0.85rem;">{{ comentario.data_criacao|date:"d/m/Y H:i" }}</p>
-                             <a href="{% url 'detalhe_post' comentario.post_id %}#comentario-{{ comentario.comentario_id }}">Ver comentario</a>
+                            <a href="{% url 'detalhe_post' comentario.post_id %}#comentario-{{ comentario.comentario_id }}">Ver comentario</a>
+                            <a href="{% url 'excluir_comentario' comentario.comentario_id %}">excluir comentario</a>
+
                         </div>
                                           
 
