@@ -21,7 +21,16 @@
           <img src="{% static 'assets/images/logo_amae.png' %}" class="d-inline-block align-top" alt="Logo da Amae">
           </a>
         </div>
-
+        {% if request.session.usuario_id %}
+          <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
+          <ul class="navbar-nav" id="divItensNav">
+            <li class="nav-item"><a class="nav-link" href="{% url 'forum' %}">Forum</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'blog' %}">blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'perfil_usuario' request.session.usuario_id %}">Meu perfil</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </div>
+        {% else %}
         <div class="collapse navbar-collapse justify-content-center" id="navbarResponsive">
           <ul class="navbar-nav" id="divItensNav">
             <li class="nav-item"><a class="nav-link" href="{% url 'app' %}#SecaoIndex1">Início</a></li>
@@ -33,6 +42,7 @@
         <form class="d-flex" role="search">
           <a href="{% url 'login' %}" class="btn btn-outline-success" id="btn-login">Entrar</a>
         </form>
+        {% endif %}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
         aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
