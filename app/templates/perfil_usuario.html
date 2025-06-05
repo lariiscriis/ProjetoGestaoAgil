@@ -12,13 +12,17 @@
 
 {% block conteudo %}
     <div class="container py-5">
-    
-    <a href="{% url 'logout' %}" class="btn btn-primary mb-3">logout</a>
     <h1>perfil </h1>
     {% if request.session.usuario_id == usuario.usuario_id %}
+        <a href="{% url 'excluir_conta' %}" class="btn btn-primary mb-3">Excluir conta</a>
+
         <a href="{% url 'editar_perfil' usuario.usuario_id %}" class="btn btn-warning">Editar Perfil</a>
     {% endif %}
-
+        {% if not usuario.ativo %}
+            <div class="alert alert-warning" role="alert">
+                Este perfil está inativo. Entre em contato com o administrador para mais informações.
+            </div>
+        {% endif %}
         <div class="perfil-container">
             {% if usuario.background_perfil %}
                 <img src="{{ usuario.background_perfil.url }}" width="100"  height="60" alt="{{ usuario.background_perfil }}">

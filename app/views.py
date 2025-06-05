@@ -41,11 +41,17 @@ def login_view(request):
                         else:
                             try:
                                 usuario = Usuario.objects.get(email=email, crp=crp, tipo='psicologo')
+                                if not usuario.ativo:
+                                    return HttpResponse("Este perfil foi desativado.")
+
                             except Usuario.DoesNotExist:
                                 usuario = None
                     else:
                         try:
                             usuario = Usuario.objects.get(email=email, tipo='usuario')
+                            if not usuario.ativo:
+                                return HttpResponse("Este perfil foi desativado.")
+
                         except Usuario.DoesNotExist:
                             usuario = None
 
@@ -382,7 +388,6 @@ def perfil_usuario(request, usuario_id):
 
 def editar_perfil(request, usuario_id):
     usuario = get_object_or_404(Usuario, _id=ObjectId(usuario_id))
-
     if request.session.get('usuario_id') != str(usuario._id):
         return HttpResponse("Você não tem permissão para editar este perfil.", status=403)
     if request.method == 'POST':
@@ -400,6 +405,26 @@ def editar_perfil(request, usuario_id):
         form = EditarPerfilForm(instance=usuario)
 
     return render(request, 'editar_perfil.html', {'form': form, 'usuario': usuario})
+
+def excluir_conta(request):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
+        return redirect('login')
+
+    try:
+        usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+    except Usuario.DoesNotExist:
+        return HttpResponse("Usuário não encontrado.", status=404)
+
+    if request.method == 'POST':
+        usuario.ativo = False
+        usuario.save()
+        del request.session['usuario_id']
+        return redirect('app')
+
+    return render(request, 'excluir_conta.html', {'usuario': usuario})
+
 
 def criar_notificacao_para_comentario(comentario):
     post = comentario.post
