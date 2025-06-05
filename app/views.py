@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm, ComentarioForm, ForumForm, EditarPerfilForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Usuario, Post, Comentario, Curtida, Forum
+from .models import Usuario, Post, Comentario, Curtida, Forum, Notificacao
 from bson import ObjectId 
 from django.contrib.auth.decorators import login_required
 from collections import Counter
@@ -151,10 +151,10 @@ def blog(request):
 
     return render(request, 'blog.html', {'posts': posts,'usuario': usuario,'autores_frequentes': autores_frequentes,'request': request,'top_mais_curtidos': top_mais_curtidos})
 
+
 def detalhe_post(request, post_id):
     post = get_object_or_404(Post, _id=ObjectId(post_id))
     comentarios = Comentario.objects.filter(post=post, comentario_pai=None).order_by('-data_criacao')
-
 
     form = ComentarioForm()
     usuario_id = request.session.get('usuario_id')
@@ -163,16 +163,21 @@ def detalhe_post(request, post_id):
         form = ComentarioForm(request.POST)
         if form.is_valid():
             comentario = form.save(commit=False)
-            comentario.post = post  # era comentario.post_id
+            comentario.post = post
             comentario.autor = Usuario.objects.get(_id=ObjectId(usuario_id))
             
             comentario_pai_id = request.POST.get('comentario_pai_id')
             if comentario_pai_id:
-                comentario.comentario_pai = Comentario.objects.get(_id=ObjectId(comentario_pai_id))
-            
-            comentario.save()
+                comentario_pai = Comentario.objects.get(_id=ObjectId(comentario_pai_id))
+                comentario.comentario_pai = comentario_pai
+                comentario.save()
+                criar_notificacao_para_resposta(comentario)
+            else:
+                comentario.save()
+                criar_notificacao_para_comentario(comentario)
+
             return redirect('detalhe_post', post_id=post_id)
-        
+
     posts_do_autor = Post.objects.filter(autor=post.autor).exclude(_id=post._id)[:5]  
 
     return render(request, 'detalhe_post.html', {
@@ -199,7 +204,7 @@ def curtir_post(request, post_id):
     if usuario_id:
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         post = Post.objects.get(_id=ObjectId(post_id))
-
+        criar_notificacao_curtida_post(post, usuario)
         if not Curtida.objects.filter(usuario=usuario, post=post).exists():
             Curtida.objects.create(usuario=usuario, post=post, comentario=None)
 
@@ -211,7 +216,7 @@ def curtir_comentario(request, comentario_id):
     if usuario_id:
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         comentario = Comentario.objects.get(_id=ObjectId(comentario_id))
-
+        criar_notificacao_curtida_comentario(comentario, usuario)
     if not Curtida.objects.filter(usuario=usuario, comentario=comentario).exists():
         Curtida.objects.create(usuario=usuario, comentario=comentario, post=None)
 
@@ -395,3 +400,80 @@ def editar_perfil(request, usuario_id):
         form = EditarPerfilForm(instance=usuario)
 
     return render(request, 'editar_perfil.html', {'form': form, 'usuario': usuario})
+
+def criar_notificacao_para_comentario(comentario):
+    post = comentario.post
+    if post and comentario.autor != post.autor:
+        Notificacao.objects.create(
+            usuario=post.autor,
+            comentario=comentario,
+            post=post,
+            tipo='comentario',
+            link=f"/post/{post._id}/"
+        )
+def criar_notificacao_para_resposta(resposta):
+    comentario_pai = resposta.comentario_pai
+    if comentario_pai and resposta.autor != comentario_pai.autor:
+        Notificacao.objects.create(
+            usuario=comentario_pai.autor,
+            comentario=resposta,
+            comentario_pai=comentario_pai,
+            post=comentario_pai.post,
+            tipo='resposta',
+            link=f"/post/{comentario_pai.post._id}/"
+        )
+
+def criar_notificacao_curtida_post(post, quem_curtiu):
+    if quem_curtiu != post.autor:
+        Notificacao.objects.create(
+            usuario=post.autor,
+            autor_acao=quem_curtiu,
+            post=post,
+            tipo='curtida_post',
+            link=f"/post/{post._id}/"
+        )
+
+def criar_notificacao_curtida_comentario(comentario, quem_curtiu):
+    if quem_curtiu != comentario.autor:
+        Notificacao.objects.create(
+            usuario=comentario.autor,
+            autor_acao=quem_curtiu,
+            comentario=comentario,
+            tipo='curtida_comentario',
+            link=f"/post/{comentario.post._id}/"
+        )
+
+def criar_notificacao_curtida_forum(forum, quem_curtiu):
+    if quem_curtiu != forum.autor:
+        Notificacao.objects.create(
+            usuario=forum.autor,
+            autor_acao=quem_curtiu,
+            forum=forum,
+            tipo='curtida_forum',
+            link=f"/forum/{forum.id}/"
+        )
+
+def criar_notificacao_resposta_forum(comentario, forum):
+    if comentario.autor != forum.autor:
+        Notificacao.objects.create(
+            usuario=forum.autor,
+            comentario=comentario,
+            forum=forum,
+            tipo='resposta_forum',
+            link=f"/forum/{forum.id}/"
+        )
+
+
+def notificacoes_view(request):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
+        return redirect('login')
+
+    try:
+        usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+    except Usuario.DoesNotExist:
+        return HttpResponse("Usuário não encontrado", status=404)
+
+    notificacoes = Notificacao.objects.filter(usuario=usuario).order_by('-criada_em')
+    return render(request, 'notificacoes.html', {'notificacoes': notificacoes})

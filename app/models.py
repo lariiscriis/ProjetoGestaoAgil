@@ -72,3 +72,17 @@ class Curtida(models.Model):
  
     def comcurtida_id(self):
         return str(self._id)
+    
+class Notificacao(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='notificacoes')
+    autor_acao = models.ForeignKey(Usuario, null=True, blank=True, on_delete=models.SET_NULL, related_name='notificacoes_realizadas')
+    post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
+    comentario = models.ForeignKey(Comentario, null=True, blank=True, on_delete=models.CASCADE)
+    comentario_pai = models.ForeignKey(Comentario, null=True, blank=True, on_delete=models.CASCADE, related_name='notificacoes_respostas')
+    forum = models.ForeignKey('Forum', null=True, blank=True, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=50)
+    link = models.URLField(blank=True, null=True)
+    criada_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.tipo.title()} para {self.usuario.nome}'

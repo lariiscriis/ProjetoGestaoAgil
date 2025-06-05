@@ -1,0 +1,77 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block titulo %}Notificações{% endblock %}
+
+{% block conteudo %}
+<div class="container mt-4">
+    <h2>Notificações</h2>
+    <ul class="list-group">
+        {% for n in notificacoes %}
+            <li class="list-group-item {% if not n.lida %}fw-bold{% endif %}">
+    {% if n.tipo == 'comentario' %}
+         {% if n.comentario.autor.foto_perfil %}
+            <img src="{{ n.comentario.autor.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.comentario.autor.nome }}">
+        {% else %}
+            <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
+        {% endif %}
+        <p>{{ n.comentario.autor.nome }} comentou no seu post: <a href="{{ n.link }}">{{ n.post.titulo }}</a></p>
+        <p>{{n.comentario.texto}}</p>
+    {% elif n.tipo == 'resposta' %}
+        {% if n.comentario.autor.foto_perfil %}
+            <img src="{{ n.comentario.autor.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.comentario.autor.nome }}">
+        {% else %}
+            <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
+        {% endif %}
+        <p>{{ n.comentario.autor.nome }} respondeu seu comentário: <a href="{{ n.link }}">{{ n.comentario_pai.texto }}</a></p>
+        <p>{{n.comentario.texto}}</p>
+    {% elif n.tipo == 'curtida_post' %}
+        <div class="d-flex align-items-center">
+            {% if n.autor_acao.foto_perfil %}
+                <img src="{{ n.autor_acao.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.autor_acao.nome }}">
+            {% else %}
+                <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
+            {% endif %}
+            <div>
+                <p><strong>{{ n.autor_acao.nome }}</strong> curtiu seu post: <a href="{{ n.link }}">{{ n.post.titulo }}</a></p>
+            </div>
+        </div>
+    {% elif n.tipo == 'curtida_comentario' %}
+        <div class="d-flex align-items-center">
+            {% if n.autor_acao.foto_perfil %}
+                <img src="{{ n.autor_acao.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.autor_acao.nome }}">
+            {% else %}
+                <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
+            {% endif %}
+            <div>
+                <p><strong>{{ n.autor_acao.nome }}</strong> curtiu seu comentário: <a href="{{ n.link }}">{{ n.comentario.texto }}</a></p>
+            </div>
+        </div>
+
+    {% elif n.tipo == 'curtida_forum' %}
+    {% if n.autor_acao.foto_perfil %}
+                <img src="{{ n.autor_acao.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.autor_acao.nome }}">
+            {% else %}
+                <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
+            {% endif %}
+        <p> <strong>{{ n.autor_acao.nome }}</strong> curtiu seu post no fórum: <a href="{{ n.link }}">{{ n.forum.titulo }}</a></p>
+    {% elif n.tipo == 'resposta_forum' %}
+        {% if n.comentario.autor.foto_perfil %}
+            <img src="{{ n.comentario.autor.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.comentario.autor.nome }}">
+        {% else %}
+            <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
+        {% endif %}
+        <p>{{ n.comentario.autor.nome }} respondeu seu post no fórum: <a href="{{ n.link }}">{{ n.forum.titulo }}</a></p>
+    {% else %}
+        <p>Nova notificação</p>
+    {% endif %}
+    <span class="text-muted float-end" style="font-size: 0.85rem;">{{ n.criada_em|date:"d/m/Y H:i" }}</span>
+</li>
+
+        {% empty %}
+            <li class="list-group-item">Nenhuma notificação encontrada.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
