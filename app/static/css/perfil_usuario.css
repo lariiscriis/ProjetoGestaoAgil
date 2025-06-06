@@ -1,0 +1,122 @@
+:root {
+/* Color Theme Swatches in Hex */
+
+.cor1-1-hex { color: #88C3FB; }
+.cor1-2-hex { color: #BEE5B0; }
+.cor1-3-hex { color: #FFFFFF; }
+.cor1-4-hex { color: #F5F5F5; }
+
+/* Color Theme Swatches in RGBA */
+.cor1-1-rgba { color: rgba(136, 195, 251, 1); }
+.cor1-2-rgba { color: rgba(190, 229, 176, 1); }
+.cor1-3-rgba { color: rgba(255, 255, 255, 1); }
+.cor1-4-rgba { color: rgba(245, 245, 245, 1); }
+
+/* Color Theme Swatches in HSLA */
+.cor1-1-hsla { color: hsla(209, 93, 75, 1); }
+.cor1-2-hsla { color: hsla(104, 50, 79, 1); }
+.cor1-3-hsla { color: hsla(0, 0, 100, 1); }
+.cor1-4-hsla { color: hsla(0, 0, 96, 1); }
+
+}
+
+.profile-pic {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.perfil-foto {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-top: -50px;
+    border: 5px solid #BEE5B0;
+}
+
+.perfil-info p {
+     margin: 0;
+}
+
+.email-areaAtuacao{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.perfil-header-img {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 5px solid #BEE5B0;
+
+}
+
+.nome-editar-usuario{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nome-tipo-usuario{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.nome-tipo-usuario span{
+    color: #333333c5;
+   
+}
+
+
+.btn-warning{
+   background-color: #88C3FB ;
+   border: none;
+   color: #333333c5;
+   transition: background-color 0.3s ease, color 0.3s ease;
+   
+}
+
+.btn-warning i{
+    margin-right: 10px;
+}
+
+.btn-warning:hover{
+    background-color: #88c3fbac;
+    
+}
+
+.comentario {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.post-nome-perfil{
+    display:flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+
+.post-nome-perfil span{
+    color: #333333c5;
+   
+}
+
+.data-comentario {
+    top: 10px;
+    right: 10px;
+}
+
+.curtir-resposta{
+    bottom: 10px;
+    right: 10px;
+}
+
+.comentario .bi-heart-fill {
+    cursor: pointer;
+}
