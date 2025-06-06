@@ -38,9 +38,17 @@
                             <h2>{{ usuario.nome }}</h2>
                             <span>{{  usuario.get_tipo_display }}</span>
                         </div>
+                    <a href="{% url 'excluir_conta' %}" class="btn btn-primary mb-3">Excluir conta</a>
+
                 {% if request.session.usuario_id == usuario.usuario_id %}
                     <a href="{% url 'editar_perfil' usuario.usuario_id %}" class="btn btn-warning mb-3"><i class="bi bi-pencil-square"></i>Editar Perfil</a>
                 {% endif %}
+
+                        {% if not usuario.ativo %}
+                    <div class="alert alert-warning" role="alert">
+                        Este perfil está inativo. Entre em contato com o administrador para mais informações.
+                    </div>
+                    {% endif %}
 
                     </div>
                     

@@ -29,6 +29,8 @@ urlpatterns = [
     path('perfil/<str:usuario_id>/editar/', views.editar_perfil, name='editar_perfil'),
 
     path('logout/', views.logout, name='logout'),
+    path('excluir_conta/', views.excluir_conta, name='excluir_conta'),
+
     path('notificacoes/', views.notificacoes_view, name='notificacoes'),
 
 
