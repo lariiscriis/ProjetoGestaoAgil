@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Usuario, Post, Comentario
+from app.models import Usuario, Post, Comentario, Forum
 from django.contrib.auth.hashers import make_password
 from django_summernote.widgets import SummernoteWidget
 from django.core.validators import RegexValidator
@@ -88,13 +88,13 @@ class ComentarioForm(forms.ModelForm):
         }
 
 class ForumForm(forms.ModelForm):
-    conteudo = forms.CharField(widget=SummernoteWidget())
     class Meta:
-        model = Post
-        fields = ['titulo', 'conteudo']
+        model = Forum
+        fields = [ 'conteudo']
         widgets = {
-        'titulo': forms.TextInput(attrs={'placeholder': 'titulo'}),
+         'conteudo': forms.Textarea(attrs={'placeholder': 'Escreva seu comentário aqui...'}),
 }
+
         
 
 class EditarPerfilForm(forms.ModelForm):

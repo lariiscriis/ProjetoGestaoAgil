@@ -7,124 +7,77 @@
 {% endblock %}
 
 {% block conteudo %}
-
-
 <div class="forum-wrapper position-relative">
-
   <div class="container-fluid forum-page">
-    
     <div class="row gx-3">
+      
+      <!-- Coluna direita: Nova Postagem -->
       <div class="col-lg-4 order-lg-3 order-1">
-        <div class="right-panel sticky-top py-4 nova-postagem"  style="top: 90px;">
+        <div class="right-panel sticky-top py-4 nova-postagem" style="top: 90px;">
           <div class="mb-4 p-3 bg-white rounded shadow-sm border">
             <h5 class="mb-3">Nova Postagem</h5>
-            <textarea class="form-control mb-2" rows="3" placeholder="O que você está pensando?"></textarea>
-            <button class="btn btn-primary btn-sm w-100" onclick="mostrarPopup()">Publicar</button>
+
+            <!-- FORMULÁRIO DIRETO -->
+            <form method="post">
+              {% csrf_token %}
+              {{ form.conteudo }}
+              <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Publicar</button>
+
+              {% if form.non_field_errors %}
+                <div class="text-danger mt-2">{{ form.non_field_errors }}</div>
+              {% endif %}
+            </form>
           </div>
 
-        <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
-          <h6 class="mb-3">Posts Sugeridos</h6>
-          <ul class="list-unstyled small">
-            <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
-            <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
-            <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
-          </ul>
+          <!-- Posts sugeridos -->
+          <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
+            <h6 class="mb-3">Posts Sugeridos</h6>
+            <ul class="list-unstyled small">
+              <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
+              <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
+              <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
 
-     <!-- <div class="col-lg-2 p-0">
-            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <div class="left-sidebar p-3 text-white">
-
-                    <div class="perfil-box d-flex align-items-center gap-2 mb-4">
-                    <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
-                    <h6 class="mb-0">Usuário</h6>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                    <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
-                    <a class="btn btn-light text-start" href="{% url 'forum' %}" ><i class="bi bi-chat  me-2"></i> Fórum</a>
-                    <a class="btn btn-light text-start" href="{% url 'blog' %}"><i class="bi bi-file-earmark-text me-2"></i>Blog</a>
-
-                    </div>
-                </div>
-                </div> -->
-
-
+      <!-- Coluna esquerda: Lista de postagens -->
       <div class="col-lg-8 order-lg-1 order-2">
         <h2 class="my-4">Fórum</h2>
 
-        {% for i in "123456"|make_list %}
+        {% for forum in forums %}
         <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
-
           <div class="d-flex justify-content-between align-items-start mb-2">
             <div class="d-flex align-items-center gap-2 flex-wrap">
-              <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
-              <strong class="text-primary mb-0">João Costa</strong>
-              <small class="text-muted">· 30min atrás</small>
+                  {% if forum.autor.foto_perfil %}
+                      <img class="profile-pic me-2" src="{{ forum.autor.foto_perfil.url }}" width="45" height="45" alt="{{ comentario.autor.nome }}">
+                  {% else %}
+                      <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="45" height="45" alt="Foto padrão">
+                  {% endif %}              <strong class="text-primary mb-0">{{ forum.autor.nome }}</strong>
+              <small class="text-muted">· {{ forum.data|date:"d/m/Y H:i" }}</small>
             </div>
 
-            <div class="dropdown">
-              <i class="bi bi-three-dots" data-bs-toggle="dropdown" style="cursor: pointer;"></i>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><button class="dropdown-item text-danger">Apagar post</button></li>
-              </ul>
-            </div>
+            {% if request.session.usuario_id == forum.autor.id|stringformat:"s" %}
+            <form method="post" action="{% url 'excluir_forum' post.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+            </form>
+            {% endif %}
           </div>
 
-          <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
+          <p class="mb-2">{{ forum.conteudo }}</p>
 
           <div class="d-flex gap-3">
             <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
             <a href="#" class="text-muted text-decoration-none"><i class="bi bi-chat me-1"></i>Responder</a>
           </div>
         </div>
+        {% empty %}
+        <p class="text-muted">Nenhuma postagem ainda.</p>
         {% endfor %}
       </div>
-        
-        </div>
-
-        
-
-
-
-
-      </div>
-
 
     </div>
   </div>
 </div>
-
-
-<div id="popupComentario" class="popup-comentario d-none">
-  <div class="popup-inner">
-    <textarea placeholder="O que você está pensando?" rows="4" ></textarea>
-    <div class="popup-botoes">
-      <button class="btn btn-sm btn-primary">Publicar</button>
-      <button class="btn btn-sm btn-secondary" onclick="fecharPopup()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<script>
-
-function toggleSidebar() {
-    document.querySelector('.left-sidebar').classList.toggle('active');
-  }
-
-    document.addEventListener('click', function(event) {
-    const sidebar = document.querySelector('.left-sidebar');
-    const toggle = document.querySelector('.sidebar-toggle');
-    
-    if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggle.contains(event.target)) {
-      sidebar.classList.remove('active');
-    }
-  });
-</script>
-
 {% endblock %}

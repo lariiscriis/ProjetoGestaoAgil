@@ -339,37 +339,34 @@ def novo_forum(request):
             usuario_id = request.session.get('usuario_id')
             if usuario_id:
                 try:
-                    try:
-                        autor = Usuario.objects.get(_id=ObjectId(usuario_id))
-                    except Usuario.DoesNotExist:
-                        autor = None
- 
-                    if autor:
-                        forum.autor = autor
-                        forum.save()
-                        return redirect('forum')
-                    else:
-                        form.add_error(None, "Usuário não encontrado. Faça login novamente.")
+                    autor = Usuario.objects.get(_id=ObjectId(usuario_id))
+                    forum.autor = autor
+                    forum.save()
+                    return redirect('forum.html')
+                except Usuario.DoesNotExist:
+                    form.add_error(None, "Usuário não encontrado. Faça login novamente.")
                 except Exception as e:
-                    form.add_error(None, f"Erro ao buscar usuário: {e}")
+                    form.add_error(None, f"Erro: {e}")
             else:
                 form.add_error(None, "Usuário não autenticado.")
     else:
         form = ForumForm()
-    return render(request, 'novo_forum.html', {'form': form})
- 
+    
+    posts = Forum.objects.all().order_by('-id')
+    return render(request, 'forum.html', {'form': form, 'posts': posts})
+
+
 def excluir_forum(request, forum_id):
     forum = get_object_or_404(Forum, _id=ObjectId(forum_id))
     usuario_id = request.session.get('usuario_id')
- 
+
     if not usuario_id or str(forum.autor._id) != usuario_id:
-        return HttpResponse("Você não tem permissão para excluir este forum.", status=403)
- 
+        return HttpResponse("Você não tem permissão para excluir este fórum.", status=403)
+
     if request.method == "POST":
         forum.delete()
-        return redirect('forum')
-    return render(request, 'excluir_forum.html', {'forum': forum})
-
+        return redirect('forum.html')
+    
 def perfil_usuario(request, usuario_id):
     try:
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
