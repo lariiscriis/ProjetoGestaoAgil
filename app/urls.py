@@ -33,5 +33,9 @@ urlpatterns = [
 
     path('notificacoes/', views.notificacoes_view, name='notificacoes'),
 
+    path('curtir_forum/<str:forum_id>/', views.curtir_forum, name='curtir_forum'),
+
+    path('responder-forum/<str:forum_id>/', views.responder_forum, name='responder_forum'),
+
 
 ]

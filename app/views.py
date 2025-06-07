@@ -208,24 +208,31 @@ def excluir_comentario(request, comentario_id):
 def curtir_post(request, post_id):
     usuario_id = request.session.get('usuario_id')
     if usuario_id:
+
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         post = Post.objects.get(_id=ObjectId(post_id))
-        criar_notificacao_curtida_post(post, usuario)
-        if not Curtida.objects.filter(usuario=usuario, post=post).exists():
-            Curtida.objects.create(usuario=usuario, post=post, comentario=None)
 
+        curtida, created = Curtida.objects.get_or_create(usuario=usuario, post=post, comentario=None)
+
+        if not created:
+            curtida.delete()
+        else:
+            criar_notificacao_curtida_post(post, usuario)
+    else:
+        return redirect('login')
     return redirect('detalhe_post', post_id=post_id)
-
 
 def curtir_comentario(request, comentario_id):
     usuario_id = request.session.get('usuario_id')
     if usuario_id:
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         comentario = Comentario.objects.get(_id=ObjectId(comentario_id))
-        criar_notificacao_curtida_comentario(comentario, usuario)
-    if not Curtida.objects.filter(usuario=usuario, comentario=comentario).exists():
-        Curtida.objects.create(usuario=usuario, comentario=comentario, post=None)
+        curtida, created = Curtida.objects.get_or_create(usuario=usuario, comentario=comentario, post=None)
 
+        if not created:
+            curtida.delete()
+        else:
+            criar_notificacao_curtida_comentario(comentario, usuario)
 
     return redirect('detalhe_post', post_id=comentario.post._id)
 
@@ -357,6 +364,49 @@ def novo_forum(request):
     posts = Forum.objects.all().order_by('-id')
     return render(request, 'forum.html', {'form': form, 'posts': posts})
 
+
+from django.http import JsonResponse
+from .models import Curtida, Forum
+
+
+def responder_forum(request, forum_id):
+    if request.method == "POST":
+        usuario_id = request.session.get('usuario_id')
+        if not usuario_id:
+            return JsonResponse({'erro': 'Usuário não autenticado'}, status=403)
+
+        usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        forum = Forum.objects.get(_id=ObjectId(forum_id))
+        texto = request.POST.get('texto')
+
+        if texto:
+            comentario = Comentario.objects.create(
+                autor=usuario,
+                texto=texto,
+                forum=forum
+            )
+            criar_notificacao_resposta_forum(comentario, forum)
+            return redirect('forum')
+
+    return JsonResponse({'erro': 'Método inválido'}, status=400)
+
+def curtir_forum(request, forum_id):
+    if request.method == 'POST':
+        usuario_id = request.session.get('usuario_id')
+        if not usuario_id:
+            return redirect('login')
+
+        usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        forum = Forum.objects.get(_id=ObjectId(forum_id))
+
+        curtida, created = Curtida.objects.get_or_create(usuario=usuario, forum=forum)
+
+        if not created:
+            curtida.delete()
+        else:
+            criar_notificacao_curtida_forum(forum, usuario)
+
+    return redirect('forum')
 
 def excluir_forum(request, forum_id):
     forum = get_object_or_404(Forum, _id=ObjectId(forum_id))

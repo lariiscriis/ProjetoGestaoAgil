@@ -95,8 +95,6 @@ class ForumForm(forms.ModelForm):
          'conteudo': forms.Textarea(attrs={'placeholder': 'Escreva seu comentário aqui...'}),
 }
 
-        
-
 class EditarPerfilForm(forms.ModelForm):
     senha = forms.CharField(
         widget=forms.PasswordInput(attrs={

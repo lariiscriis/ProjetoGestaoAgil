@@ -68,8 +68,16 @@
           <p class="mb-2">{{ forum.conteudo }}</p>
 
           <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-chat me-1"></i>Responder</a>
+
+<form method="post" action="{% url 'curtir_forum' forum.forum_id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm ">  <i class="bi bi-heart me-1"></i>{{ forum.curtida_set.count}}
+</button>
+            </form>
+            <a href="#" class="text-muted text-decoration-none" onclick="abrirPopup('{{ forum.forum_id }}')">
+  <i class="bi bi-chat me-1"></i>Responder
+</a>
+
           </div>
         </div>
         {% empty %}
@@ -80,4 +88,31 @@
     </div>
   </div>
 </div>
+
+
+<div id="popupComentario" class="popup-comentario d-none">
+  <div class="popup-inner">
+    <form id="formResposta" method="post">
+      {% csrf_token %}
+      <textarea name="texto" placeholder="Escreva sua resposta..." rows="4" required></textarea>
+      <div class="popup-botoes">
+        <button type="submit" class="btn btn-sm btn-primary">Publicar</button>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="fecharPopup()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+    function abrirPopup(forumId) {
+    document.getElementById('formResposta').action = '/responder-forum/' + forumId + '/';
+    document.getElementById('popupComentario').classList.remove('d-none');
+  }
+
+  function fecharPopup() {
+    document.getElementById('popupComentario').classList.add('d-none');
+  }
+
+</script>
+
 {% endblock %}
