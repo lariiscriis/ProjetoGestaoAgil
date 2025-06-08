@@ -67,6 +67,7 @@
             <div class="bg-white p-3 rounded shadow-sm " >
                 {% if comentarios %}
                     {% for comentario in comentarios %}
+                        {% if comentario.post %}
                         <div class="comentario forum-post p-3 mb-3">
                             <div class="data-excluir-comentario position-absolute">
 
@@ -110,6 +111,36 @@
 
                             </div>
                         </div>
+                        {% endif %}
+                        {% if comentario.forum %}
+                        <div class="comentario forum-post p-3 mb-3">
+                            <p class="text-muted data-comentario position-absolute" style="font-size: 0.85rem;">
+                                {{ comentario.data_criacao|date:"d/m/Y H:i" }}
+                            </p>
+                            <div class="d-flex align-items-center mb-2 mt-2">
+                                {% if comentario.autor.foto_perfil %}
+                                    <img class="profile-pic me-2" src="{{ comentario.autor.foto_perfil.url }}" width="45" height="45" alt="{{ comentario.autor.nome }}">
+                                {% else %}
+                                    <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="45" height="45" alt="Foto padrão">
+                                {% endif %}
+
+                                <div class="post-nome-perfil">
+                                <strong>{{ comentario.autor.nome }}</strong>
+                                <span class="d-block">Forum: {{ comentario.forum.conteudo }}</span>
+                                </div>
+                            
+                            </div>
+                            <p class="mb-2">{{ comentario.texto }}</p>
+                            <div class="d-flex gap-3 curtir-resposta position-absolute">
+                                <i class="bi bi-heart-fill text-danger"><span> {{ comentario.curtida_set.count }}</span></i>
+                                <a href="{% url 'forum' comentario.forum_id %}#comentario-{{ comentario.comentario_id }}" class="text-decoration-none"><i class="bi bi-chat me-1"></i>Responder</a>
+                                {% if request.session.usuario_id == comentario.autor.usuario_id %}
+                                    <a href="{% url 'excluir_comentario' comentario.comentario_id %}" class="text-danger"><i class="bi bi-trash3-fill"></i>Excluir</a>
+                                {% endif %}
+                                <a href="{% url 'forum'  %}#comentario-{{ comentario.comentario_id }}"><i class="bi bi-eye-fill"></i>Ver comentario</a>
+                            </div>
+                        </div>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     <p>Nenhum comentário encontrado.</p>

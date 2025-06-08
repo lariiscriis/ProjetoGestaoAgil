@@ -8,98 +8,171 @@
 
 {% block conteudo %}
 
-
 <div class="forum-wrapper position-relative">
-
   <div class="container-fluid forum-page">
+    <div class="row">
+      
+      <!-- Coluna direita: Nova Postagem -->
+      <div class="col-lg-4 order-lg-3 order-1">
+        <div class="right-panel sticky-top py-4 nova-postagem" style="top: 90px;">
+          <div class="mb-4 p-3 bg-white rounded shadow-sm border">
+            <h5 class="mb-3">Nova Postagem</h5>
+
+            <!-- FORMULÁRIO DIRETO -->
+            <form method="post">
+              {% csrf_token %}
+              {{ form.conteudo }}
+              <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Publicar</button>
+
+              {% if form.non_field_errors %}
+                <div class="text-danger mt-2">{{ form.non_field_errors }}</div>
+              {% endif %}
+            </form>
+          </div>
+
+          <!-- Posts sugeridos -->
+          <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
+            <h6 class="mb-3">Posts Sugeridos</h6>
+            <ul class="list-unstyled small">
+              <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
+              <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
+              <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna esquerda: Lista de postagens -->
     
     <div class="row">
 
 
       <div class="col-lg-8 order-lg-1 order-2">
+        <h2 class="my-4">Fórum</h2>
+
         {% for i in "123456"|make_list %}
         <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
-
           <div class="d-flex justify-content-between align-items-start mb-2">
             <div class="d-flex align-items-center gap-2 flex-wrap">
-              <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" width="40" height="40" alt="Foto">
-              <strong class="text-primary mb-0">João Costa</strong>
-              <small class="text-muted">· 30min atrás</small>
+                <a href="{% url 'perfil_usuario' forum.autor.usuario_id %}">
+                  {% if forum.autor.foto_perfil %}
+                      <img class="profile-pic me-2" src="{{ forum.autor.foto_perfil.url }}" width="45" height="45" alt="{{ comentario.autor.nome }}">
+                  {% else %}
+                      <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="45" height="45" alt="Foto padrão">
+                  {% endif %}              
+                  <strong class="text-primary mb-0">{{ forum.autor.nome }}</strong>
+                </a>
+              <small class="text-muted">· {{ forum.data|date:"d/m/Y H:i" }}</small>
             </div>
 
-            <div class="dropdown">
-              <i class="bi bi-three-dots" data-bs-toggle="dropdown" style="cursor: pointer;"></i>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><button class="dropdown-item text-danger">Apagar post</button></li>
-              </ul>
-            </div>
+            {% if request.session.usuario_id == forum.autor.id|stringformat:"s" %}
+            <form method="post" action="{% url 'excluir_forum' forum.forum_id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+            </form>
+            {% endif %}
           </div>
 
-          <p class="mb-2">Uma boa caminhada sempre me ajuda. Tenta sair ao ar livre e respirar fundo.</p>
+          <p class="mb-2">{{ forum.conteudo }}</p>
 
           <div class="d-flex gap-3">
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-heart me-1"></i>Curtir</a>
-            <a href="#" class="text-muted text-decoration-none"><i class="bi bi-chat me-1"></i>Responder</a>
+
+          <form method="post" action="{% url 'curtir_forum' forum.forum_id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm ">  <i class="bi bi-heart me-1"></i>{{ forum.curtida_set.count}}</button>
+            </form>
+            <a href="#" class="text-muted text-decoration-none" onclick="abrirPopup('{{ forum.forum_id }}')"><i class="bi bi-chat me-1"></i>Responder</a>
+            <a href="#" class="text-muted text-decoration-none" onclick="abrirRespostas('{{ forum.forum_id }}')">{{ forum.comentarios.count }} Respostas </a>
+          </div>       
+  </div>
+
+  <!-- Comentários ocultos de cada fórum vão ser renderizados no modal 
+   Mas DEVEM estar dentro desse for pra poder pegar o id-->
+  <div id="comentarios-{{ forum.forum_id }}" class="d-none">
+    {% for comentario in forum.comentarios.all %}
+      <div class="comentario mb-2 p-2 bg-light rounded">
+        <div class="d-flex justify-content-between align-items-start mb-1">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            {% if comentario.autor.foto_perfil %}
+              <img class="profile-pic me-2" src="{{ comentario.autor.foto_perfil.url }}" width="35" height="35">
+            {% else %}
+              <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="35" height="35">
+            {% endif %}
+            <strong class="text-primary">{{ comentario.autor.nome }}</strong>
           </div>
+          <small class="text-muted">{{ comentario.data|date:"d/m/Y H:i" }}</small>
         </div>
-        {% endfor %}
+        <p class="mt-1">{{ comentario.texto }}</p>
       </div>
-
-          <div class="col-lg-4 order-lg-3 order-1">
-            <div class="right-panel sticky-top py-4 nova-postagem" style="top: 90px;">
-                <div class="mb-4 p-3 bg-white rounded shadow-sm border">
-                    <h5 class="mb-3">Novo Comentário</h5>
-                    <textarea class="form-control mb-2 texto-publicar-comentario" rows="3" placeholder="O que você está pensando?"></textarea>
-                    <button class="btn btn-primary btn-sm w-100 publicar-comentario">Publicar</button>
-                </div>
-
-                <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
-                    <h6 class="mb-3">Posts Sugeridos</h6>
-                    <ul class="list-unstyled small">
-                        <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        </div>
-
-      
-
+    {% empty %}
+      <p class="text-muted">Nenhuma resposta ainda.</p>
+    {% endfor %}
+  </div>
+{% endfor %}
 
       </div>
-
 
     </div>
+  </div>
+</div>
 
+<div class="modal fade" id="popupComentario" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <form id="formResposta" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title">Escrever Resposta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <textarea name="texto" class="form-control" placeholder="Escreva sua resposta..." rows="4" required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Publicar</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-
-<div id="popupComentario" class="popup-comentario d-none">
-  <div class="popup-inner">
-    <textarea placeholder="O que você está pensando?" rows="4" ></textarea>
-    <div class="popup-botoes">
-      <button class="btn btn-sm btn-primary">Publicar</button>
-      <button class="btn btn-sm btn-secondary" onclick="fecharPopup()">Cancelar</button>
+<div class="modal fade" id="popupRespostas" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Respostas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body" id="modalRespostasBody">
+      </div>
     </div>
   </div>
 </div>
 
 <script>
+function abrirPopup(forumId) {
+  document.getElementById('formResposta').action = '/responder-forum/' + forumId + '/';
+  const modal = new bootstrap.Modal(document.getElementById('popupComentario'));
+  modal.show();
+}
 
-function toggleSidebar() {
-    document.querySelector('.left-sidebar').classList.toggle('active');
+
+  function fecharPopup() {
+    document.getElementById('popupComentario').classList.add('d-none');
   }
+  function abrirRespostas(forumId) {
+  const comentariosDiv = document.getElementById('comentarios-' + forumId);
+  const modalBody = document.getElementById('modalRespostasBody');
 
-    document.addEventListener('click', function(event) {
-    const sidebar = document.querySelector('.left-sidebar');
-    const toggle = document.querySelector('.sidebar-toggle');
-    
-    if (sidebar.classList.contains('active') && !sidebar.contains(event.target) && !toggle.contains(event.target)) {
-      sidebar.classList.remove('active');
-    }
-  });
+  if (comentariosDiv && modalBody) {
+    modalBody.innerHTML = comentariosDiv.innerHTML;
+    const modal = new bootstrap.Modal(document.getElementById('popupRespostas'));
+    modal.show();
+  }
+}
+
 </script>
 
 {% endblock %}
+

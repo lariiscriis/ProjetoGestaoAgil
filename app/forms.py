@@ -1,5 +1,5 @@
 from django import forms
-from app.models import Usuario, Post, Comentario
+from app.models import Usuario, Post, Comentario, Forum
 from django.contrib.auth.hashers import make_password
 from django_summernote.widgets import SummernoteWidget
 from django.core.validators import RegexValidator
@@ -88,14 +88,12 @@ class ComentarioForm(forms.ModelForm):
         }
 
 class ForumForm(forms.ModelForm):
-    conteudo = forms.CharField(widget=SummernoteWidget())
     class Meta:
-        model = Post
-        fields = ['titulo', 'conteudo']
+        model = Forum
+        fields = [ 'conteudo']
         widgets = {
-        'titulo': forms.TextInput(attrs={'placeholder': 'titulo'}),
+         'conteudo': forms.Textarea(attrs={'class':'form-control','rows':5,'placeholder': 'Escreva seu comentário aqui...'}),
 }
-        
 
 class EditarPerfilForm(forms.ModelForm):
     senha = forms.CharField(
@@ -104,7 +102,6 @@ class EditarPerfilForm(forms.ModelForm):
             'placeholder': 'Nova senha (deixe em branco para manter a atual)'
         }),
         required=False,
-        min_length=8,
         help_text="A senha deve ter pelo menos 8 caracteres."
     )
 

@@ -10,7 +10,9 @@ urlpatterns = [
     path('usuarios', views.exibirUsuarios , name = "exibirUsuarios"),
 
     path('forum/', views.forum, name='forum'),
-    path('novo_forum/', views.novo_forum, name='novo_forum'),
+    path('forum/<str:forum_id>', views.forum, name='forum'),
+
+    path('forum/', views.novo_forum, name='novo_forum'),
     path('forum/<str:forum_id>/excluir/', views.excluir_forum, name='excluir_forum'),
     
     path('blog', views.blog, name='blog'),
@@ -33,5 +35,10 @@ urlpatterns = [
 
     path('notificacoes/', views.notificacoes_view, name='notificacoes'),
 
+    path('curtir_forum/<str:forum_id>/', views.curtir_forum, name='curtir_forum'),
+
+    path('responder-forum/<str:forum_id>/', views.responder_forum, name='responder_forum'),
+
+    path('buscar/', views.buscar_locais, name='buscar_locais'),
 
 ]
