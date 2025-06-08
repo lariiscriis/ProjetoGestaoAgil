@@ -10,6 +10,8 @@ urlpatterns = [
     path('usuarios', views.exibirUsuarios , name = "exibirUsuarios"),
 
     path('forum/', views.forum, name='forum'),
+    path('forum/<str:forum_id>', views.forum, name='forum'),
+
     path('forum/', views.novo_forum, name='novo_forum'),
     path('forum/<str:forum_id>/excluir/', views.excluir_forum, name='excluir_forum'),
     

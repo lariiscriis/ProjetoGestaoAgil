@@ -62,7 +62,7 @@
             </div>
 
             {% if request.session.usuario_id == forum.autor.id|stringformat:"s" %}
-            <form method="post" action="{% url 'excluir_forum' post.id %}">
+            <form method="post" action="{% url 'excluir_forum' forum.forum_id %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
             </form>
