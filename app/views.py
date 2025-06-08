@@ -370,15 +370,12 @@ def novo_forum(request):
     return render(request, 'forum.html', {'form': form, 'posts': posts})
 
 
-from django.http import JsonResponse
-from .models import Curtida, Forum
-
-
 def responder_forum(request, forum_id):
     if request.method == "POST":
         usuario_id = request.session.get('usuario_id')
         if not usuario_id:
-            return JsonResponse({'erro': 'Usuário não autenticado'}, status=403)
+            return redirect('login')
+
 
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         forum = Forum.objects.get(_id=ObjectId(forum_id))
@@ -393,7 +390,8 @@ def responder_forum(request, forum_id):
             criar_notificacao_resposta_forum(comentario, forum)
             return redirect('forum')
 
-    return JsonResponse({'erro': 'Método inválido'}, status=400)
+    return redirect('forum')
+
 
 def curtir_forum(request, forum_id):
     if request.method == 'POST':
@@ -556,3 +554,4 @@ def notificacoes_view(request):
 
     notificacoes = Notificacao.objects.filter(usuario=usuario).order_by('-criada_em')
     return render(request, 'notificacoes.html', {'notificacoes': notificacoes})
+
