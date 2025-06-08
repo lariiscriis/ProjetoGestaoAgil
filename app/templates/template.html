@@ -28,11 +28,12 @@
           <ul class="navbar-nav" id="divItensNav">
             <li class="nav-item"><a class="nav-link" href="{% url 'forum' %}"><i class="bi bi-chat me-2"></i>Forum</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'blog' %}"><i class="bi bi-journal-richtext me-2"></i>Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'buscar_locais' %}"><i class="bi bi-geo-alt"></i> Mapa</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'notificacoes' %}"><i class="bi bi-bell me-2"></i>Notificações</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'perfil_usuario' request.session.usuario_id %}"><i class="bi bi-person me-2"></i>Meu perfil</a></li>
-              {% if usuario.tipo == 'psicologo' %}
+            {% if usuario.tipo == 'psicologo' %}
             <li class="nav-item"><a class="nav-link" href="{% url 'admin_posts' %}"><i class="bi bi-file-earmark-text me-2"></i>Administrar Posts</a></li>
-              {% endif%}
+            {% endif%}
             <li class=""><a class="btn btn-outline-success" href="{% url 'logout' %}" id="btn-login"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
           </ul>
         </div>

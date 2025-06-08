@@ -161,11 +161,16 @@ def blog(request):
 def detalhe_post(request, post_id):
     post = Post.objects.get(_id=ObjectId(post_id))
     comentarios = Comentario.objects.filter(post=post, comentario_pai=None).order_by('-data_criacao')
-
     form = ComentarioForm()
+    usuario = None
     usuario_id = request.session.get('usuario_id')
     if not usuario_id:
         return redirect('login')
+    if usuario_id:
+        try:
+            usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        except Usuario.DoesNotExist:
+            pass
     if request.method == 'POST' and usuario_id:
         form = ComentarioForm(request.POST)
         if form.is_valid():
@@ -195,6 +200,7 @@ def detalhe_post(request, post_id):
         'form': form,
         'usuario_id': usuario_id,
         'posts_do_autor': posts_do_autor,
+        'usuario': usuario
     })
 
 def excluir_comentario(request, comentario_id):
@@ -245,10 +251,15 @@ def curtir_comentario(request, comentario_id):
 
 
 def admin_posts(request):
+    usuario = None
     usuario_id = request.session.get('usuario_id')
-
     if not usuario_id:
         return redirect('login')
+    if usuario_id:
+        try:
+            usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        except Usuario.DoesNotExist:
+            pass
 
     try:
         autor = Usuario.objects.get(_id=ObjectId(usuario_id))
@@ -266,7 +277,8 @@ def admin_posts(request):
 
     return render(request, 'admin_psicologo.html', {
         'posts': posts,
-        'autor': autor, 
+        'autor': autor,
+        'usuario': usuario
     })
 
 def novo_post(request):
@@ -295,7 +307,13 @@ def novo_post(request):
 
 def editar_post(request, post_id):
     post = Post.objects.get(_id=ObjectId(post_id))
+    usuario = None
     usuario_id = request.session.get('usuario_id')
+    if usuario_id:
+        try:
+            usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+        except Usuario.DoesNotExist:
+            pass
     if not usuario_id or str(post.autor._id) != usuario_id:
          messages.error(request, 'Você não tem permissão para editar este post.')   
     if request.method == "POST":
@@ -311,7 +329,8 @@ def editar_post(request, post_id):
     
     return render(request, 'editar_post.html', {
         'form': form,
-        'post': post
+        'post': post,
+        'usuario': usuario
     })
 
 
@@ -585,7 +604,7 @@ def notificacoes_view(request):
         messages.error(request, 'Usuário não encontrado.')
 
     notificacoes = Notificacao.objects.filter(usuario=usuario).order_by('-criada_em')
-    return render(request, 'notificacoes.html', {'notificacoes': notificacoes})
+    return render(request, 'notificacoes.html', {'notificacoes': notificacoes, 'usuario': usuario})
 
 
 def buscar_locais(request):
@@ -593,6 +612,11 @@ def buscar_locais(request):
 
     if not usuario_id:
         return redirect('login')
+    try:
+        usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
+    except Usuario.DoesNotExist:
+        messages.error(request, 'Usuário não encontrado.')
+
     resultados = []
     termo_busca = request.GET.get('q')
     latitude = request.GET.get('lat')
@@ -616,6 +640,7 @@ def buscar_locais(request):
     return render(request, 'buscar_locais.html', {
         'resultados': dados_processados,
         'termo_busca': termo_busca,
+        'usuario': usuario
     })
 
 def processar_resultado(local):

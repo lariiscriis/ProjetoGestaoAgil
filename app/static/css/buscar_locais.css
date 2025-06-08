@@ -1,5 +1,4 @@
 :root {
-  --verde: #4CAF50;
   --verde-hover: #45a049;
   --cinza-claro: #f9f9f9;
   --cinza-medio: #ddd;
@@ -9,7 +8,6 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
   background-color: var(--cinza-claro);
   margin: 0;
   padding: 0;
@@ -26,6 +24,7 @@ body {
   text-align: center;
   margin-bottom: 1rem;
   font-size: 2rem;
+  color: #88C3FB;
 }
 
 .busca-locais form {
@@ -39,7 +38,8 @@ body {
 .busca-locais input[type="text"] {
   flex: 1 1 60%;
   padding: 0.8rem;
-  border: 1px solid var(--verde);
+  background-color: transparent;
+  border: 1px solid #BEE5B0;
   border-radius: 6px;
   font-size: 1rem;
 }
@@ -47,7 +47,7 @@ body {
 .busca-locais button {
   flex: 1 1 20%;
   padding: 0.8rem;
-  background-color: var(--verde);
+  background-color:#BEE5B0;
   color: var(--branco);
   border: none;
   border-radius: 6px;
@@ -74,7 +74,7 @@ body {
   padding: 1rem;
   border-radius: 8px;
   box-shadow: var(--sombra-suave);
-  max-height: 70vh;
+  max-height: 65vh;
   overflow-y: auto;
 }
 
@@ -82,7 +82,7 @@ body {
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1.5rem;
-  border-bottom: 2px solid var(--verde);
+  border-bottom: 2px solid #BEE5B0;
   padding-bottom: 0.5rem;
 }
 
@@ -96,7 +96,7 @@ body {
   background-color: var(--cinza-claro);
   margin-bottom: 1rem;
   padding: 1rem;
-  border-left: 5px solid var(--verde);
+  border-left: 5px solid #BEE5B0;
   border-radius: 4px;
 }
 
@@ -108,7 +108,7 @@ body {
 
 #map {
   flex: 1 1 45%;
-  height: 70vh;
+  height: 65vh;
   border-radius: 10px;
   box-shadow: var(--sombra-suave);
   min-width: 300px;
