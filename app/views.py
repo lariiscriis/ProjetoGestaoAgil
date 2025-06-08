@@ -1,15 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template import loader
 from django.http import HttpResponse
 from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm, ComentarioForm, ForumForm, EditarPerfilForm
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Usuario, Post, Comentario, Curtida, Forum, Notificacao
 from bson import ObjectId 
-from django.contrib.auth.decorators import login_required
 from collections import Counter
 from django.db.models import Q
 import requests
+from django.contrib import messages
 from django.shortcuts import render
 
 def app(request):
@@ -28,8 +26,6 @@ def login_view(request):
         error = None
 
         if request.method == 'POST':
-            print("Dados POST:", request.POST)
-
             if form.is_valid():
                 print("Formulário válido:", form.cleaned_data)
                 email = form.cleaned_data.get('email')
@@ -39,12 +35,13 @@ def login_view(request):
                     if tipo == 'psicologo':
                         crp = form.cleaned_data.get('crp')
                         if not crp:
-                            error = 'CRP é obrigatório para psicólogos.'
+                            messages.error(request, 'CRP é obrigatório para psicólogos.')
+
                         else:
                             try:
                                 usuario = Usuario.objects.get(email=email, crp=crp, tipo='psicologo')
                                 if not usuario.ativo:
-                                    return HttpResponse("Este perfil foi desativado.")
+                                    messages.error(request, 'Este perfil foi desativado.')
 
                             except Usuario.DoesNotExist:
                                 usuario = None
@@ -52,20 +49,20 @@ def login_view(request):
                         try:
                             usuario = Usuario.objects.get(email=email, tipo='usuario')
                             if not usuario.ativo:
-                                return HttpResponse("Este perfil foi desativado.")
+                                messages.error(request, 'Este perfil foi desativado.')
 
                         except Usuario.DoesNotExist:
                             usuario = None
 
                     if usuario and check_password(senha, usuario.senha):
                         request.session['usuario_id'] = str(usuario._id)
-                        print("ID salvo na sessão:", request.session['usuario_id'])
+                        messages.success(request, 'Login efetuado com sucesso!')
                         return redirect('blog')
                     else:
-                        error = 'Email, CRP ou senha inválidos.'
-
+                        messages.error(request, 'Email, CRP ou senha inválidos.')
 
                 except Usuario.DoesNotExist:
+                    messages.error(request, 'Usuário não encontrado.')
                     error = 'Usuário não encontrado.'
 
             else:

@@ -42,9 +42,9 @@
               {% elif n.tipo == 'curtida_comentario' %}
                 <strong>{{ n.autor_acao.nome }}</strong> curtiu seu comentário: <a href="{{ n.link }}">"{{ n.comentario.texto|truncatechars:20 }}"</a>
               {% elif n.tipo == 'curtida_forum' %}
-                <strong>{{ n.autor_acao.nome }}</strong> curtiu seu post no fórum: <a href="{{ n.link }}">"{{ n.forum.titulo }}"</a>
+                <strong>{{ n.autor_acao.nome }}</strong> curtiu seu post no fórum: <a href="{{ n.link }}">"{{ n.forum.conteudo }}"</a>
               {% elif n.tipo == 'resposta_forum' %}
-                <strong>{{ n.comentario.autor.nome }}</strong> respondeu seu post no fórum: <a href="{{ n.link }}">"{{ n.forum.titulo }}"</a>
+                <strong>{{ n.comentario.autor.nome }}</strong> respondeu seu post no fórum: <a href="{{ n.link }}">"{{ n.forum.conteudo }}"</a>
               {% else %}
                 Nova notificação
               {% endif %}
@@ -57,30 +57,12 @@
           </div>
           {% endif %}
         </div>
-
-    {% elif n.tipo == 'curtida_forum' %}
-    {% if n.autor_acao.foto_perfil %}
-                <img src="{{ n.autor_acao.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.autor_acao.nome }}">
-            {% else %}
-                <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
-            {% endif %}
-        <p> <strong>{{ n.autor_acao.nome }}</strong> curtiu seu post no fórum: <a href="{{ n.link }}">{{ n.forum.conteudo }}</a></p>
-    {% elif n.tipo == 'resposta_forum' %}
-        {% if n.comentario.autor.foto_perfil %}
-            <img src="{{ n.comentario.autor.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.comentario.autor.nome }}">
-        {% else %}
-            <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
-        {% endif %}
-        <p>{{ n.comentario.autor.nome }} respondeu seu post no fórum: <a href="{{ n.link }}">{{ n.forum.conteudo }}</a></p>
-    {% else %}
-        <p>Nova notificação</p>
-    {% endif %}
-    <span class="text-muted float-end" style="font-size: 0.85rem;">{{ n.criada_em|date:"d/m/Y H:i" }}</span>
-</li>
-
-        {% empty %}
-            <li class="list-group-item">Nenhuma notificação encontrada.</li>
-        {% endfor %}
-    </ul>
+      </div>
+    </li>
+    {% empty %}
+      <li class="list-group-item">Nenhuma notificação encontrada.</li>
+    {% endfor %}
+  </ul>
 </div>
 {% endblock %}
+
