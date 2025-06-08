@@ -28,39 +28,35 @@
 
 body {
     color: var(--cor-principal);
-    /* height: 100vh; */
     background-color: #F5F5F5;
 }
 
 .tela {
     display: flex;
-    height: 100vh;
+    height: 84vh;
     align-items: center;
     justify-content: center;
     background-color: #F5F5F5;
 }
   
-  .imagem {
+.imagem {
     flex: 1;
     position: relative;
     background: #F5F5F5;
     overflow: hidden;
-    height: 100vh;
-  }
+    height: 90vh;
+}
 
 .onda {
     position: absolute;
-    top: 0;
-    left: 0 !important;
-    right: -1px;
     width: 100%;
     height: 100vh;
     transform: rotate(90deg);
-    z-index: 0  ;
+    z-index: 0;
     pointer-events: none;
-  }
+}
 
-  .logo-amae {
+.logo-amae {
     position: relative;
     flex: 1;
     display: flex;
@@ -85,7 +81,6 @@ body {
     height: 100%;
 }
 
-
 .fundo{
     position: relative;
     background-color: rgba(255, 255, 255, 0.8);
@@ -101,8 +96,6 @@ body {
     max-height: none;
 }
 
-
-
 .fundo.usuario {
     border: 3px solid #88C3FB; 
 }
@@ -110,7 +103,6 @@ body {
 .fundo.psicologo {
     border: 3px solid #BEE5B0; 
 }
-
 
 .fundo.psicologo input{
     border: 1px solid #BEE5B0;
@@ -157,8 +149,6 @@ body {
 .fundo.usuario h2{
     color: #88C3FB;
 }
-
-
 
 label{
     display: none;
@@ -225,7 +215,6 @@ input, button {
     border-radius: 1rem;
     font-size: 1rem;
 }
-
 
 button {
     background-color: #88C3FB;
