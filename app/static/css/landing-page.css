@@ -20,12 +20,18 @@
 
 }
 
+body{
+    background-color: #F5F5F5 !important;
+    color: #5f5b5b;
+}
+
 #SecaoIndex1 {
     display: flex;
     align-items: center; 
     justify-content: space-between;
     flex-wrap: wrap;
     margin-top: 2em;
+    background-color: #F5F5F5;
 }
 
 #row{
@@ -42,6 +48,7 @@
 
 #sectionLeft {
     text-align: left;
+    color: #5f5b5b;
 }
 
 #sectionRight {
@@ -55,8 +62,8 @@
 }
 
 #btn-section {
-    background-color: #000000;
-    color: #fff;
+    background-color: #88C3FB;
+    color: #333;
     border: none;
     padding: 10px 20px;
     width: 150px;
@@ -217,7 +224,7 @@ svg{
 #Section-sobre-nos{
     width: 100%;
     min-height: 70vh;
-    background-color: #ecebeb;
+    background-color: #F5F5F5;
     margin-top: -12em;
 }
 
@@ -234,6 +241,15 @@ svg{
 
 .video-section{
     float: right;
+    width: 40%;
+
+}
+
+.video-section video{
+    width: 130% ;
+    height: auto;
+    border-radius: 15px;
+    border: 5px solid #88C3FB;
     max-height: 100px;
 }
 
@@ -260,7 +276,7 @@ svg{
 }
 
 .content-section .sobre-button{
-    background-color: #000000;
+    background-color: #BEE5B0;
     border: none;
     padding: 10px 20px;
     width: 130px;
@@ -277,7 +293,7 @@ svg{
 }
 
 .content-section .sobre-button:hover {
-    background-color: #333;
+    background-color: #bee5b0be;
 }
 
 .content-section .redes-sobre{
@@ -285,7 +301,7 @@ svg{
 }
 
 .fab{
-    color: #000000;
+    color: #88C3FB;
     font-size: 30px;
     margin-right: 10px;
     padding: 0 5px;
@@ -293,7 +309,7 @@ svg{
 }
 
 .fab:hover{
-    color: #7e7777;
+    color: #88c3fbb6;
 }
 
 #Section-contato{
@@ -348,9 +364,13 @@ svg{
     padding: 12px;
     margin-bottom: 20px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #88C3FB;
     font-size: 1em;
     box-sizing: border-box;
+}
+
+input:focus{
+    border: 1px solid #88C3FB;
 }
 
 .contato-form textarea {
@@ -365,8 +385,8 @@ svg{
     max-width: 300px; 
     margin: 5px auto 50px auto; 
     padding: 10px 20px;
-    background-color: #000000;
-    color: #fff;
+    background-color: #BEE5B0;
+    color: #333;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -374,7 +394,7 @@ svg{
 }
 
 .contato-form button:hover {
-    background-color: #333;
+    background-color: #bee5b0be;
 }
 
 footer {

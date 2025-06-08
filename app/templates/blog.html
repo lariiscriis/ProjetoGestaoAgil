@@ -1,241 +1,142 @@
 {% extends 'template.html' %}
-
 {% load static %}
 
-    {% block head %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    {% endblock %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}
 
 {% block titulo %} Blog {% endblock %}
 
-
 {% block conteudo %}
-    <!-- <div class="container py-5">
 
-    <h1>Blog</h1> 
-    {% if usuario and usuario.tipo == "psicologo" %}
-    <p><a href="{% url 'novo_post' %}">Criar novo post</a></p>
-    {% endif %}
-    <ul>
-   {% for post in posts %}
-    <li>
-        {% if post.thumbnail  and post.thumbnail.name %}  
-            <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }}">
-        {% else %}
-            <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">
-        {% endif %}
-
-        <a href="{% url 'detalhe_post' post.post_id %}">{{ post.titulo }}</a>
-        {% if post.autor.foto_perfil %}
-            <img src="{{ post.autor.foto_perfil.url }}" alt="Foto de perfil">
-        {% else %}
-            <img src="/static/images/default-profile.png" alt="Foto padrão">
-        {% endif %}
-
-        <small>Por {{ post.autor.nome }} ({{ post.autor.tipo }}) em {{ post.criado_em }}</small><br>
-
-    </li>
-    {% endfor %}
-
-    </ul>
-    </div> -->
-
-    <div class="page-wrapper">
-        <div class="post-slider">
-            <h1>Mais Curtidos</h1>
-            <i class="bi bi-chevron-left prev"></i>  
-            <i class="bi bi-chevron-right next"></i> 
-            <div class="post-wrapper">
-                {% for post in top_mais_curtidos %}
-                <div class="post">
-                        <div class="blog-card">
-                            <div class="blog-image">
-                                {% if post.thumbnail  and post.thumbnail.name%}
-                                    <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }} ">
-                                {% else %}
-                                    <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão">
-                                {% endif %}                                        
-                                <div class="blog-data">{{ post.criado_em }}</div>
-                                        </div>
-                                <div class="blog-content">
-                                    <h2 class="blog-title">{{ post.titulo }}</h2>
-                            
-                                    <p class="blog-description">{{ post.conteudo|safe|truncatewords:20|linebreaksbr|striptags|cut:"\n"|cut:"\r"}}...</p>
-                                        <div class="blog-footer">
-                                         <a href="{% url 'perfil_usuario' post.autor.usuario_id %}">
-                                            <div class="author-image">
-                                                {% if post.autor.foto_perfil %}
-                                                <img src="{{ post.autor.foto_perfil.url }}" alt="">
-                                                {% else %}
-                                                <img src="{% static 'assets/images/default_foto.png' %}" width="60"> 
-                                                {% endif %}
-
-                                            <span class="blog-author">{{ post.autor.nome}}</span>
-                                        
-                                            </div>
-                                        </a>
-                                        <a href="{% url 'detalhe_post' post.post_id %}" class="read-more">Leia Mais</a>
-                                </div>
-                            </div>
-                     </div>
-
+<div class="container py-4">
+    <!-- Top 3 mais curtidos -->
+    <div class="text-center mb-4">
+        <h1>Top 3 mais Curtidos</h1>
+    </div>
+    <div class="row g-4 justify-content-center">
+        {% for post in top_mais_curtidos %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card blog-card h-100">
+                <div class="blog-image position-relative">
+                    {% if post.thumbnail and post.thumbnail.name %}
+                        <img src="{{ post.thumbnail.url }}" class="card-img-top" alt="{{ post.thumbnail.url }}">
+                    {% else %}
+                        <img src="{% static 'images/default-thumbnail.jpg' %}" class="card-img-top" alt="Thumbnail padrão">
+                    {% endif %}
+                    <div class="blog-data">{{ post.criado_em }}</div>
                 </div>
-        {% endfor %}
-
-
-
-            </div>
-        </div>
-
-
-        <div class="content clearfix">
-            <div class="main-content">
-                {% if request.GET.autor_id %}
-                    <h1 class="recent-post-title">Posts de {{ posts.0.autor.nome }}
-                        <a href="{% url 'blog' %}">x</a>
-                    </h1>
-                    
-                {% elif request.GET.q %}
-                    <h1 class="recent-post-title">Resultados para "{{ request.GET.q }}"  
-                        <a href="{% url 'blog' %}">x</a>
-                    </h1>
-                    
-                {% else %}
-                    <h1 class="recent-post-title">Posts Recentes</h1>
-                {% endif %}
-
-                {% for post in posts %}
-                    <div class="post">
-                        <!-- imagem -->
-                        {% if post.thumbnail  and post.thumbnail.name%}
-                        <div class="post-image-data">
-                            <img src="{{ post.thumbnail.url }}"   width="60" alt=" {{ post.thumbnail.url }} " class="post-image">
-                             <div class="post-data">{{ post.criado_em }}</div>
-
-                            {% else %}
-                            <img src="{% static 'images/default-thumbnail.jpg' %}"  width="30" alt="Thumbnail padrão" class="post-image">
-                        {% endif %}   
-                        </div>
-                        <!-- titulo -->
-                    <div class="post-preview">
-                            <h4 class="post-title"><a href="{% url 'detalhe_post' post.post_id %}">{{ post.titulo }}</a></h4>
-                             <p class="post-description">{{ post.conteudo|safe|truncatewords:40|linebreaksbr|striptags|cut:"\n"|cut:"\r" }}</p>
-
-                            <!-- autor -->
-                            <div class="post-footer">
-                                        <div class="post-author-image" >
-                                        <a href="{% url 'perfil_usuario' post.autor.usuario_id %}">
-                                            {% if post.autor.foto_perfil %}
-                                            <img src="{{ post.autor.foto_perfil.url }}" alt="">
-                                            {% else %}
-                                            <img  src="{% static 'assets/images/default_foto.png' %}" width="60">
-                                            {% endif %}
-                                            <span class="post-author">{{ post.autor.nome }}</span>
-                                        </a>
-                                        </div>
-                                        <div class="post-likes">
-                                        <i class="bi bi-heart-fill me-1"><span>{{ post.curtida_set.count }}</span></i>
-                                        <a href="{% url 'detalhe_post' post.post_id %}" class="post-read-more">Leia Mais</a>
-                                        </div>
-                                </div>
-                        </div>
-
-
-
-                     </div>
-               {% endfor %}
-
-
-
-                    {% for post in posts %}
-                      <!-- <div class="post">
-                            <h2>{{ post.titulo }}</h2>
-                            <p>{{ post.criado_em }}</p>
-                            <a href="{% url 'detalhe_post' post.post_id %}">Leia Mais</a>
-                        </div>
-                        {% endfor %} -->
-      
-            </div>
-            <div class="side-bar">
-
-                <div class="section search">
-                    <h2 class="section-title">Pesquisa</h2>
-                        <form method="get" action="{% url 'blog' %}">
-                            <input type="text" name="q" class="text-input" placeholder="Pesquisar..." value="{{ request.GET.q }}">
-                        </form>
-                </div>
-
-                <div class="section topics">
-                    <h2 class="section-title">Autores Frequentes</h2>
-                        <ul>
-                        {% for item in autores_frequentes %}
-                        
-                        <li><a href="?autor_id={{ item.autor.usuario_id }}">
-                            <div class="post-author-image">
-                                {% if item.autor.foto_perfil %}
-                                    <img src="{{ item.autor.foto_perfil.url }}" alt="">
+                <div class="card-body blog-content d-flex flex-column">
+                    <h2 class="blog-title">{{ post.titulo }}</h2>
+                    <p class="blog-description">{{ post.conteudo|safe|truncatewords:20|linebreaksbr|striptags|cut:"\n"|cut:"\r" }}...</p>
+                    <div class="blog-footer d-flex justify-content-between align-items-center mt-auto">
+                        <a href="{% url 'perfil_usuario' post.autor.usuario_id %}" class="d-flex align-items-center text-decoration-none">
+                            <div class="author-image me-2">
+                                {% if post.autor.foto_perfil %}
+                                    <img src="{{ post.autor.foto_perfil.url }}" alt="" class="rounded-circle" width="40" height="40">
                                 {% else %}
-                                    <img  src="{% static 'assets/images/default_foto.png' %}" width="60">
+                                    <img src="{% static 'assets/images/default_foto.png' %}" class="rounded-circle" width="40" height="40">
                                 {% endif %}
-                                <span class="post-author">{{ item.autor.nome }}</span>
-                                <p class="post-author">{{ item.total }} postagens</p>
                             </div>
-                        </a></li>
-                        {% endfor %}
-                        </ul>
+                            <span class="blog-author">{{ post.autor.nome|truncatewords:3 }}</span>
+                        </a>
+                        <a href="{% url 'detalhe_post' post.post_id %}" class="btn btn-link read-more">Leia Mais</a>
+                    </div>
                 </div>
-
             </div>
         </div>
-
+        {% endfor %}
     </div>
 
-    <!-- js do slick carousel  -->
-<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <!-- Posts recentes -->
+    <div class="row mt-5">
+        
+        <div class="col-lg-8 order-2 order-lg-1">
+            {% if request.GET.autor_id %}
+                <h2 class="recent-post-title">Posts de {{ posts.0.autor.nome }}
+                    <a href="{% url 'blog' %}" class="text-danger">x</a>
+                </h2>
+            {% elif request.GET.q %}
+                <h2 class="recent-post-title">Resultados para "{{ request.GET.q }}"
+                    <a href="{% url 'blog' %}" class="text-danger">x</a>
+                </h2>
+            {% else %}
+                <h2 class="recent-post-title">Posts Recentes</h2>
+            {% endif %}
 
-<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+            {% for post in posts %}
+            <div class="card mb-4">
+                <div class="row g-0">
+                    <div class="col-md-4 post-image-data">
+                        {% if post.thumbnail and post.thumbnail.name %}
+                            <img src="{{ post.thumbnail.url }}" class="img-fluid rounded-start h-100 object-fit-cover" alt="Post">
+                                <div class="post-data">{{ post.criado_em }}</div>
+                        {% else %}
+                            <img src="{% static 'images/default-thumbnail.jpg' %}" class="img-fluid rounded-start" alt="Thumbnail padrão">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body d-flex flex-column">
+                            <h4 class="post-title"><a href="{% url 'detalhe_post' post.post_id %}">{{ post.titulo }}</a></h4>
+                            <p class="post-description">{{ post.conteudo|safe|truncatewords:40|linebreaksbr|striptags|cut:"\n"|cut:"\r" }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <a href="{% url 'perfil_usuario' post.autor.usuario_id %}" class="d-flex align-items-center text-decoration-none">
+                                    {% if post.autor.foto_perfil %}
+                                        <img src="{{ post.autor.foto_perfil.url }}" class="rounded-circle me-2" width="40" height="40">
+                                    {% else %}
+                                        <img src="{% static 'assets/images/default_foto.png' %}" class="rounded-circle me-2" width="40" height="40">
+                                    {% endif %}
+                                    <span class="post-author">{{ post.autor.nome }}</span>
+                                </a>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-heart-fill me-1 text-danger"></i><span>{{ post.curtida_set.count }}</span>
+                                    <a href="{% url 'detalhe_post' post.post_id %}" class="btn btn-sm btn-outline-primary ms-3 post-read-more">Leia Mais</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
-<script>    
-  $('.post-wrapper').slick({
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 2000,
-  nextArrow: $('.next'),
-  prevArrow: $('.prev'),
-   responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        infinite: true,
-        dots: true
-      }
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2
-      }
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1
-      }
-    }
+        <!-- Sidebar -->
+        <div class="col-lg-4 order-1 order-lg-2 mb-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Pesquisa</h5>
+                    <form method="get" action="{% url 'blog' %}">
+                        <input type="text" name="q" class="form-control" placeholder="Pesquisar..." value="{{ request.GET.q }}">
+                    </form>
+                </div>
+            </div>
 
-  ]
-});
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Autores Frequentes</h5>
+                    <ul class="list-unstyled">
+                        {% for item in autores_frequentes %}
+                        <li class="mb-3">
+                            <a href="?autor_id={{ item.autor.usuario_id }}" class="d-flex align-items-center text-decoration-none">
+                                {% if item.autor.foto_perfil %}
+                                    <img src="{{ item.autor.foto_perfil.url }}" class="rounded-circle me-2" width="40" height="40">
+                                {% else %}
+                                    <img src="{% static 'assets/images/default_foto.png' %}" class="rounded-circle me-2" width="40" height="40">
+                                {% endif %}
+                                <div>
+                                    <strong class="d-block" style="color: #333;">{{ item.autor.nome }}</strong>
+                                    <small class="text-muted">{{ item.total }} postagens</small>
+                                </div>
+                            </a>
+                            <hr>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-</script>
-
-{% endblock %} 
-
+{% endblock %}

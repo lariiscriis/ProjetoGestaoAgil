@@ -15,14 +15,18 @@
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" class="onda">
                 <path d="M0,0 C150,100 350,0 500,100 L500,150 L0,150 Z" fill="#fff" />
             </svg>
+             <div class="logo-amae">
+            <img src="{% static 'assets\images\logo_amae.png' %}" alt="">
         </div>
-            
+        </div>
+           
+       
         <div class="formulario-container">
-            <div class="fundo">
+            <div class="fundo {% if tipo == 'psicologo' %}psicologo{% else %}usuario{% endif %}">
             <div class="navegacao">
-                <a href="#" onclick="setTipo('usuario')">Usuário</a>
-                <a class="separador">|</a>
-                <a href="#" onclick="setTipo('psicologo')">Psicólogo</a>
+                <a href="#" onclick="setTipo('usuario')" style="color: #88C3FB;">Usuário</a>
+                <a class="separador" style="color: #333;">|</a>
+                <a href="#" onclick="setTipo('psicologo')" style="color: #BEE5B0;">Psicólogo</a>
             </div>
     
        

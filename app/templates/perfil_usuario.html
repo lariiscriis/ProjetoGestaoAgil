@@ -15,7 +15,7 @@
 
     <div class="row">
         <div class="col-lg-8 order-lg-1 order-2">
-            <div class="bg-white p-3 rounded shadow-sm border mb-3">
+            <div class="bg-white p-3 rounded shadow-sm  mb-3">
 
 
                 {% if usuario.background_perfil %}
@@ -38,12 +38,13 @@
                             <h2>{{ usuario.nome }}</h2>
                             <span>{{  usuario.get_tipo_display }}</span>
                         </div>
-                    <a href="{% url 'excluir_conta' %}" class="btn btn-primary mb-3">Excluir conta</a>
 
-                {% if request.session.usuario_id == usuario.usuario_id %}
-                    <a href="{% url 'editar_perfil' usuario.usuario_id %}" class="btn btn-warning mb-3"><i class="bi bi-pencil-square"></i>Editar Perfil</a>
-                {% endif %}
-
+                        <div class="botoes-crud-perfil">
+                        {% if request.session.usuario_id == usuario.usuario_id %}
+                            <button data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" class="btn btn-primary mb-3 excluir_perfil"><i class="bi bi-person-x"></i>Excluir conta</button>
+                            <a href="{% url 'editar_perfil' usuario.usuario_id %}" class="btn btn-warning mb-3 editar_perfil"><i class="bi bi-pencil-square"></i>Editar Perfil</a>
+                        {% endif %}
+                        </div>
                         {% if not usuario.ativo %}
                     <div class="alert alert-warning" role="alert">
                         Este perfil está inativo. Entre em contato com o administrador para mais informações.
@@ -63,14 +64,26 @@
                 </div>
             </div>
 
-            <div class="bg-white p-3 rounded shadow-sm border">
-                <h3>Comentários</h3>
+            <div class="bg-white p-3 rounded shadow-sm " >
                 {% if comentarios %}
                     {% for comentario in comentarios %}
                         <div class="comentario forum-post p-3 mb-3">
-                            <p class="text-muted data-comentario position-absolute" style="font-size: 0.85rem;">
+                            <div class="data-excluir-comentario position-absolute">
+
+                            <p class="text-muted data-comentario " style="font-size: 0.85rem;">
                                 {{ comentario.data_criacao|date:"d/m/Y H:i" }}
                             </p>
+
+                                 <div class="dropdown">
+                                    <i class="bi bi-three-dots" data-bs-toggle="dropdown" style="cursor: pointer;"></i>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                    {% if request.session.usuario_id == comentario.autor.usuario_id %}
+                                        <li><a href="{% url 'excluir_comentario' comentario.comentario_id %}"><button class="dropdown-item text-danger"><i class="bi bi-trash3-fill"></i> Apagar post</button></li></a>
+                                    {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+
                             <div class="d-flex align-items-center mb-2 mt-2">
                                 {% if comentario.autor.foto_perfil %}
                                     <img class="profile-pic me-2" src="{{ comentario.autor.foto_perfil.url }}" width="45" height="45" alt="{{ comentario.autor.nome }}">
@@ -79,19 +92,22 @@
                                 {% endif %}
 
                                 <div class="post-nome-perfil">
+                                    <div class="nome-email-autor">
                                 <strong>{{ comentario.autor.nome }}</strong>
-                                <span class="d-block">Post: {{ comentario.post.titulo }}</span>
+                                <span> {{comentario.autor.email}}</span>
                                 </div>
+                                <span class="d-block post-nome">{{ comentario.post.titulo }}</span>
+                                </div>
+
+                               
                             
                             </div>
-                            <p class="mb-2">{{ comentario.texto }}</p>
+                            <p class="mb-2 text-comentario">{{ comentario.texto }}</p>
                             <div class="d-flex gap-3 curtir-resposta position-absolute">
                                 <i class="bi bi-heart-fill text-danger"><span> {{ comentario.curtida_set.count }}</span></i>
-                                <a href="{% url 'detalhe_post' comentario.post_id %}#comentario-{{ comentario.comentario_id }}" class="text-decoration-none"><i class="bi bi-chat me-1"></i>Responder</a>
-                                {% if request.session.usuario_id == comentario.autor.usuario_id %}
-                                    <a href="{% url 'excluir_comentario' comentario.comentario_id %}" class="text-danger"><i class="bi bi-trash3-fill"></i>Excluir</a>
-                                {% endif %}
-                                <a href="{% url 'detalhe_post' comentario.post_id %}#comentario-{{ comentario.comentario_id }}"><i class="bi bi-eye-fill"></i>Ver comentario</a>
+                                <a href="{% url 'detalhe_post' comentario.post_id %}#comentario-{{ comentario.comentario_id }}" class="text-decoration-none resposta-ver-comentario"><i class="bi bi-chat me-1"></i>Responder</a>
+                                <a href="{% url 'detalhe_post' comentario.post_id %}#comentario-{{ comentario.comentario_id }}" class="resposta-ver-comentario"><i class="bi bi-eye-fill"></i>Ver comentario</a>
+
                             </div>
                         </div>
                     {% endfor %}
@@ -104,9 +120,9 @@
         <div class="col-lg-4 order-lg-3 order-1">
             <div class="right-panel sticky-top py-4 nova-postagem" style="top: 90px;">
                 <div class="mb-4 p-3 bg-white rounded shadow-sm border">
-                    <h5 class="mb-3">Nova Postagem</h5>
-                    <textarea class="form-control mb-2" rows="3" placeholder="O que você está pensando?"></textarea>
-                    <button class="btn btn-primary btn-sm w-100" onclick="mostrarPopup()">Publicar</button>
+                    <h5 class="mb-3">Novo Comentário</h5>
+                    <textarea class="form-control mb-2 texto-publicar-comentario" rows="3" placeholder="O que você está pensando?"></textarea>
+                    <button class="btn btn-primary btn-sm w-100 publicar-comentario">Publicar</button>
                 </div>
 
                 <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
@@ -121,4 +137,27 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteLabel">Confirmar Exclusão de Conta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <p>Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.</p>
+      </div>
+      <div class="modal-footer text-center">
+        <form method="post" action="{% url 'excluir_conta' %}">
+          {% csrf_token %}    
+          <button type="submit" class="btn btn-danger excluir-conta">Excluir definitivamente</button>
+          <button type="button" class="btn btn-secondary cancelar-exclusao" data-bs-dismiss="modal">Cancelar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

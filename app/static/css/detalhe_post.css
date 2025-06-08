@@ -26,6 +26,7 @@
   flex-direction: column;
   flex: 1 1 auto;
   min-height: 100%;
+  margin-top: 3em;
 }
 
 
@@ -42,18 +43,14 @@
     background-color: white;
     padding: 20px 50px;
     border-radius: 12px;
-    border: 2px solid #BEE5B0;
+
 }
 
 .side-bar{
     padding: 0px 10px;
 }
 
-.content{
-  display: flex;
-  width: 90%;
-  margin: 30px auto 30px; 
-}
+
 
 .content .main-content{
   flex: 7; 
@@ -72,25 +69,6 @@
   clear: both;
 }
 
-.voltar-blog a{
-    text-decoration: none;
-    color: #ecebeb;
-    background-color: #000000;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-.voltar-blog{
-    position: absolute;
-    left: 20px;
-    top: 150px;
-}
-
-.voltar-blog a:hover{
-    background-color: #333;
-}
 
 .post-author-image-perfil img{
     width: 50px;
@@ -119,7 +97,6 @@
     height: auto;
     border-radius: 12px;
     margin-bottom: 20px;
-    border: 3px solid #88C3FB;
 
 }
 
@@ -132,7 +109,6 @@
  .autor-email span{
     font-size: 12px;
     color: #666;
-    /* margin: 0px 0px 0px 60px; */
  }
 
 
@@ -156,7 +132,7 @@
     color: #666;
 }
 
-.content .side-bar .section{
+.section{
     background-color: white;
     padding: 20px;
     border-radius: 12px;
@@ -170,19 +146,18 @@
     margin-right: 10px;
 }
 
-.content .side-bar .section.search{
+ .section.search{
     margin-top: 80px;
 }
 
 
-.content .side-bar .section.topics ul{
+ .section.topics ul{
     margin: 0px;
     padding: 0px;
     list-style: none;
     border-top: 1px solid #ccc;
 }
-
-.content .side-bar .section.topics ul li a{
+.section .topics ul li a{
     text-decoration: none;
     display: block;
     padding: 15px 0px 15px 0px;
@@ -191,7 +166,7 @@
     transition: background-color 0.5s ease, transform 0.3s ease;
 }
 
-.content .side-bar .section.topics ul li a:hover{
+ .section.topics ul li a:hover{
     background-color: #ecebeb;
     transform: translateY(0px);
 
@@ -205,12 +180,10 @@ section-title{
 
 
 .comentarios-section {
-  padding: 20px 50px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  max-width: 90%;
-  
+  max-width: 100%;
   margin: 5px auto;
     
 }
@@ -271,15 +244,6 @@ section-title{
   color: #d63384;
 }
 
-.responder-btn i {
-  transform: rotateY(180deg);
-}
-
-.acoes-comentarios{
-   position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
 
 textarea {
   width: 100%;
@@ -290,58 +254,36 @@ textarea {
   resize: none;
 }
 
-.sidebar-toggle {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #e0e0e0;
-  color: black;
-  border: 1 px solid #000;
-  padding: 0.5rem 1rem;
-  z-index: 1001;
-  display: none;
-  margin: 1rem 0 1rem 1rem; 
-  border-radius: 10px;
-}
+
 
 a {
   text-decoration: none;
 }
 
 
-.perfil-box {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);  
+
+.autor-nome-email{
+  display: flex;
+  flex-direction: column;
 }
 
-.perfil-box h6 {
-  margin-left:1rem;
-  font-size: 1.2rem;
+.autor-nome-email span{
   color: #333;
 }
 
-.perfil-box img{
-  border-radius: 50%;
-  object-fit: cover;
-  width: 40px;
-  height: 40px;
+.span2{
+  font-size: 14px;
 }
 
-
-.left-sidebar {
-  /* background-color: #e0e0e0; */
-  /* padding-top: 90px;
-  padding-bottom: 20px; */
-  /* min-height: 100vh; */
-  /* position: fixed; */
-  /* width: 250px; */
-  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); */
-  transition: transform 0.3s ease-in-out;
-  /* z-index: 999; */
+.comentario-nome-foto-email{
+  display: flex;
+  flex-direction: row;
 }
+
+.text-comentario{
+    margin-left: 0.5em;
+}
+
 
 label{
   display: none;
@@ -349,8 +291,9 @@ label{
 }
 
 .btn-comentar{
-  background-color: #000 !important;
-
+  background-color: #BEE5B0 !important;
+  color: #333;
+  border: none;
 }
 
 .post-author-image{

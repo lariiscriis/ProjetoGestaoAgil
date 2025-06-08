@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     {% block head %}{% endblock %}
     
     <link rel="stylesheet" href="{% static 'css/template.css' %}">
@@ -24,11 +26,14 @@
         {% if request.session.usuario_id %}
           <div class="collapse navbar-collapse justify-content-end" id="navbarResponsive">
           <ul class="navbar-nav" id="divItensNav">
-            <li class="nav-item"><a class="nav-link" href="{% url 'forum' %}">Forum</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'blog' %}">blog</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'notificacoes' %}">Notificações</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'perfil_usuario' request.session.usuario_id %}">Meu perfil</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'forum' %}"><i class="bi bi-chat  me-2"></i>Forum</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'blog' %}"><i class="bi bi-journal-richtext"></i> blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'notificacoes' %}"><i class="bi bi-bell me-2"></i>Notificações</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'perfil_usuario' request.session.usuario_id %}"><i class="bi bi-person me-2"></i>Meu perfil</a></li>
+              {% if usuario.tipo == 'psicologo' %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'admin_posts' %}"><i class="bi bi-file-earmark-text me-2""></i>Administrar Posts</a></li>
+              {% endif%}
+            <li class=""><a class="btn btn-outline-success" href="{% url 'logout' %}" id="btn-login"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
           </ul>
         </div>
         {% else %}

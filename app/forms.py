@@ -75,7 +75,7 @@ class PostForm(forms.ModelForm):
         fields = ['titulo', 'conteudo', 'thumbnail']
         widgets = {
             'titulo': forms.TextInput(attrs={'placeholder': 'titulo'}),
-            'thumbnail': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
+            'thumbnail': forms.FileInput(attrs={'accept': 'image/*'}),
           
         }
 
@@ -123,15 +123,15 @@ class EditarPerfilForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['nome', 'email', 'foto_perfil', 'background_perfil', 'senha',
+        fields = ['nome', 'email', 'foto_perfil', 'background_perfil',
                   'data_nascimento', 'bio', 'telefone', 'endereco', 'crp', 'area_atuacao']
         
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome completo'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Seu email'}),
-            'foto_perfil': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'background_perfil': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'bio': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Conte um pouco sobre você'}),
+            'foto_perfil': forms.FileInput(attrs={'class': 'form-control input-file'}),
+            'background_perfil': forms.FileInput(attrs={'class': 'form-control input-file'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control id_bio', 'placeholder': 'Conte um pouco sobre você'}),
             'endereco': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Endereço completo'}),
             'crp': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'CRP (se for psicólogo)'}),
             'area_atuacao': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Área de atuação'}),

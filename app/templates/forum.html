@@ -13,51 +13,10 @@
 
   <div class="container-fluid forum-page">
     
-    <div class="row gx-3">
-      <div class="col-lg-4 order-lg-3 order-1">
-        <div class="right-panel sticky-top py-4 nova-postagem"  style="top: 90px;">
-          <div class="mb-4 p-3 bg-white rounded shadow-sm border">
-            <h5 class="mb-3">Nova Postagem</h5>
-            <textarea class="form-control mb-2" rows="3" placeholder="O que você está pensando?"></textarea>
-            <button class="btn btn-primary btn-sm w-100" onclick="mostrarPopup()">Publicar</button>
-          </div>
-
-        <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
-          <h6 class="mb-3">Posts Sugeridos</h6>
-          <ul class="list-unstyled small">
-            <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
-            <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
-            <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-     <!-- <div class="col-lg-2 p-0">
-            <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <div class="left-sidebar p-3 text-white">
-
-                    <div class="perfil-box d-flex align-items-center gap-2 mb-4">
-                    <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
-                    <h6 class="mb-0">Usuário</h6>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                    <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
-                    <a class="btn btn-light text-start" href="{% url 'forum' %}" ><i class="bi bi-chat  me-2"></i> Fórum</a>
-                    <a class="btn btn-light text-start" href="{% url 'blog' %}"><i class="bi bi-file-earmark-text me-2"></i>Blog</a>
-
-                    </div>
-                </div>
-                </div> -->
+    <div class="row">
 
 
       <div class="col-lg-8 order-lg-1 order-2">
-        <h2 class="my-4">Fórum</h2>
-
         {% for i in "123456"|make_list %}
         <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
 
@@ -85,20 +44,36 @@
         </div>
         {% endfor %}
       </div>
+
+          <div class="col-lg-4 order-lg-3 order-1">
+            <div class="right-panel sticky-top py-4 nova-postagem" style="top: 90px;">
+                <div class="mb-4 p-3 bg-white rounded shadow-sm border">
+                    <h5 class="mb-3">Novo Comentário</h5>
+                    <textarea class="form-control mb-2 texto-publicar-comentario" rows="3" placeholder="O que você está pensando?"></textarea>
+                    <button class="btn btn-primary btn-sm w-100 publicar-comentario">Publicar</button>
+                </div>
+
+                <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
+                    <h6 class="mb-3">Posts Sugeridos</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         
         </div>
 
-        
-
-
+      
 
 
       </div>
 
 
     </div>
-  </div>
-</div>
+
 
 
 <div id="popupComentario" class="popup-comentario d-none">

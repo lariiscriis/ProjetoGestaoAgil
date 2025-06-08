@@ -1,13 +1,119 @@
 {% extends 'template.html' %}
 {% load static %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/editar_perfil.css' %}"/>
+{% endblock %}
+
+{% block titulo %} Perfil {% endblock %}
+
+
 {% block conteudo %}
-<div class="container">
-    <h1>Editar Perfil</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
+<div class="container mt-5 mb-5">
+  <h1 class="mb-4 text-center">Editar Perfil</h1>
+  <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <div class="card shadow-sm p-4 h-100">
+          <h5 class="mb-3">Dados Pessoais</h5>
+
+          <div class="mb-3">
+            <label for="id_nome" class="form-label">Nome de Usuário</label>
+            {{ form.nome }}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_email" class="form-label">Email</label>
+            {{ form.email }}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_senha" class="form-label">
+              Nova Senha <i class="bi bi-info-circle" title="{{ form.senha.help_text }}"><span>{{ form.senha.help_text }}</span></i>
+            </label>
+            {{ form.senha }}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_data_nascimento" class="form-label">Data de Nascimento</label>
+            {{ form.data_nascimento }}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_bio" class="form-label">Biografia</label>
+            {{ form.bio }}
+          </div>
+
+        <div class="mb-3">
+          <div class="foto-perfil-atual">
+            <label class="form-label">Foto de Perfil Atual:</label><br>
+            {% if usuario.foto_perfil.url %}
+              <img src="{{ usuario.foto_perfil.url }}" alt="Foto atual" class="img-thumbnail mb-2" width="100">
+            {% else %}
+              <img src="{% static 'assets/images/default_foto.png' %}" class="perfil-foto shadow" alt="Foto padrão">
+              {% endif %}
+            </div>
+            <div class="nova-foto-perfil">
+            <label for="id_foto_perfil" class="form-label">Nova Foto de Perfil:</label>
+            {{ form.foto_perfil }}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="header-fundo-perfil">
+            <label class="form-label">Imagem de Fundo Atual:</label><br>
+            {% if usuario.background_perfil.url %}
+              <img src="{{ usuario.background_perfil.url }}" alt="Fundo atual" class="img-thumbnail mb-2" width="300px" height="100%">
+            {% else %}
+                    <img src="{% static 'assets/images/default_background.jpg' %}" class="img-fluid rounded" alt="Background padrão">
+              {% endif %}
+
+            </div>
+            <div class="header-fundo-perfil-nova">
+            <label for="id_background_perfil" class="form-label">Nova Imagem de Fundo:</label>
+            {{ form.background_perfil }}
+          </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card shadow-sm p-4 h-100">
+          <h5 class="mb-3">Contato e Profissional</h5>
+
+          <div class="mb-3">
+            <label for="id_telefone" class="form-label">Telefone</label>
+            {{ form.telefone }}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_endereco" class="form-label">Endereço</label>
+            {{ form.endereco }}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_crp" class="form-label">CRP</label>
+            {{ form.crp }}
+          </div>
+
+          <div class="mb-3">
+            <label for="id_area_atuacao" class="form-label">Área de Atuação</label>
+            {{ form.area_atuacao }}
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4 botoes-edicao-form">
+      <button type="submit" class="btn btn-primary px-5 salvar-alteracoes">Salvar Alterações</button>
+      <a href="{% url 'perfil_usuario' usuario.usuario_id %}"><button class="btn btn-primary px-5 cancelar-edicao">Cancelar</button></a>
+    </div>
+  </form>
 </div>
+
 {% endblock %}

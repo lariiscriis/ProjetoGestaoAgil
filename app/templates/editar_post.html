@@ -15,26 +15,7 @@
 
 {% block conteudo %}
 <div class="page-layout">
-    <div class="left-sidebar p-3 text-white">
-        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="perfil-box d-flex align-items-center gap-2 mb-4">
-                    <img src="/static/img/default-profile.png" alt="Perfil" class="profile-pic">
-                    <h6 class="mb-0">Usuário</h6>
-        </div>
-
-        <div class="d-grid gap-2">
-            <button class="btn btn-light text-start"><i class="bi bi-house-door me-2"></i>Página Inicial</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-search me-2"></i>Pesquisar</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-bell me-2"></i>Notificações</button>
-                    <button class="btn btn-light text-start"><i class="bi bi-person me-2"></i>Meu Perfil</button>
-                    <a class="btn btn-light text-start" href="{% url 'forum' %}" ><i class="bi bi-chat  me-2"></i> Fórum</a>
-                    <a class="btn btn-light text-start" href="{% url 'blog' %}"><i class="bi bi-file-earmark-text me-2"></i>Blog</a>
-                    <a class="btn btn-light text-start" href="{% url 'admin_posts' %}"><i class="bi bi-file-earmark-text me-2"></i>Administrar Posts</a>
-        </div>
-    </div>
-
   <div class="edit-post-container">
-    <a href="{% url 'admin_posts' %}" class="btn btn-secondary mb-3">← Voltar</a>
     <h2>Editar Post</h2>
     <form method="post" enctype="multipart/form-data" class="edit-post-form">
       {% csrf_token %}
@@ -43,7 +24,8 @@
         {{ form.thumbnail.label_tag }}
         {{ form.thumbnail }}
         {% if post.thumbnail %}
-        <div class="thumbnail-preview">
+        <div class="thumbnail-preview"><br>
+
           <small>Thumbnail atual:</small>
           <img src="{{ post.thumbnail.url }}" alt="Thumbnail atual">
         </div>
@@ -53,8 +35,10 @@
         <label for="{{ form.conteudo.id_for_label }}">Conteúdo:</label>
         {{ form.conteudo }}
       </div>
+      <div class="botoes">
       <button type="submit">Salvar Alterações</button>
-      <a href="{% url 'detalhe_post' post.post_id %}" class="btn-outline-secondary">Cancelar</a>
+      <a href="{% url 'admin_posts'  %}" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
     </form>
   </div>
 </div>

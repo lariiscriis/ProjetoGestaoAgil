@@ -23,6 +23,7 @@
 .profile-pic {
     border-radius: 50%;
     object-fit: cover;
+    
 }
 
 .perfil-foto {
@@ -30,7 +31,7 @@
     height: 100px;
     border-radius: 50%;
     margin-top: -50px;
-    border: 5px solid #BEE5B0;
+    border: 3px solid #BEE5B0;
 }
 
 .perfil-info p {
@@ -48,14 +49,14 @@
     height: 200px; 
     object-fit: cover;
     border-radius: 0.5rem;
-    border: 5px solid #BEE5B0;
-
+    border: 3px solid #BEE5B0;
 }
 
 .nome-editar-usuario{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 0.7em;
 }
 
 .nome-tipo-usuario{
@@ -70,46 +71,92 @@
    
 }
 
-
-.btn-warning{
-   background-color: #88C3FB ;
+.editar_perfil, .excluir_perfil{
    border: none;
    color: #333333c5;
-   transition: background-color 0.3s ease, color 0.3s ease;
-   
+   transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
-.btn-warning i{
+.excluir_perfil{
+    background-color: #88C3FB ;
+}
+
+.editar_perfil{
+    background-color: #BEE5B0;
+}
+
+.excluir_perfil:active{
+    background-color: #88c3fbac !important;
+}
+
+.editar_perfil:active{
+    background-color: #bee5b0c3 !important;
+}
+
+
+.editar_perfil i, .excluir_perfil i{
     margin-right: 10px;
 }
 
-.btn-warning:hover{
+.excluir_perfil:hover{
     background-color: #88c3fbac;
-    
+    color: #333333c5;
+
+}
+
+.editar_perfil:hover{
+    background-color: #bee5b0c3;
+    color: #333333c5;
 }
 
 .comentario {
     position: relative;
-    border: 1px solid #ddd;
+    border: 2px solid #BEE5B0;
     border-radius: 8px;
     background-color: #fff;
+}
+
+.comentario img{
+    border: 2px solid #BEE5B0;
 }
 
 .post-nome-perfil{
     display:flex;
     flex-direction: row;
-    gap: 10px;
+    justify-content: center;
+    margin-top: 0.5em;
 }
 
-
-.post-nome-perfil span{
-    color: #333333c5;
+.post-nome-perfil span, .post-nome{
+    font-size: 14px;
+    color: #333333a0;
    
 }
 
-.data-comentario {
+.post-nome{
+    margin-left: -2.5em;
+    margin-top: 0.2em;
+}
+
+.nome-email-autor{
+    display: flex;
+    flex-direction: column;
+}
+
+.data-excluir-comentario{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
     top: 10px;
     right: 10px;
+}
+
+.data-excluir-comentario a{
+    text-decoration: none;
+}
+
+.data-excluir-comentario a:active{
+    background-color: #33333373 !important;
 }
 
 .curtir-resposta{
@@ -117,6 +164,102 @@
     right: 10px;
 }
 
+.curtir-resposta a{
+    color: #333;
+    text-decoration: none;
+
+}
+
+.curtir-resposta a i{
+        margin-right: 10px;
+}
+
 .comentario .bi-heart-fill {
     cursor: pointer;
+}
+
+.text-comentario{
+    margin-left: 0.5em;
+}
+
+.resposta-ver-comentario:hover{
+    transition: 1s all;
+    color: #88C3FB;
+}
+
+
+.texto-publicar-comentario{
+    resize: none;
+    border: 2px solid #BEE5B0;
+}
+
+.publicar-comentario{
+    background-color: #BEE5B0;
+    border: none;
+}
+
+.publicar-comentario:hover{
+    background-color: #88c3fbac;
+}
+
+.publicar-comentario:active{
+    background-color: #88c3fbac;
+}
+
+.posts-sugeridos a{
+    color: #333;    
+}
+
+.posts-sugeridos a:hover{
+    transition: 1s all;
+    color: #88C3FB;    
+}
+
+.modal-content{
+    border: 3px solid #88C3FB;
+}
+
+.modal-body{
+    text-align: center;
+    color: #333;
+}
+
+.modal-footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+ .excluir-conta{
+    background-color: #88C3FB;
+    border: none;
+    color: #333;
+}
+ .excluir-conta:hover{
+    background-color: #88c3fb9f;
+    border: none;
+    color: #333;
+    transition: 1s all;
+}
+
+.excluir-conta:active{
+    background-color: #88c3fb9f
+}
+
+
+.cancelar-exclusao{
+    background-color: #BEE5B0;
+    border: none;
+    color: #333;
+}
+.cancelar-exclusao:hover{
+    background-color: #bee5b0c3;
+    border: none;
+    color: #333;
+    transition: 1s all;
+}
+
+.cancelar-exclusao:active{
+    background-color: #bee5b0c3
 }

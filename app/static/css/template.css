@@ -26,9 +26,10 @@ body{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #eceaea;
+    background-color: #F5F5F5;
     font-family: "Poppins", sans-serif;
     scroll-behavior: smooth;
+    
 }
 
 main {
@@ -77,8 +78,9 @@ main {
     transition: all .8s;
 }
 
-#divItensNav .nav-item:hover{
-    color: #000000;
+#divItensNav .nav-link:hover{
+    color: #88C3FB !important;
+    transition: all .8s;
 }
 
 #divItensNav .nav-item::before{
@@ -88,7 +90,7 @@ main {
     left: 0;
     width: 0%;
     height: 3px;
-    background-color: #000000;
+    background-color: #BEE5B0;
     transition: width .8s;
 }
 
@@ -98,17 +100,17 @@ main {
 }
 
 #btn-login{
-    background-color: #000000 ;
+    background-color: #BEE5B0 ;
     border: none;
-    color: #ffffff;
+    color: #333;
     letter-spacing: 0.5px;
     font-family: "Poppins", sans-serif;
     transition: all .8s;
 }
 
 #btn-login:hover{
-    background-color: #000000a9;
-    color: #ffffff;
+    background-color: #bee5b0be;
+    color: #333;
     letter-spacing: 0.5px;
     font-family: "Poppins", sans-serif;
 }

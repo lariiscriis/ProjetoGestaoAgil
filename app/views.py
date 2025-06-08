@@ -146,7 +146,7 @@ def blog(request):
         reverse=True
     )
 
-    top_mais_curtidos = posts_com_curtidas[:6]
+    top_mais_curtidos = posts_com_curtidas[:3]
 
     # Autores mais frequentes
     contagem_autores = Counter()
@@ -388,18 +388,30 @@ def perfil_usuario(request, usuario_id):
 
 def editar_perfil(request, usuario_id):
     usuario = get_object_or_404(Usuario, _id=ObjectId(usuario_id))
+
     if request.session.get('usuario_id') != str(usuario._id):
         return HttpResponse("Você não tem permissão para editar este perfil.", status=403)
+    
     if request.method == 'POST':
         form = EditarPerfilForm(request.POST, request.FILES, instance=usuario)
+
         if form.is_valid():
+            usuario = form.save(commit=False) 
+            nova_senha = form.cleaned_data.get('senha')
+
+            if nova_senha:
+               usuario.senha = make_password(nova_senha)
+
             if not usuario.foto_perfil:
                 usuario.foto_perfil = 'defaults/default_foto.png'
+                
             if not usuario.background_perfil:
                 usuario.background_perfil = 'defaults/default_background.jpg'
-            if form.cleaned_data['senha']:
-               usuario.senha = make_password(form.cleaned_data['senha'])
-            form.save()
+
+            # if form.cleaned_data['senha']:
+            #    usuario.senha = make_password(form.cleaned_data['senha'])
+
+            usuario.save()
             return redirect('perfil_usuario', usuario_id=usuario_id)
     else:
         form = EditarPerfilForm(instance=usuario)

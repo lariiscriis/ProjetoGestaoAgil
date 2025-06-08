@@ -27,48 +27,67 @@
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
     color: var(--cor-principal);
-    height: 100vh;
-    overflow: hidden;
+    /* height: 100vh; */
+    background-color: #F5F5F5;
 }
 
 .tela {
     display: flex;
-    flex-direction: row; 
     height: 100vh;
-  }
+    align-items: center;
+    justify-content: center;
+    background-color: #F5F5F5;
+}
   
   .imagem {
     flex: 1;
     position: relative;
-    background: #eceaea;
+    background: #F5F5F5;
     overflow: hidden;
+    height: 100vh;
   }
 
-  .onda {
+.onda {
     position: absolute;
-    top: 0 ;
+    top: 0;
+    left: 0 !important;
     right: -1px;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     transform: rotate(90deg);
-    z-index: 2;
+    z-index: 0  ;
+    pointer-events: none;
   }
+
+  .logo-amae {
+    position: relative;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 2rem;
+    z-index: 1000;
+}
+
+.logo-amae img {
+    max-width: 80%;
+    height: auto;
+}
 
 .formulario-container {
     flex: 1;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 3rem;
-    position: relative;
-    margin-top: -5em;
+    padding: 2rem;
+    height: 100%;
 }
 
+
 .fundo{
-    position: absolute;
+    position: relative;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 20px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -79,7 +98,57 @@ body {
     justify-content: center;
     align-items: center;
     padding: 3rem;
+    max-height: none;
 }
+
+
+
+.fundo.usuario {
+    border: 3px solid #88C3FB; 
+}
+
+.fundo.psicologo {
+    border: 3px solid #BEE5B0; 
+}
+
+
+.fundo.psicologo input{
+    border: 1px solid #BEE5B0;
+}
+.fundo.fundo.usuario input{
+    border: 1px solid #88C3FB;
+}
+
+.fundo.psicologo input:focus{
+    border: none;
+}
+
+.fundo.usuario button {
+    background-color: #88C3FB;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.fundo.usuario button:hover {
+    background-color: #5fa7ec;
+}
+
+.fundo.psicologo button {
+    background-color: #BEE5B0;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.fundo.psicologo button:hover {
+    background-color: #9ddc92;
+}
+
 
 label{
     display: none;
@@ -143,7 +212,6 @@ h2 {
 input, button {
     padding: 0.75rem;
     margin-top: 0.9rem;
-    border: 1px solid #ccc;
     border-radius: 1rem;
     font-size: 1rem;
 }
@@ -221,7 +289,7 @@ button:hover {
 @media (min-width: 769px) and (max-width: 1200px) {
     .tela {
         flex-direction: row;
-        height: 100vh;
+        height: 100vh !important;
     }
 
     .formulario-container {
@@ -271,7 +339,7 @@ button:hover {
 @media (min-width: 1201px) {
     .tela {
         flex-direction: row;
-        height: 100vh;
+        top: 0;
     }
 
     .formulario-container {
