@@ -51,7 +51,7 @@ class Forum(models.Model):
 class Comentario(models.Model):
     _id = models.ObjectIdField(primary_key=True) 
     post = models.ForeignKey(Post, null=True, blank=True, on_delete=models.CASCADE)
-    forum = models.ForeignKey(Forum, null=True, blank=True, on_delete=models.CASCADE)
+    forum = models.ForeignKey(Forum, null=True, blank=True, on_delete=models.CASCADE, related_name='comentarios')
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     texto = models.TextField()
     data_criacao = models.DateTimeField(auto_now_add=True)

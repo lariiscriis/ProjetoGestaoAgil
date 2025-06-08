@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block conteudo %}
+
 <div class="forum-wrapper position-relative">
   <div class="container-fluid forum-page">
     <div class="row gx-3">
@@ -69,50 +70,102 @@
 
           <div class="d-flex gap-3">
 
-<form method="post" action="{% url 'curtir_forum' forum.forum_id %}">
+          <form method="post" action="{% url 'curtir_forum' forum.forum_id %}">
               {% csrf_token %}
-              <button type="submit" class="btn btn-sm ">  <i class="bi bi-heart me-1"></i>{{ forum.curtida_set.count}}
-</button>
+              <button type="submit" class="btn btn-sm ">  <i class="bi bi-heart me-1"></i>{{ forum.curtida_set.count}}</button>
             </form>
-            <a href="#" class="text-muted text-decoration-none" onclick="abrirPopup('{{ forum.forum_id }}')">
-  <i class="bi bi-chat me-1"></i>Responder
-</a>
+            <a href="#" class="text-muted text-decoration-none" onclick="abrirPopup('{{ forum.forum_id }}')"><i class="bi bi-chat me-1"></i>Responder</a>
+            <a href="#" class="text-muted text-decoration-none" onclick="abrirRespostas('{{ forum.forum_id }}')">{{ forum.comentarios.count }} Respostas </a>
+          </div>       
+  </div>
 
+  <!-- Comentários ocultos de cada fórum vão ser renderizados no modal 
+   Mas DEVEM estar dentro desse for pra poder pegar o id-->
+  <div id="comentarios-{{ forum.forum_id }}" class="d-none">
+    {% for comentario in forum.comentarios.all %}
+      <div class="comentario mb-2 p-2 bg-light rounded">
+        <div class="d-flex justify-content-between align-items-start mb-1">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            {% if comentario.autor.foto_perfil %}
+              <img class="profile-pic me-2" src="{{ comentario.autor.foto_perfil.url }}" width="35" height="35">
+            {% else %}
+              <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="35" height="35">
+            {% endif %}
+            <strong class="text-primary">{{ comentario.autor.nome }}</strong>
           </div>
+          <small class="text-muted">{{ comentario.data|date:"d/m/Y H:i" }}</small>
         </div>
-        {% empty %}
-        <p class="text-muted">Nenhuma postagem ainda.</p>
-        {% endfor %}
+        <p class="mt-1">{{ comentario.texto }}</p>
+      </div>
+    {% empty %}
+      <p class="text-muted">Nenhuma resposta ainda.</p>
+    {% endfor %}
+  </div>
+{% endfor %}
+
       </div>
 
     </div>
   </div>
 </div>
 
+<div class="modal fade" id="popupComentario" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <form id="formResposta" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title">Escrever Resposta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <textarea name="texto" class="form-control" placeholder="Escreva sua resposta..." rows="4" required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Publicar</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-<div id="popupComentario" class="popup-comentario d-none">
-  <div class="popup-inner">
-    <form id="formResposta" method="post">
-      {% csrf_token %}
-      <textarea name="texto" placeholder="Escreva sua resposta..." rows="4" required></textarea>
-      <div class="popup-botoes">
-        <button type="submit" class="btn btn-sm btn-primary">Publicar</button>
-        <button type="button" class="btn btn-sm btn-secondary" onclick="fecharPopup()">Cancelar</button>
+<div class="modal fade" id="popupRespostas" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Respostas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
-    </form>
+      <div class="modal-body" id="modalRespostasBody">
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-    function abrirPopup(forumId) {
-    document.getElementById('formResposta').action = '/responder-forum/' + forumId + '/';
-    document.getElementById('popupComentario').classList.remove('d-none');
-  }
+function abrirPopup(forumId) {
+  document.getElementById('formResposta').action = '/responder-forum/' + forumId + '/';
+  const modal = new bootstrap.Modal(document.getElementById('popupComentario'));
+  modal.show();
+}
+
 
   function fecharPopup() {
     document.getElementById('popupComentario').classList.add('d-none');
   }
+  function abrirRespostas(forumId) {
+  const comentariosDiv = document.getElementById('comentarios-' + forumId);
+  const modalBody = document.getElementById('modalRespostasBody');
+
+  if (comentariosDiv && modalBody) {
+    modalBody.innerHTML = comentariosDiv.innerHTML;
+    const modal = new bootstrap.Modal(document.getElementById('popupRespostas'));
+    modal.show();
+  }
+}
 
 </script>
 
 {% endblock %}
+

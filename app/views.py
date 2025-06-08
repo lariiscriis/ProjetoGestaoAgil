@@ -318,12 +318,16 @@ def excluir_post(request, post_id):
         return redirect('blog')
     return render(request, 'excluir_post.html', {'post': post})
 
+from django.db.models import Prefetch
+
 def forum(request):
-    forums = Forum.objects.all().order_by('-data')
+    forums = Forum.objects.all().prefetch_related(
+    Prefetch('comentarios', queryset=Comentario.objects.order_by('-data_criacao'))
+).order_by('-data')
+
     usuario = None
     usuario_id = request.session.get('usuario_id')
     form = ForumForm()
-
 
     if usuario_id:
         try:
@@ -338,7 +342,8 @@ def forum(request):
             Forum.objects.create(autor=usuario, conteudo=conteudo)
             return redirect('forum')
 
-    return render(request, 'forum.html', {'form': form, 'forums': forums, 'usuario': usuario})
+    return render(request, 'forum.html', {'form': form, 'forums':forums, 'usuario': usuario})
+
  
 def novo_forum(request):
     if request.method == "POST":

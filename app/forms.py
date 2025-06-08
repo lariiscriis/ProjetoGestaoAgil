@@ -76,7 +76,6 @@ class PostForm(forms.ModelForm):
         widgets = {
             'titulo': forms.TextInput(attrs={'placeholder': 'titulo'}),
             'thumbnail': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
-          
         }
 
 class ComentarioForm(forms.ModelForm):
@@ -92,7 +91,7 @@ class ForumForm(forms.ModelForm):
         model = Forum
         fields = [ 'conteudo']
         widgets = {
-         'conteudo': forms.Textarea(attrs={'placeholder': 'Escreva seu comentário aqui...'}),
+         'conteudo': forms.Textarea(attrs={'class':'form-control','rows':5,'placeholder': 'Escreva seu comentário aqui...'}),
 }
 
 class EditarPerfilForm(forms.ModelForm):
