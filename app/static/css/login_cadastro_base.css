@@ -149,6 +149,16 @@ body {
     background-color: #9ddc92;
 }
 
+.fundo.psicologo h2{
+    color: #BEE5B0;
+}
+
+
+.fundo.usuario h2{
+    color: #88C3FB;
+}
+
+
 
 label{
     display: none;

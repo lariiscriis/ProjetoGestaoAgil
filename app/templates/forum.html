@@ -10,7 +10,7 @@
 
 <div class="forum-wrapper position-relative">
   <div class="container-fluid forum-page">
-    <div class="row">
+    <div class="row gx-3">
       
       <!-- Coluna direita: Nova Postagem -->
       <div class="col-lg-4 order-lg-3 order-1">
@@ -43,14 +43,10 @@
       </div>
 
       <!-- Coluna esquerda: Lista de postagens -->
-    
-    <div class="row">
-
-
       <div class="col-lg-8 order-lg-1 order-2">
         <h2 class="my-4">Fórum</h2>
 
-        {% for i in "123456"|make_list %}
+        {% for forum in forums %}
         <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
           <div class="d-flex justify-content-between align-items-start mb-2">
             <div class="d-flex align-items-center gap-2 flex-wrap">
