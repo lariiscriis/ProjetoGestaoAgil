@@ -447,14 +447,19 @@ def editar_perfil(request, usuario_id):
     if request.method == 'POST':
         form = EditarPerfilForm(request.POST, request.FILES, instance=usuario)
         if form.is_valid():
-            if not usuario.foto_perfil:
-                usuario.foto_perfil = 'defaults/default_foto.png'
-            if not usuario.background_perfil:
-                usuario.background_perfil = 'defaults/default_background.jpg'
-            if form.cleaned_data['senha']:
-               usuario.senha = make_password(form.cleaned_data['senha'])
-            form.save()
-            return redirect('perfil_usuario', usuario_id=usuario_id)
+           if form.is_valid():
+                usuario_obj = form.save(commit=False)  # Não salva ainda
+                if not usuario_obj.foto_perfil:
+                    usuario_obj.foto_perfil = 'defaults/default_foto.png'
+                if not usuario_obj.background_perfil:
+                    usuario_obj.background_perfil = 'defaults/default_background.jpg'
+                if form.cleaned_data['senha']:
+                    usuario_obj.senha = make_password(form.cleaned_data['senha'])
+                else:
+                    usuario_obj.senha = usuario.senha  # Mantém a senha antiga
+                usuario_obj.save()
+                return redirect('perfil_usuario', usuario_id=usuario_id)
+
     else:
         form = EditarPerfilForm(instance=usuario)
 

@@ -101,7 +101,6 @@ class EditarPerfilForm(forms.ModelForm):
             'placeholder': 'Nova senha (deixe em branco para manter a atual)'
         }),
         required=False,
-        min_length=8,
         help_text="A senha deve ter pelo menos 8 caracteres."
     )
 
@@ -120,7 +119,7 @@ class EditarPerfilForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['nome', 'email', 'foto_perfil', 'background_perfil', 'senha',
+        fields = ['nome', 'email', 'foto_perfil', 'background_perfil',
                   'data_nascimento', 'bio', 'telefone', 'endereco', 'crp', 'area_atuacao']
         
         widgets = {
