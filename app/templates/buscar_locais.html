@@ -1,0 +1,76 @@
+{% extends 'template.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div class="busca-locais">
+<h1>Buscar Locais</h1>
+
+<form method="get">
+  <input type="text" name="q" placeholder="Pesquise estabelecimentos como: clínicas, hospital"
+{% if termo_busca %} value="{{ termo_busca }}" {% endif %}>
+
+  <input type="hidden" name="lat" id="lat">
+  <input type="hidden" name="lon" id="lon">
+  <button type="submit">Buscar</button>
+</form>
+
+{% if resultados %}
+  <div class="container-busca">
+    <div class="lista-locais">
+      <ul>
+        {% for local in resultados %}
+        <li>
+            <strong>{{ local.nome }}</strong><br>
+            {{ local.rua }}, {{ local.bairro }}<br>
+            {{ local.cidade }}/{{ local.pais }}<br>
+            CEP: {{ local.estado }}<br>
+            <small>Latitude: {{ local.lat }} | Longitude: {{ local.lon }}</small>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div id="map" class="mapa-locais"></div>
+
+  </div>
+{% elif termo_busca %}
+  <p>Nenhum local encontrado.</p>
+{% endif %}
+</div>
+
+<link rel="stylesheet" href="{% static 'css/buscar_locais.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  navigator.geolocation.getCurrentPosition(function(position) {
+    document.getElementById('lat').value = position.coords.latitude;
+    document.getElementById('lon').value = position.coords.longitude;
+  });
+
+  const locais = [
+  {% for local in resultados %}
+    {
+      lat: {{ local.lat }},
+      lon: {{ local.lon }},
+      nome: "{{ local.nome|escapejs }}<br>{{ local.rua|escapejs }}, {{ local.bairro|escapejs }}<br>{{ local.cidade|escapejs }} - {{ local.estado|escapejs }}<br>{{ local.cep|escapejs }}"
+    }{% if not forloop.last %},{% endif %}
+  {% endfor %}
+  ];
+
+
+  if (locais.length > 0) {
+    const map = L.map('map').setView([locais[0].lat, locais[0].lon], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    locais.forEach(local => {
+      L.marker([local.lat, local.lon])
+        .addTo(map)
+        .bindPopup(local.nome);
+    });
+  }
+</script>
+
+{% endblock %}

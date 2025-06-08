@@ -37,5 +37,6 @@ urlpatterns = [
 
     path('responder-forum/<str:forum_id>/', views.responder_forum, name='responder_forum'),
 
+    path('buscar/', views.buscar_locais, name='buscar_locais'),
 
 ]

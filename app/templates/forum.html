@@ -50,11 +50,14 @@
         <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
           <div class="d-flex justify-content-between align-items-start mb-2">
             <div class="d-flex align-items-center gap-2 flex-wrap">
+                <a href="{% url 'perfil_usuario' forum.autor.usuario_id %}">
                   {% if forum.autor.foto_perfil %}
                       <img class="profile-pic me-2" src="{{ forum.autor.foto_perfil.url }}" width="45" height="45" alt="{{ comentario.autor.nome }}">
                   {% else %}
                       <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="45" height="45" alt="Foto padrão">
-                  {% endif %}              <strong class="text-primary mb-0">{{ forum.autor.nome }}</strong>
+                  {% endif %}              
+                  <strong class="text-primary mb-0">{{ forum.autor.nome }}</strong>
+                </a>
               <small class="text-muted">· {{ forum.data|date:"d/m/Y H:i" }}</small>
             </div>
 

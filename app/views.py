@@ -9,6 +9,8 @@ from bson import ObjectId
 from django.contrib.auth.decorators import login_required
 from collections import Counter
 from django.db.models import Q
+import requests
+from django.shortcuts import render
 
 def app(request):
     return render(request, 'landing-page.html')
@@ -555,3 +557,43 @@ def notificacoes_view(request):
     notificacoes = Notificacao.objects.filter(usuario=usuario).order_by('-criada_em')
     return render(request, 'notificacoes.html', {'notificacoes': notificacoes})
 
+
+def buscar_locais(request):
+    resultados = []
+    termo_busca = request.GET.get('q')
+    latitude = request.GET.get('lat')
+    longitude = request.GET.get('lon')
+
+    if termo_busca and latitude and longitude:
+        url = 'https://nominatim.openstreetmap.org/search'
+        params = {
+            'q': termo_busca,
+            'format': 'json',
+            'limit': 10,
+            'viewbox': f"{float(longitude)-0.05},{float(latitude)+0.05},{float(longitude)+0.05},{float(latitude)-0.05}",
+            'bounded': 1,
+        }
+
+        response = requests.get(url, params=params, headers={'User-Agent': 'meuapp/1.0'})
+        if response.status_code == 200:
+            resultados = response.json()
+
+    dados_processados = [processar_resultado(local) for local in resultados]
+    return render(request, 'buscar_locais.html', {
+        'resultados': dados_processados,
+        'termo_busca': termo_busca,
+    })
+
+def processar_resultado(local):
+    partes = local['display_name'].split(', ')
+    return {
+        'nome': partes[0] if len(partes) > 0 else '',
+        'rua': partes[1] if len(partes) > 1 else '',
+        'bairro': partes[2] if len(partes) > 2 else '',
+        'cidade': partes[-4] if len(partes) > 4 else '',
+        'estado': partes[-2] if len(partes) > 2 else '',
+        'cep': partes[-3] if len(partes) > 3 else '',
+        'pais': partes[-1] if len(partes) > 1 else '',
+        'lat': local['lat'],
+        'lon': local['lon']
+    }
