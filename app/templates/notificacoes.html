@@ -55,14 +55,14 @@
             {% else %}
                 <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
             {% endif %}
-        <p> <strong>{{ n.autor_acao.nome }}</strong> curtiu seu post no fórum: <a href="{{ n.link }}">{{ n.forum.titulo }}</a></p>
+        <p> <strong>{{ n.autor_acao.nome }}</strong> curtiu seu post no fórum: <a href="{{ n.link }}">{{ n.forum.conteudo }}</a></p>
     {% elif n.tipo == 'resposta_forum' %}
         {% if n.comentario.autor.foto_perfil %}
             <img src="{{ n.comentario.autor.foto_perfil.url }}" width="40" class="rounded-circle me-2" alt="{{ n.comentario.autor.nome }}">
         {% else %}
             <img src="{% static 'assets/images/default_foto.png' %}" width="40" class="rounded-circle me-2" alt="Foto padrão">
         {% endif %}
-        <p>{{ n.comentario.autor.nome }} respondeu seu post no fórum: <a href="{{ n.link }}">{{ n.forum.titulo }}</a></p>
+        <p>{{ n.comentario.autor.nome }} respondeu seu post no fórum: <a href="{{ n.link }}">{{ n.forum.conteudo }}</a></p>
     {% else %}
         <p>Nova notificação</p>
     {% endif %}

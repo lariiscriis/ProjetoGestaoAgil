@@ -534,7 +534,7 @@ def criar_notificacao_curtida_forum(forum, quem_curtiu):
             autor_acao=quem_curtiu,
             forum=forum,
             tipo='curtida_forum',
-            link=f"/forum/{forum.forum_id}/"
+            link=f"/forum/#forum-{forum._id}"
         )
 
 def criar_notificacao_resposta_forum(comentario, forum):
@@ -544,7 +544,7 @@ def criar_notificacao_resposta_forum(comentario, forum):
             comentario=comentario,
             forum=forum,
             tipo='resposta_forum',
-            link=f"/forum/{forum.forum_id}/"
+            link=f"/forum/#comentario-{comentario.comentario_id}"
         )
 
 
