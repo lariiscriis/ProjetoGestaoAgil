@@ -446,13 +446,13 @@ def perfil_usuario(request, usuario_id):
     except Usuario.DoesNotExist:
         messages.error(request, 'Usuário não encontrado.')    
 
-    posts = Post.objects.filter(autor=usuario).order_by('-criado_em')
+    forums = Forum.objects.filter(autor=usuario).order_by('-data')
     comentarios = Comentario.objects.filter(autor=usuario).order_by('-data_criacao')
 
     return render(request, 'perfil_usuario.html', {
         'usuario': usuario,
-        'posts': posts,
-        'comentarios': comentarios
+        'comentarios': comentarios,
+        'forums': forums
     })
 
 

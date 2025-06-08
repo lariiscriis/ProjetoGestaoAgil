@@ -16,21 +16,17 @@
       <div class="col-lg-4 order-lg-3 order-1">
         <div class="right-panel sticky-top py-4 nova-postagem" style="top: 90px;">
           <div class="mb-4 p-3 bg-white rounded shadow-sm border">
-            <h5 class="mb-3">Nova Postagem</h5>
+              <h5 class="mb-3">Nova Postagem</h5>
+              <form method="post">
+                {% csrf_token %}
+                {{ form.conteudo }}
+                <button type="submit" class="btn btn-primary mt-3 btn-sm w-100 publicar-comentario">Publicar</button>
 
-            <!-- FORMULÁRIO DIRETO -->
-            <form method="post">
-              {% csrf_token %}
-              {{ form.conteudo }}
-              <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Publicar</button>
-
-              {% if form.non_field_errors %}
-                <div class="text-danger mt-2">{{ form.non_field_errors }}</div>
-              {% endif %}
-            </form>
+                {% if form.non_field_errors %}
+                  <div class="text-danger mt-2">{{ form.non_field_errors }}</div>
+                {% endif %}
+              </form>
           </div>
-
-          <!-- Posts sugeridos -->
           <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
             <h6 class="mb-3">Posts Sugeridos</h6>
             <ul class="list-unstyled small">
