@@ -133,7 +133,7 @@
                             <p class="mb-2">{{ comentario.texto }}</p>
                             <div class="d-flex gap-3 curtir-resposta position-absolute">
                                 <i class="bi bi-heart-fill text-danger"><span> {{ comentario.curtida_set.count }}</span></i>
-                                <a href="{% url 'forum' comentario.forum_id %}#comentario-{{ comentario.comentario_id }}" class="text-decoration-none"><i class="bi bi-chat me-1"></i>Responder</a>
+                                <a href="{% url 'forum' %}#comentario-{{ comentario.comentario_id }}" class="text-decoration-none"><i class="bi bi-chat me-1"></i>Responder</a>
                                 {% if request.session.usuario_id == comentario.autor.usuario_id %}
                                     <a href="{% url 'excluir_comentario' comentario.comentario_id %}" class="text-danger"><i class="bi bi-trash3-fill"></i>Excluir</a>
                                 {% endif %}

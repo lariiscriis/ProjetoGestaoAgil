@@ -1,5 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from .forms import CadastroForm, LoginForm, CadastroPsicologoForm, PostForm, ComentarioForm, ForumForm, EditarPerfilForm
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Usuario, Post, Comentario, Curtida, Forum, Notificacao
@@ -82,13 +81,17 @@ def login_view(request):
         else:
             cadastro_form = CadastroForm(request.POST or None)
 
-        if request.method == 'POST' and cadastro_form.is_valid():
-            email = cadastro_form.cleaned_data.get('email')
+        if request.method == 'POST':
+            email = request.POST.get('email')
             if Usuario.objects.filter(email=email).exists():
                 cadastro_form.add_error('email', 'Email já cadastrado.')
-            else:
+                messages.error(request, 'Erro no cadastro. Email já cadastrado.')
+            elif cadastro_form.is_valid():
                 cadastro_form.save()
-                return redirect('exibirUsuarios')
+                messages.success(request, 'Cadastro realizado com sucesso!')
+                return redirect('login')
+            else:
+                messages.error(request, 'Erro no cadastro. Verifique os dados e tente novamente.')
 
         return render(request, 'login_cadastro_base.html', {
             'form': cadastro_form,
@@ -96,15 +99,12 @@ def login_view(request):
             'tipo': tipo
         })
 
+
 def logout(request):
     if 'usuario_id' in request.session:
         del request.session['usuario_id']
-    return redirect('app')
-
-
-def exibirUsuarios(request):
-    usuarios = Usuario.objects.all().values()
-    return render(request, "usuarios.html", {'listUsuarios': usuarios})
+        messages.success(request, 'Você foi desconectado com sucesso.')
+    return redirect('login')
 
 # # Blog Views 
 def blog(request):
@@ -112,7 +112,8 @@ def blog(request):
     autor_id = request.GET.get('autor_id')
     usuario = None
     usuario_id = request.session.get('usuario_id')
-
+    if not usuario_id:
+        return redirect('login')
     if usuario_id:
         try:
             usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
@@ -158,12 +159,13 @@ def blog(request):
 
 
 def detalhe_post(request, post_id):
-    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    post = Post.objects.get(_id=ObjectId(post_id))
     comentarios = Comentario.objects.filter(post=post, comentario_pai=None).order_by('-data_criacao')
 
     form = ComentarioForm()
     usuario_id = request.session.get('usuario_id')
-    
+    if not usuario_id:
+        return redirect('login')
     if request.method == 'POST' and usuario_id:
         form = ComentarioForm(request.POST)
         if form.is_valid():
@@ -176,9 +178,11 @@ def detalhe_post(request, post_id):
                 comentario_pai = Comentario.objects.get(_id=ObjectId(comentario_pai_id))
                 comentario.comentario_pai = comentario_pai
                 comentario.save()
+                messages.success(request, 'Resposta adicionada com sucesso!')
                 criar_notificacao_para_resposta(comentario)
             else:
                 comentario.save()
+                messages.success(request, 'Comentário adicionado com sucesso!')
                 criar_notificacao_para_comentario(comentario)
 
             return redirect('detalhe_post', post_id=post_id)
@@ -194,13 +198,15 @@ def detalhe_post(request, post_id):
     })
 
 def excluir_comentario(request, comentario_id):
-    comentario = get_object_or_404(Comentario, _id=ObjectId(comentario_id))
+    comentario = Comentario.objects.get(_id=ObjectId(comentario_id))
+
     usuario_id = request.session.get('usuario_id')
 
     if not usuario_id or str(comentario.autor._id) != usuario_id:
-        return HttpResponse("Você não tem permissão para excluir este comentário.", status=403)
+        messages.error(request, 'Você não tem permissão para excluir este comentário.')    
 
     comentario.delete()
+    messages.success(request, 'Comentário excluído com sucesso.')
     return redirect('perfil_usuario', usuario_id=usuario_id)
 
 
@@ -223,6 +229,8 @@ def curtir_post(request, post_id):
 
 def curtir_comentario(request, comentario_id):
     usuario_id = request.session.get('usuario_id')
+    if not usuario_id:
+        return redirect('login')
     if usuario_id:
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         comentario = Comentario.objects.get(_id=ObjectId(comentario_id))
@@ -246,7 +254,7 @@ def admin_posts(request):
         autor = Usuario.objects.get(_id=ObjectId(usuario_id))
 
         if autor.tipo != 'psicologo':
-            return HttpResponse("Apenas psicólogos podem acessar esta página.", status=403)
+            messages.error(request, 'Apenas psicólogos podem acessar esta página.')        
 
         posts = Post.objects.filter(autor=autor).order_by('-criado_em')
         
@@ -269,7 +277,7 @@ def novo_post(request):
     try:
         autor = Usuario.objects.get(_id=ObjectId(usuario_id))
         if autor.tipo != 'psicologo':
-            return HttpResponse("Apenas psicólogos podem criar posts.", status=403)
+            messages.error(request, 'Apenas psicólogos podem acessar esta página.')   
     except Usuario.DoesNotExist:
         return redirect('login')
     
@@ -279,22 +287,24 @@ def novo_post(request):
             post = form.save(commit=False)
             post.autor = autor
             post.save()
+            messages.success(request, 'Post criado com sucesso!')
             return redirect('blog')
     else:
         form = PostForm()
     return render(request, 'novo_post.html', {'form': form})
 
 def editar_post(request, post_id):
-    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    post = Post.objects.get(_id=ObjectId(post_id))
     usuario_id = request.session.get('usuario_id')
     if not usuario_id or str(post.autor._id) != usuario_id:
-        return HttpResponse("Você não tem permissão para editar este post.", status=403)
+         messages.error(request, 'Você não tem permissão para editar este post.')   
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             if not post.thumbnail:
                 post.thumbnail = 'defaults/default_thumbnail.jpeg'
             form.save()
+            messages.success(request, 'Post editado com sucesso!')
             return redirect('detalhe_post', post_id=post_id)
     else:
         form = PostForm(instance=post)
@@ -306,14 +316,15 @@ def editar_post(request, post_id):
 
 
 def excluir_post(request, post_id):
-    post = get_object_or_404(Post, _id=ObjectId(post_id))
+    post = Post.objects.get(_id=ObjectId(post_id))
     usuario_id = request.session.get('usuario_id')
 
     if not usuario_id or str(post.autor._id) != usuario_id or post.autor.tipo != 'psicologo':
-        return HttpResponse("Você não tem permissão para excluir este post.", status=403)
+         messages.error(request, 'Você não tem permissão para excluir este post.')   
 
     if request.method == "POST":
         post.delete()
+        messages.success(request, 'Post excluído com sucesso.')
         return redirect('blog')
     return render(request, 'excluir_post.html', {'post': post})
 
@@ -327,7 +338,8 @@ def forum(request):
     usuario = None
     usuario_id = request.session.get('usuario_id')
     form = ForumForm()
-
+    if not usuario_id:
+        return redirect('login')
     if usuario_id:
         try:
             usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
@@ -345,6 +357,8 @@ def forum(request):
 
  
 def novo_forum(request):
+    if not request.session.get('usuario_id'):
+        return redirect('login')
     if request.method == "POST":
         form = ForumForm(request.POST)
         if form.is_valid():
@@ -355,13 +369,14 @@ def novo_forum(request):
                     autor = Usuario.objects.get(_id=ObjectId(usuario_id))
                     forum.autor = autor
                     forum.save()
+                    messages.success(request, 'Fórum criado com sucesso!')
                     return redirect('forum.html')
                 except Usuario.DoesNotExist:
-                    form.add_error(None, "Usuário não encontrado. Faça login novamente.")
+                     messages.error(request, 'Usuário não encontrado. Faça login novamente.')   
                 except Exception as e:
-                    form.add_error(None, f"Erro: {e}")
+                    messages.error(request,  f"Erro: {e}")
             else:
-                form.add_error(None, "Usuário não autenticado.")
+                messages.error(request, "Usuário não autenticado.")   
     else:
         form = ForumForm()
     
@@ -375,7 +390,6 @@ def responder_forum(request, forum_id):
         if not usuario_id:
             return redirect('login')
 
-
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
         forum = Forum.objects.get(_id=ObjectId(forum_id))
         texto = request.POST.get('texto')
@@ -386,6 +400,7 @@ def responder_forum(request, forum_id):
                 texto=texto,
                 forum=forum
             )
+            messages.success(request, 'Resposta adicionada com sucesso!')
             criar_notificacao_resposta_forum(comentario, forum)
             return redirect('forum')
 
@@ -411,21 +426,25 @@ def curtir_forum(request, forum_id):
     return redirect('forum')
 
 def excluir_forum(request, forum_id):
-    forum = get_object_or_404(Forum, _id=ObjectId(forum_id))
+    forum = Forum.objects.get(_id=ObjectId(forum_id))
     usuario_id = request.session.get('usuario_id')
 
     if not usuario_id or str(forum.autor._id) != usuario_id:
-        return HttpResponse("Você não tem permissão para excluir este fórum.", status=403)
+        messages.error(request, 'Você não tem permissão para excluir este fórum.')
 
     if request.method == "POST":
         forum.delete()
+        messages.success(request, 'Fórum excluído com sucesso.')
         return redirect('forum.html')
     
 def perfil_usuario(request, usuario_id):
+    usuario = request.session.get('usuario_id')
+    if not usuario:
+        return redirect('login')
     try:
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
     except Usuario.DoesNotExist:
-        return HttpResponse("Usuário não encontrado.", status=404)
+        messages.error(request, 'Usuário não encontrado.')    
 
     posts = Post.objects.filter(autor=usuario).order_by('-criado_em')
     comentarios = Comentario.objects.filter(autor=usuario).order_by('-data_criacao')
@@ -438,10 +457,13 @@ def perfil_usuario(request, usuario_id):
 
 
 def editar_perfil(request, usuario_id):
-    usuario = get_object_or_404(Usuario, _id=ObjectId(usuario_id))
+    usuario = request.session.get('usuario_id')
+    if not usuario:
+        return redirect('login')
+    usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
 
     if request.session.get('usuario_id') != str(usuario._id):
-        return HttpResponse("Você não tem permissão para editar este perfil.", status=403)
+        messages.error(request, 'Você não tem permissão para editar este perfil.')
     
     if request.method == 'POST':
         form = EditarPerfilForm(request.POST, request.FILES, instance=usuario)
@@ -459,10 +481,8 @@ def editar_perfil(request, usuario_id):
             if not usuario.background_perfil:
                 usuario.background_perfil = 'defaults/default_background.jpg'
 
-            # if form.cleaned_data['senha']:
-            #    usuario.senha = make_password(form.cleaned_data['senha'])
-
             usuario.save()
+            messages.success(request, 'Perfil atualizado com sucesso!')
             return redirect('perfil_usuario', usuario_id=usuario_id)
     else:
         form = EditarPerfilForm(instance=usuario)
@@ -478,12 +498,13 @@ def excluir_conta(request):
     try:
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
     except Usuario.DoesNotExist:
-        return HttpResponse("Usuário não encontrado.", status=404)
+        messages.error(request, 'Usuário não encontrado.')
 
     if request.method == 'POST':
         usuario.ativo = False
         usuario.save()
         del request.session['usuario_id']
+        messages.success(request, 'Sua conta foi desativada com sucesso.')
         return redirect('app')
 
     return render(request, 'excluir_conta.html', {'usuario': usuario})
@@ -561,13 +582,17 @@ def notificacoes_view(request):
     try:
         usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
     except Usuario.DoesNotExist:
-        return HttpResponse("Usuário não encontrado", status=404)
+        messages.error(request, 'Usuário não encontrado.')
 
     notificacoes = Notificacao.objects.filter(usuario=usuario).order_by('-criada_em')
     return render(request, 'notificacoes.html', {'notificacoes': notificacoes})
 
 
 def buscar_locais(request):
+    usuario_id = request.session.get('usuario_id')
+
+    if not usuario_id:
+        return redirect('login')
     resultados = []
     termo_busca = request.GET.get('q')
     latitude = request.GET.get('lat')

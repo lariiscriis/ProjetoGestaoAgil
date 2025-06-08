@@ -7,8 +7,6 @@ urlpatterns = [
     path('ajuda/', views.linkAjuda, name='linkAjuda'),
     path('login/', views.login_view, name='login'),
 
-    path('usuarios', views.exibirUsuarios , name = "exibirUsuarios"),
-
     path('forum/', views.forum, name='forum'),
     path('forum/<str:forum_id>', views.forum, name='forum'),
 
@@ -40,5 +38,4 @@ urlpatterns = [
     path('responder-forum/<str:forum_id>/', views.responder_forum, name='responder_forum'),
 
     path('buscar/', views.buscar_locais, name='buscar_locais'),
-
 ]
