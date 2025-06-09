@@ -57,7 +57,7 @@
                     <div class="card-body blog-content d-flex flex-column">
                         <h5 class="card-title blog-title">{{ post.titulo }}</h5>
                         <p class="card-text blog-description">
-                            {{ post.conteudo|safe|truncatewords:20|linebreaksbr|striptags }}
+                            {{ post.conteudo|safe|truncatewords:60|linebreaksbr|striptags }}
                         </p>
                         <div class="blog-footer d-flex justify-content-between align-items-center mt-auto">
                             <a href="{% url 'perfil_usuario' post.autor.usuario_id %}" class="d-flex align-items-center text-decoration-none">
