@@ -133,7 +133,7 @@
                                 {% endif %}
 
                                 <div class="post-nome-perfil">
-                                    <div class="nome-email-autor">
+                                <div class="nome-email-autor">
                                 <strong>{{ comentario.autor.nome }}</strong>
                                 <span> {{comentario.autor.email}}</span>
                                 </div>
@@ -180,10 +180,15 @@
                                 <strong>{{ forum.autor.nome }}</strong>
                                 <span> {{forum.autor.email}}</span>
                                 </div>
-                                <span class="d-block post-nome">{{ forum.conteudo }}</span>
-                                </div>                            
+                                <span class="d-block post-nome">Fórum</span>
+                                </div>      
                             </div>
-
+                            <p class="mb-2 text-comentario">{{ forum.conteudo }}</p>
+                            <div class="d-flex gap-3 curtir-resposta position-absolute">
+                                <i class="bi bi-heart-fill text-danger"><span> {{ forum.curtida_set.count }}</span></i>
+                                <a href="{% url 'forum' %}#forum-{{ forum.forum_id }}" class="text-decoration-none resposta-ver-comentario"><i class="bi bi-chat me-1"></i>Responder</a>
+                                <a href="{% url 'forum' %}#forum-{{ forum.forum_id }}" class="resposta-ver-comentario"><i class="bi bi-eye-fill"></i>Ver comentário</a>
+                            </div>
                         </div>
                     {% endfor %}
                 {% else %}
