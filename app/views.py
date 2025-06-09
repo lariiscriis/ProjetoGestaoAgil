@@ -374,6 +374,7 @@ def forum(request):
         conteudo = request.POST.get('conteudo')
         if conteudo:
             Forum.objects.create(autor=usuario, conteudo=conteudo)
+            messages.success(request, "Comentário Adicionado com sucesso!")
             return redirect('forum')
 
     # Lógica dos posts sugeridos

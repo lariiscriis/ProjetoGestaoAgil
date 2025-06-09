@@ -16,30 +16,29 @@
       <div class="col-lg-4 order-lg-3 order-1">
         <div class="right-panel sticky-top py-4 nova-postagem" style="top: 90px;">
           <div class="mb-4 p-3 bg-white rounded shadow-sm border">
-              <h5 class="mb-3">Nova Postagem</h5>
-              <form method="post">
-                {% csrf_token %}
-                {{ form.conteudo }}
-                <button type="submit" class="btn btn-primary mt-3 btn-sm w-100 publicar-comentario">Publicar</button>
+            <h5 class="mb-3">Nova Postagem</h5>
 
-                {% if form.non_field_errors %}
-                  <div class="text-danger mt-2">{{ form.non_field_errors }}</div>
-                {% endif %}
-              </form>
+            <!-- FORMULÁRIO DIRETO -->
+            <form method="post">
+              {% csrf_token %}
+              {{ form.conteudo }}
+              <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Publicar</button>
+
+              {% if form.non_field_errors %}
+                <div class="text-danger mt-2">{{ form.non_field_errors }}</div>
+              {% endif %}
+            </form>
           </div>
+
+          <!-- Posts sugeridos -->
           <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
             <h6 class="mb-3">Posts Sugeridos</h6>
             <ul class="list-unstyled small">
-                {% for post in sugeridos %}
-                    <li class="mb-2">
-                        <a href="{% url 'forum' %}{{ post.id }}" class="text-decoration-none">
-                            {{ post.conteudo|truncatechars:40 }}
-                        </a>
-                    </li>
-                {% endfor %}
+              <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
+              <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
+              <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
             </ul>
-        </div>
-
+          </div>
         </div>
       </div>
 
