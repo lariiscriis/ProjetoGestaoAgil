@@ -137,7 +137,7 @@
                                 <strong>{{ comentario.autor.nome }}</strong>
                                 <span> {{comentario.autor.email}}</span>
                                 </div>
-                                <span class="d-block post-nome">{{ comentario.forum.conteudo }}</span>
+                                <span class="d-block post-nome">{{ comentario.forum.conteudo|truncatechars:50 }}</span>
                                 </div>                            
                             </div>
                             <p class="mb-2 text-comentario">{{ comentario.texto }}</p>
@@ -210,9 +210,15 @@
                 <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
                     <h6 class="mb-3">Posts Sugeridos</h6>
                     <ul class="list-unstyled small">
-                        <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
-                        <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
+                    {% for post in sugestoes_forum %}
+                        <li class="mb-2">
+                            <a href="{% url 'forum' %}{{ post.id }}" class="text-decoration-none">
+                                {{ post.conteudo|truncatechars:50 }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <li class="mb-2">Nenhuma sugestão disponível.</li>
+                    {% endfor %}
                     </ul>
                 </div>
             </div>

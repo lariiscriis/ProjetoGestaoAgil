@@ -8,6 +8,8 @@ from django.db.models import Q
 import requests
 from django.contrib import messages
 from django.shortcuts import render
+from django.db.models import Count
+import random
 
 def app(request):
     return render(request, 'landing-page.html')
@@ -351,14 +353,16 @@ from django.db.models import Prefetch
 
 def forum(request):
     forums = Forum.objects.all().prefetch_related(
-    Prefetch('comentarios', queryset=Comentario.objects.order_by('-data_criacao'))
-).order_by('-data')
+        Prefetch('comentarios', queryset=Comentario.objects.order_by('-data_criacao'))
+    ).order_by('-data')
 
     usuario = None
     usuario_id = request.session.get('usuario_id')
     form = ForumForm()
+
     if not usuario_id:
         return redirect('login')
+
     if usuario_id:
         try:
             usuario = Usuario.objects.get(_id=ObjectId(usuario_id))
@@ -372,7 +376,17 @@ def forum(request):
             Forum.objects.create(autor=usuario, conteudo=conteudo)
             return redirect('forum')
 
-    return render(request, 'forum.html', {'form': form, 'forums':forums, 'usuario': usuario})
+    # Lógica dos posts sugeridos
+    all_forums = list(forums)
+    random.shuffle(all_forums)
+    sugeridos = all_forums[:3]  # Pegue 3 aleatórios
+
+    return render(request, 'forum.html', {
+        'form': form,
+        'forums': forums,
+        'usuario': usuario,
+        'sugeridos': sugeridos
+    })
 
  
 def novo_forum(request):
@@ -456,6 +470,7 @@ def excluir_forum(request, forum_id):
         messages.success(request, 'Fórum excluído com sucesso.')
         return redirect('forum.html')
     
+
 def perfil_usuario(request, usuario_id):
     usuario = request.session.get('usuario_id')
     if not usuario:
@@ -467,11 +482,14 @@ def perfil_usuario(request, usuario_id):
 
     forums = Forum.objects.filter(autor=usuario).order_by('-data')
     comentarios = Comentario.objects.filter(autor=usuario).order_by('-data_criacao')
-
+    sugestoes_forum = Forum.objects.annotate(
+        num_comentarios=Count('comentarios')
+    ).order_by('-num_comentarios')[:3]
     return render(request, 'perfil_usuario.html', {
         'usuario': usuario,
         'comentarios': comentarios,
-        'forums': forums
+        'forums': forums,
+        'sugestoes_forum': sugestoes_forum,
     })
 
 

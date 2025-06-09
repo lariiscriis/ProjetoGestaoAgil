@@ -30,11 +30,16 @@
           <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
             <h6 class="mb-3">Posts Sugeridos</h6>
             <ul class="list-unstyled small">
-              <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
-              <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
-              <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
+                {% for post in sugeridos %}
+                    <li class="mb-2">
+                        <a href="{% url 'forum' %}{{ post.id }}" class="text-decoration-none">
+                            {{ post.conteudo|truncatechars:40 }}
+                        </a>
+                    </li>
+                {% endfor %}
             </ul>
-          </div>
+        </div>
+
         </div>
       </div>
 
