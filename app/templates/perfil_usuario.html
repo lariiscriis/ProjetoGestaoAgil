@@ -66,6 +66,7 @@
 
             <div class="bg-white p-3 rounded shadow-sm " >
                 {% if comentarios %}
+                    <h3 class="mt-4">Comentários no Blog</h3>
                     {% for comentario in comentarios %}
                         {% if comentario.post %}
                         <div class="comentario forum-post p-3 mb-3">
@@ -154,7 +155,7 @@
                     <p>Nenhum comentário encontrado.</p>
                 {% endif %}
                  {% if forums %}
-                    <h3 class="mt-4">postagens no Fórum</h3>
+                    <h3 class="mt-4">Postagens no Fórum</h3>
                     {% for forum in forums %}
                         <div class="comentario forum-post p-3 mb-3">
                             <div class="data-excluir-comentario position-absolute">
