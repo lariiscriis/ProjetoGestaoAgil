@@ -100,7 +100,6 @@
 
 }
 
-
 .post-author-perfil{
     font-size: 18px;
     color: black;
@@ -185,7 +184,6 @@ section-title{
   flex-direction: column;
   max-width: 100%;
   margin: 5px auto;
-    
 }
 
 .perfil-box {
@@ -198,6 +196,7 @@ section-title{
 
 .comentario {
   background-color: #f8f9fa;
+  border: 2px solid #BEE5B0;
   border-radius: 12px;
   padding: 15px;
   position: relative;
@@ -205,6 +204,7 @@ section-title{
 
 .resposta{
   background-color: #e9ecef;
+  border: 2px solid #88C3FB;
   border-radius: 12px;
   padding: 15px;
   margin-top: 10px;
