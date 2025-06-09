@@ -74,7 +74,7 @@ body{
 }
 
 #btn-section:hover {
-    background-color: #333;
+    background-color: #88c3fbc0;
 }
 
 svg{
@@ -339,6 +339,7 @@ transform: translate(1px,-14px);
     border-radius: 5px;
     transition: background-color 0.3s ease;
     margin-top: 20px;
+    color: #333;
 }
 
 .sobre-button a{

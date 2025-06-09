@@ -29,16 +29,18 @@
                     <h3>{{ psicologo.nome }}</h3>
                     <p>
                         {% if psicologo.area_atuacao %}
-                            {{ psicologo.area_atuacao }}
+                            <span>Área de Atuação: </span>{{ psicologo.area_atuacao }}<br>
                         {% else %}
                             Psicólogo parceiro da plataforma.
                         {% endif %}
                         {% if psicologo.bio %}
-                            {{ psicologo.bio }}
+                             <span>Bio: </span>{{ psicologo.bio }}
                         {% endif %}
                         
                     </p>
-                    <a href="mailto:{{ psicologo.email }}" class="conversar-btn">Conversar</a>
+                    <div class="card-footer">
+                        <a href="mailto:{{ psicologo.email }}" class="conversar-btn">Conversar</a>
+                    </div>
                 </div>
             </div>
             {% empty %}
