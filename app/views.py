@@ -34,6 +34,7 @@ def login_view(request):
                 senha = form.cleaned_data.get('senha')
 
                 try:
+                    
                     if tipo == 'psicologo':
                         crp = form.cleaned_data.get('crp')
                         if not crp:
@@ -44,8 +45,15 @@ def login_view(request):
                                 usuario = Usuario.objects.get(email=email, crp=crp, tipo='psicologo')
                                 if not usuario.ativo:
                                     messages.error(request, 'Este perfil foi desativado.')
+                                if usuario and check_password(senha, usuario.senha):
+                                    request.session['usuario_id'] = str(usuario._id)
+                                    messages.success(request, 'Login efetuado com sucesso!')
+                                    return redirect('blog')
+                                else:
+                                    messages.error(request, 'Email, CRP ou senha inválidos.')
 
                             except Usuario.DoesNotExist:
+                                messages.error(request, 'Usuário não encontrado.')
                                 usuario = None
                     else:
                         try:
@@ -54,14 +62,15 @@ def login_view(request):
                                 messages.error(request, 'Este perfil foi desativado.')
 
                         except Usuario.DoesNotExist:
+                            messages.error(request, 'Usuário não encontrado.')
                             usuario = None
 
-                    if usuario and check_password(senha, usuario.senha):
-                        request.session['usuario_id'] = str(usuario._id)
-                        messages.success(request, 'Login efetuado com sucesso!')
-                        return redirect('blog')
-                    else:
-                        messages.error(request, 'Email, CRP ou senha inválidos.')
+                        if usuario and check_password(senha, usuario.senha):
+                            request.session['usuario_id'] = str(usuario._id)
+                            messages.success(request, 'Login efetuado com sucesso!')
+                            return redirect('blog')
+                        else:
+                            messages.error(request, 'Email ou senha inválidos.')
 
                 except Usuario.DoesNotExist:
                     messages.error(request, 'Usuário não encontrado.')
@@ -69,6 +78,7 @@ def login_view(request):
 
             else:
                 print("Formulário inválido:", form.errors)
+                messages.error(request, 'Erro no login. Verifique os dados e tente novamente.')
 
         return render(request, 'login_cadastro_base.html', {
             'form': form,
@@ -378,10 +388,9 @@ def forum(request):
             messages.success(request, "Comentário Adicionado com sucesso!")
             return redirect('forum')
 
-    # Lógica dos posts sugeridos
     all_forums = list(forums)
     random.shuffle(all_forums)
-    sugeridos = all_forums[:3]  # Pegue 3 aleatórios
+    sugeridos = all_forums[:3]
 
     return render(request, 'forum.html', {
         'form': form,

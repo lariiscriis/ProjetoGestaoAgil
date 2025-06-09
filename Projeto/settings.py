@@ -116,7 +116,7 @@ WSGI_APPLICATION = 'Projeto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'projetoGestaoAgil',
+        'NAME': 'amaeOficial',
         'CLIENT': {
             'host': 'mongodb+srv://userTest:userTest@cluster0.zejs1ae.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
         }

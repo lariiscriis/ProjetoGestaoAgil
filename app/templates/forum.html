@@ -34,7 +34,7 @@
                   <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
                     <h6 class="mb-3">Posts Sugeridos</h6>
                     <ul class="list-unstyled small">
-                    {% for post in sugestoes_forum %}
+                    {% for post in sugeridos %}
                         <li class="mb-2">
                             <a href="{% url 'forum' %}{{ post.id }}" class="text-decoration-none">
                                 {{ post.conteudo|truncatechars:50 }}
