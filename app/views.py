@@ -12,7 +12,8 @@ from django.db.models import Count
 import random
 
 def app(request):
-    return render(request, 'landing-page.html')
+    posts_recentes = Post.objects.select_related('autor').order_by('-criado_em')[:3]
+    return render(request, 'landing-page.html', {'posts_recentes': posts_recentes})
 
 def linkAjuda(request):
     psicologos = Usuario.objects.filter(tipo='psicologo')

@@ -22,7 +22,7 @@
             <form method="post">
               {% csrf_token %}
               {{ form.conteudo }}
-              <button type="submit" class="btn btn-primary btn-sm w-100 mt-2">Publicar</button>
+              <button type="submit" class="btn btn-primary btn-sm w-100 mt-2 publicar-comentario">Publicar</button>
 
               {% if form.non_field_errors %}
                 <div class="text-danger mt-2">{{ form.non_field_errors }}</div>
@@ -31,35 +31,47 @@
           </div>
 
           <!-- Posts sugeridos -->
-          <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
-            <h6 class="mb-3">Posts Sugeridos</h6>
-            <ul class="list-unstyled small">
-              <li class="mb-2"><a href="#" class="text-decoration-none">Não aguento maissssss</a></li>
-              <li class="mb-2"><a href="#" class="text-decoration-none">meu filho é aviãzinho da boca, o que fazer?</a></li>
-              <li class="mb-2"><a href="#" class="text-decoration-none">Ansiedade e biruleibes</a></li>
-            </ul>
-          </div>
+                  <div class="p-3 bg-light rounded shadow-sm border posts-sugeridos">
+                    <h6 class="mb-3">Posts Sugeridos</h6>
+                    <ul class="list-unstyled small">
+                    {% for post in sugestoes_forum %}
+                        <li class="mb-2">
+                            <a href="{% url 'forum' %}{{ post.id }}" class="text-decoration-none">
+                                {{ post.conteudo|truncatechars:50 }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <li class="mb-2">Nenhuma sugestão disponível.</li>
+                    {% endfor %}
+                    </ul>
+                </div>
         </div>
       </div>
 
       <!-- Coluna esquerda: Lista de postagens -->
       <div class="col-lg-8 order-lg-1 order-2">
-        <h2 class="my-4">Fórum</h2>
+        <!-- <h2 class="my-4">Fórum</h2> -->
 
         {% for forum in forums %}
-        <div class="forum-post mb-4 p-3 bg-white rounded shadow-sm border">
+        <div class="forum-post mb-4 p-3 bg-white  position-relative">
           <div class="d-flex justify-content-between align-items-start mb-2">
-            <div class="d-flex align-items-center gap-2 flex-wrap">
+            <div class="d-flex align-items-center mb-2 mt-2">
                 <a href="{% url 'perfil_usuario' forum.autor.usuario_id %}">
+                  <div class="img-nome-perfil">
                   {% if forum.autor.foto_perfil %}
                       <img class="profile-pic me-2" src="{{ forum.autor.foto_perfil.url }}" width="45" height="45" alt="{{ comentario.autor.nome }}">
                   {% else %}
                       <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="45" height="45" alt="Foto padrão">
                   {% endif %}              
-                  <strong class="text-primary mb-0">{{ forum.autor.nome }}</strong>
+                  
+                            <div class="nome-email-autor">
+                            <strong>{{ forum.autor.nome }}</strong>
+                            <span> {{forum.autor.email}}</span>
+                            </div>
+                 </div>
+            </div>
                 </a>
               <small class="text-muted">· {{ forum.data|date:"d/m/Y H:i" }}</small>
-            </div>
 
             {% if request.session.usuario_id == forum.autor.id|stringformat:"s" %}
             <form method="post" action="{% url 'excluir_forum' forum.forum_id %}">
@@ -69,36 +81,42 @@
             {% endif %}
           </div>
 
-          <p class="mb-2">{{ forum.conteudo }}</p>
+          <p class="mb-2 d-block post-nome">{{ forum.conteudo }}</p>
 
-          <div class="d-flex gap-3">
+          <div class="comentarios-acoes">
 
           <form method="post" action="{% url 'curtir_forum' forum.forum_id %}">
               {% csrf_token %}
-              <button type="submit" class="btn btn-sm ">  <i class="bi bi-heart me-1"></i>{{ forum.curtida_set.count}}</button>
+              <button type="submit" class="btn btn-sm curtir-comentario"><i class="bi bi-heart me-1"></i>{{ forum.curtida_set.count}}</button>
             </form>
-            <a href="#" class="text-muted text-decoration-none" onclick="abrirPopup('{{ forum.forum_id }}')"><i class="bi bi-chat me-1"></i>Responder</a>
-            <a href="#" class="text-muted text-decoration-none" onclick="abrirRespostas('{{ forum.forum_id }}')">{{ forum.comentarios.count }} Respostas </a>
+            <a href="#" class="text-muted text-decoration-none resposta-ver-comentario" onclick="abrirPopup('{{ forum.forum_id }}')"><i class="bi bi-chat me-1"></i>Responder</a>
+            <a href="#" class="text-muted text-decoration-none resposta-ver-comentario" onclick="abrirRespostas('{{ forum.forum_id }}')">{{ forum.comentarios.count }} Respostas </a>
           </div>       
   </div>
 
   <!-- Comentários ocultos de cada fórum vão ser renderizados no modal 
    Mas DEVEM estar dentro desse for pra poder pegar o id-->
-  <div id="comentarios-{{ forum.forum_id }}" class="d-none">
+  <div id="comentarios-{{ forum.forum_id }}" class="d-none position-relative]" style="gap: 5px;">
     {% for comentario in forum.comentarios.all %}
       <div class="comentario mb-2 p-2 bg-light rounded">
         <div class="d-flex justify-content-between align-items-start mb-1">
           <div class="d-flex align-items-center gap-2 flex-wrap">
+
+            <div class="img-nome-perfil">
             {% if comentario.autor.foto_perfil %}
               <img class="profile-pic me-2" src="{{ comentario.autor.foto_perfil.url }}" width="35" height="35">
             {% else %}
               <img class="profile-pic me-2" src="{% static 'assets/images/default_foto.png' %}" width="35" height="35">
             {% endif %}
-            <strong class="text-primary">{{ comentario.autor.nome }}</strong>
+               <div class="nome-email-autor">
+                    <strong>{{ comentario.autor.nome }}</strong>
+                     <span> {{comentario.autor.email}}</span>
+                </div>
+            </div>
           </div>
-          <small class="text-muted">{{ comentario.data|date:"d/m/Y H:i" }}</small>
+          <small class="text-muted position-absolute">{{ comentario.data|date:"d/m/Y H:i" }}</small>
         </div>
-        <p class="mt-1">{{ comentario.texto }}</p>
+        <p class="mt-1 post-nome" style="margin-top: 0.5em;">{{ comentario.texto }}</p>
       </div>
     {% empty %}
       <p class="text-muted">Nenhuma resposta ainda.</p>
@@ -125,8 +143,8 @@
           <textarea name="texto" class="form-control" placeholder="Escreva sua resposta..." rows="4" required></textarea>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm">Publicar</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary btn-sm cancelar-resposta" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary btn-sm publicar-respostar">Publicar</button>
         </div>
       </form>
     </div>

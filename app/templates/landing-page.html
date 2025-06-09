@@ -38,71 +38,46 @@
             
         </p>
 
-    <div class="container" id="blog-container">
+<div class="container py-4" id="blog-container">
         <!-- for para loop dos posts entra aqui  -->
-        <div class="blog-card">
-            <div class="blog-image">
-                <img src="https://st.depositphotos.com/4218696/54755/i/450/depositphotos_547556104-stock-photo-worried-black-woman-psychotherapist-talking.jpg" alt="Card-imagem">
-                <div class="blog-data">27 de Abril, 2025</div>
-            </div>
-            <div class="blog-content">
-                <h2 class="blog-title">Entre Mães: Vozes e Vivências</h2>
-                <p class="blog-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci 
-                voluptatibus, cumque, accusantium, doloremque eveniet
-                </p>
-                <div class="blog-footer">
-                    <div class="author-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
-                    <span class="blog-author">por psicológa1</span>
-                </div>
-                    <a href="{% url 'blog' %}" class="read-more">Leia Mais</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="blog-card">
-            <div class="blog-image">
-                <img src="https://st.depositphotos.com/4218696/54755/i/450/depositphotos_547556104-stock-photo-worried-black-woman-psychotherapist-talking.jpg" alt="Card-imagem">
-                <div class="blog-data">27 de Abril, 2025</div>
-            </div>
-            <div class="blog-content">
-                <h2 class="blog-title">Entre Mães: Vozes e Vivências</h2>
-                <p class="blog-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci 
-                voluptatibus, cumque, accusantium, doloremque eveniet
-                </p>
-                <div class="blog-footer">
-                    <div class="author-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
-                    <span class="blog-author">por psicológa1</span>
-                </div>
-                    <a href="{% url 'blog' %}" class="read-more">Leia Mais</a>
+<!-- <div class="row g-4 justify-content-center"> -->
+        {% for post in posts_recentes %}
+            <div class="col">
+                <div class="card blog-card h-100">
+                    <div class="blog-image position-relative">
+                        {% if post.thumbnail and post.thumbnail.name %}
+                            <img src="{{ post.thumbnail.url }}" class="card-img-top" alt="{{ post.thumbnail.url }}">
+                        {% else %}
+                            <img src="{% static 'images/default-thumbnail.jpg' %}" class="card-img-top" alt="Imagem padrão">
+                        {% endif %}
+                        <div class="blog-data position-absolute">
+                            {{ post.criado_em|date:"d \d\e F, Y" }}
+                        </div>
+                    </div>
+                    <div class="card-body blog-content d-flex flex-column">
+                        <h5 class="card-title blog-title">{{ post.titulo }}</h5>
+                        <p class="card-text blog-description">
+                            {{ post.conteudo|safe|truncatewords:20|linebreaksbr|striptags }}
+                        </p>
+                        <div class="blog-footer d-flex justify-content-between align-items-center mt-auto">
+                            <a href="{% url 'perfil_usuario' post.autor.usuario_id %}" class="d-flex align-items-center text-decoration-none">
+                                <div class="author-image me-2">
+                                    {% if post.autor.foto_perfil %}
+                                        <img src="{{ post.autor.foto_perfil.url }}" class="rounded-circle" width="40" height="40" alt="">
+                                    {% else %}
+                                        <img src="{% static 'assets/images/default_foto.png' %}" class="rounded-circle" width="40" height="40" alt="">
+                                    {% endif %}
+                                </div>
+                                <span class="blog-author">{{ post.autor.nome|truncatewords:3 }}</span>
+                                                        <a href="{% url 'detalhe_post' post.post_id %}" class="btn btn-link read-more">Leia Mais</a>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-
-        <div class="blog-card">
-            <div class="blog-image">
-                <img src="https://st.depositphotos.com/4218696/54755/i/450/depositphotos_547556104-stock-photo-worried-black-woman-psychotherapist-talking.jpg" alt="Card-imagem">
-                <div class="blog-data">27 de Abril, 2025</div>
-            </div>
-            <div class="blog-content">
-                <h2 class="blog-title">Entre Mães: Vozes e Vivências</h2>
-                <p class="blog-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci 
-                voluptatibus, cumque, accusantium, doloremque eveniet
-                </p>
-                <div class="blog-footer">
-                    <div class="author-image">
-                    <img src="https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png" alt="">
-                    <span class="blog-author">por psicológa1</span>
-                </div>
-                    <a href="{% url 'blog' %}" class="read-more">Leia Mais</a>
-                </div>
-            </div>
-        </div>
-        
+        {% endfor %}
+    <!-- </div> -->
         <!-- for para loop dos posts termina aqui -->
-    </div>
 </section>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 318">
