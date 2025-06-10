@@ -2,17 +2,32 @@
   <img src="https://github.com/user-attachments/assets/eb3dd772-f2a7-43fe-b924-6f078ad1c20d" alt="logo amae" height="100" />
 </p>
 
-## Sobre O Amae
-<br>
-<a href="https://youtu.be/MLz5p7NhT1c" target="_blank" align="right">
-  <img src="https://github.com/user-attachments/assets/ee0f5478-ce8f-4e44-9c6b-2d870cbb3af8" alt="Assista no YouTube" width="400" align="right" />
-</a>
-<p align="left">
-O Amae é um projeto com viés acadêmico, desenvolvido por quatro estudantes da FATEC Praia Grande. Nosso propósito é criar um espaço seguro para mães compartilharem vivências, receberem apoio e se fortalecerem juntas. Acreditamos na troca de experiências como ferramenta de transformação e acolhimento. Mais do que um projeto de estudo, Amae nasce do desejo genuíno de fazer a diferença na vida de quem enfrenta desafios diários.
-Assista ao vídeo no YouTube para entender melhor como funciona o projeto.
+### Sobre O Amae
+
+<table align="right">
+  <tr>
+    <td>
+      <a href="https://youtu.be/MLz5p7NhT1c" target="_blank">
+        <img src="https://github.com/user-attachments/assets/a9e2214c-6cdd-41e5-b214-074671f2777a" alt="Assista no YouTube" width="300" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <em>Veja nosso pitch </em>
+    </td>
+  </tr>
+</table>
+
+<p align="left"  height="200" >
+  O Amae é um projeto com viés acadêmico, desenvolvido por quatro estudantes da FATEC Praia Grande. 
+  Nosso propósito é criar um espaço seguro para mães compartilharem vivências, receberem apoio e se fortalecerem juntas. 
+  Acreditamos na troca de experiências como ferramenta de transformação e acolhimento. 
+  Mais do que um projeto de estudo, Amae nasce do desejo genuíno de fazer a diferença na vida de quem enfrenta desafios diários.
+  Assista ao vídeo no YouTube para entender melhor como funciona o projeto.
 </p>
 
-<br>
+<br><br>
 
 ### 🛠️ Tecnologias usadas
 
