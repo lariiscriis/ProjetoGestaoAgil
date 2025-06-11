@@ -4,11 +4,12 @@
 
 ### Sobre O Amae
 
+
 <table align="right">
   <tr>
     <td>
       <a href="https://youtu.be/MLz5p7NhT1c" target="_blank">
-        <img src="https://github.com/user-attachments/assets/a9e2214c-6cdd-41e5-b214-074671f2777a" alt="Assista no YouTube" width="300" />
+        <img src="https://github.com/user-attachments/assets/812686ca-e906-4ea6-803c-84229b7c9da4" alt="Assista no YouTube" width="330" />
       </a>
     </td>
   </tr>
@@ -27,7 +28,21 @@
   Assista ao vídeo no YouTube para entender melhor como funciona o projeto.
 </p>
 
-<br><br>
+
+
+<h3 align="center">
+  <a href="https://www.canva.com/design/DAGp1d5mwpY/zX_zcdXdGN3BPiKzMjafyg/view?utm_content=DAGp1d5mwpY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h2ed47d385b" target="_blank" style="text-decoration: none; font-size: 1.5em;">
+    🚀 Clique aqui para ver a apresentação no Canva
+  </a>
+</h3>
+
+<p align="center">
+  <a href="https://www.canva.com/design/DAGp1d5mwpY/zX_zcdXdGN3BPiKzMjafyg/view?utm_content=DAGp1d5mwpY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h2ed47d385b" target="_blank">
+    <img src="https://img.shields.io/badge/Ver%20Apresenta%C3%A7%C3%A3o%20no%20Canva-00C4CC?style=for-the-badge&logo=canva&logoColor=white" alt="Ver apresentação no Canva">
+  </a>
+</p>
+
+<br>
 
 ### 🛠️ Tecnologias usadas
 
