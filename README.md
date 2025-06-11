@@ -24,8 +24,6 @@
   O Amae é um projeto com viés acadêmico, desenvolvido por quatro estudantes da FATEC Praia Grande. 
   Nosso propósito é criar um espaço seguro para mães compartilharem vivências, receberem apoio e se fortalecerem juntas. 
   Acreditamos na troca de experiências como ferramenta de transformação e acolhimento. 
-  Mais do que um projeto de estudo, Amae nasce do desejo genuíno de fazer a diferença na vida de quem enfrenta desafios diários.
-  Assista ao vídeo no YouTube para entender melhor como funciona o projeto.
 </p>
 
 
